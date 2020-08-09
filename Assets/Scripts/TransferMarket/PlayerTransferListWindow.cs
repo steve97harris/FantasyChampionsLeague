@@ -66,11 +66,22 @@ namespace Dashboard
 
             foreach (var pair in playerPricesMap)        
             {
+                // instantiate new player transfer entry
                 var entryObject = Instantiate(playerTransferEntry, transferListContent);
                 var entryButton = entryObject.transform.GetChild(0).transform;
                 var playerNameObj = entryButton.GetChild(0).gameObject;
                 var playerPriceObj = entryButton.GetChild(1).gameObject;
                 var playerTeamImageObj = entryButton.GetChild(2).gameObject;
+                
+                // set football players details component
+                playerTransferEntry.AddComponent<FootballPlayerDetails>();
+                var playerDetails = playerTransferEntry.GetComponent<FootballPlayerDetails>();
+                playerDetails.name = pair.Key;
+                playerDetails.team = pair.Value[0];
+                playerDetails.rating = pair.Value[1];
+                playerDetails.price = pair.Value[1];
+                
+                TransferList.PlayerTransferEntryMap.Add(pair.Key, playerTransferEntry);
                 
                 playerNameObj.GetComponent<TMP_Text>().text = pair.Key;
                 playerPriceObj.GetComponent<TMP_Text>().text = "$" + pair.Value[1];
