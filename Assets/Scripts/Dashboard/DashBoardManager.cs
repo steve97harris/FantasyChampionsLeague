@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
+using GoogleSheets;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class DashBoardManager : MonoBehaviour
 {
@@ -12,14 +14,17 @@ public class DashBoardManager : MonoBehaviour
 
     void Start()
     {
-        dashboard = GameObjectFinder.FindSingleObjectByName("Dashboard");
+        dashboard = GameObjectFinder.FindSingleObjectByName("DashBoard");
         pointsPage = GameObjectFinder.FindSingleObjectByName("PointsPage");
         teamPage = GameObjectFinder.FindSingleObjectByName("TeamPage");
+        transfersPage = GameObjectFinder.FindSingleObjectByName("TransfersPage");
         
         dashboard.SetActive(true);
         pointsPage.SetActive(false);
         teamPage.SetActive(false);
         transfersPage.SetActive(false);
+        
+        LevelSynchronizer.SyncLevel();
     }
 
     public void PointsButton()
