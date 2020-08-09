@@ -186,6 +186,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 973125095208038908}
     m_Modifications:
+    - target: {fileID: 8615599019061381657, guid: f71d00ae509f5884ea1fa747b08acda8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8558984798525923644, guid: 471a6e82bb22b544b89ecc579cdfb67a,
+        type: 3}
     - target: {fileID: 8615599019061381658, guid: f71d00ae509f5884ea1fa747b08acda8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -351,6 +357,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 973125095208038908}
     m_Modifications:
+    - target: {fileID: 8615599019061381657, guid: f71d00ae509f5884ea1fa747b08acda8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8558984798525923644, guid: 471a6e82bb22b544b89ecc579cdfb67a,
+        type: 3}
     - target: {fileID: 8615599019061381658, guid: f71d00ae509f5884ea1fa747b08acda8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -521,6 +533,32 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 973125095208038908}
     m_Modifications:
+    - target: {fileID: 8615599019061381657, guid: f71d00ae509f5884ea1fa747b08acda8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8615599019061381657, guid: f71d00ae509f5884ea1fa747b08acda8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8558984798525923644, guid: 471a6e82bb22b544b89ecc579cdfb67a,
+        type: 3}
+    - target: {fileID: 8615599019061381657, guid: f71d00ae509f5884ea1fa747b08acda8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8615599019061381657, guid: f71d00ae509f5884ea1fa747b08acda8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8615599019061381657, guid: f71d00ae509f5884ea1fa747b08acda8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TransfersButton
+      objectReference: {fileID: 0}
     - target: {fileID: 8615599019061381658, guid: f71d00ae509f5884ea1fa747b08acda8,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -256,6 +256,16 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7859506346464644721, guid: 71bad61d368d0474dacbb7fe3a816750,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -86.05792
+      objectReference: {fileID: 0}
+    - target: {fileID: 7859506346464644721, guid: 71bad61d368d0474dacbb7fe3a816750,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -172.26733
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71bad61d368d0474dacbb7fe3a816750, type: 3}
 --- !u!224 &7437432706674180366 stripped
