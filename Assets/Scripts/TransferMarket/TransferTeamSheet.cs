@@ -7,7 +7,7 @@ namespace Dashboard
         [SerializeField] private GameObject transferListObj;
         [SerializeField] private GameObject transferTeamSheetObj;
         
-        public void AddPlayerButtonClicked(string pos)
+        public void AddPlayerButtonClicked()
         {
             var playerTransferEntryMap = TransferList.PlayerTransferEntryMap;
             
