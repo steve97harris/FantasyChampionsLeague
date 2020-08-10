@@ -2,6 +2,7 @@
 using System.IO;
 using Dashboard;
 using DefaultNamespace;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace TeamSheetDatabase
@@ -56,7 +57,8 @@ namespace TeamSheetDatabase
             {
                 
                 // json string not accepting dictionary :(  
-                
+
+                // var serializeObject = JsonConvert.SerializeObject(teamSheetSaveData);
                 var json = JsonUtility.ToJson(teamSheetSaveData, false);
                 Debug.LogError("json String: " + json);
                 stream.Write(json);
