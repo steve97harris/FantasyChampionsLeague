@@ -8,7 +8,7 @@ namespace DefaultNamespace
         [SerializeField] private GameObject transferListObj;
         [SerializeField] private GameObject transferTeamSheetObj;
 
-        public static GameObject playerTeamEntryClickedObj;
+        public static GameObject PlayerTeamEntryClickedObj;
         public void AddPlayerButtonClicked()
         {
             var transfersPage = GameObjectFinder.FindSingleObjectByName("TransfersPage");
@@ -19,8 +19,9 @@ namespace DefaultNamespace
             transferTeamSheetObj.SetActive(false);
             
             var thisButtonObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-            playerTeamEntryClickedObj = thisButtonObj.transform.parent.gameObject;
-            Debug.LogError(playerTeamEntryClickedObj.name);
+            var panel = thisButtonObj.transform.parent.gameObject;
+            PlayerTeamEntryClickedObj = panel.transform.parent.gameObject;
+            Debug.LogError(PlayerTeamEntryClickedObj.name);
         }
     }
 }

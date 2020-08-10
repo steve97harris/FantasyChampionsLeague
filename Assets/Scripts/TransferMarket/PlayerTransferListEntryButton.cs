@@ -21,21 +21,23 @@ namespace Dashboard
             
             // sets transfer team page
             // need to create json to store details
-            var playerTeamEntryClickedObj = PlayerTransferTeamEntryButton.playerTeamEntryClickedObj;
+            var playerTeamEntryClickedObj = PlayerTransferTeamEntryButton.PlayerTeamEntryClickedObj;
             var playerDetails = playerTeamEntryClickedObj.GetComponent<FootballPlayerDetails>();
             playerDetails.playerName = playerName;
             playerDetails.price = playerPrice;
             playerDetails.position = playerPosition;
             playerDetails.team = playerTeamLogo.name;
 
-            playerTeamEntryClickedObj.transform.GetChild(4).GetComponent<TMP_Text>().text = playerName;
-            playerTeamEntryClickedObj.transform.GetChild(3).GetComponent<TMP_Text>().text = playerPrice;
-            playerTeamEntryClickedObj.transform.GetChild(2).GetComponent<Image>().sprite = playerTeamLogo;
-            var entryImage = playerTeamEntryClickedObj.transform.GetChild(2).GetComponent<Image>();
+            var obj = playerTeamEntryClickedObj.transform.GetChild(0);
+            Debug.LogError(obj.name);
+            obj.transform.GetChild(4).GetComponent<TMP_Text>().text = playerName;
+            obj.transform.GetChild(3).GetComponent<TMP_Text>().text = playerPrice;
+            obj.transform.GetChild(2).GetComponent<Image>().sprite = playerTeamLogo;
+            var entryImage = obj.transform.GetChild(2).GetComponent<Image>();
             var color = entryImage.color;
             color.a = 1f;
             entryImage.color = color;
-            playerTeamEntryClickedObj.transform.GetChild(2).gameObject.transform.GetChild(0).GetComponent<TMP_Text>()
+            obj.transform.GetChild(2).gameObject.transform.GetChild(0).GetComponent<TMP_Text>()
                 .text = "";
             
             var list = GameObjectFinder.FindSingleObjectByName("TransferList(Clone)");
@@ -45,6 +47,9 @@ namespace Dashboard
             list.SetActive(false);
             transferTeamSheet.SetActive(true);
             DestroyImmediate(list,true);
+            
+            // Save new player entry to json
+            TeamSheetDatabase.TeamSheetDatabase.AddOrderEntry(playerDetails, playerDetails.teamSheetPosition);
         }
 
         private string GetGameObjectChildText(GameObject obj, int childIndex)
