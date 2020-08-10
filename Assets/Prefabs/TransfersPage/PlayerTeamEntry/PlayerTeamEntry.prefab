@@ -119,10 +119,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6771015069280357482, guid: 262a576fbcfb5264e879352375140bf7,
-          type: 3}
+      - m_Target: {fileID: 0}
         m_MethodName: AddPlayerButtonClicked
-        m_Mode: 5
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -456,7 +455,7 @@ GameObject:
   - component: {fileID: 768557969187240521}
   - component: {fileID: 8884310618383692969}
   m_Layer: 5
-  m_Name: PlayerTeamEntry 1 1 1 1
+  m_Name: PlayerTeamEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -493,10 +492,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1879e8f51b94a6ab56214d1c170fa26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
+  playerName: 
   team: 
   rating: 
   price: 
+  position: 
 --- !u!1 &4586347182921781495
 GameObject:
   m_ObjectHideFlags: 0

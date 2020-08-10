@@ -10,10 +10,10 @@ namespace Dashboard
 {
     public class PlayerTransferListWindow : MonoBehaviour
     {
+        public static readonly Dictionary<string, string[]> PlayerPricesMap = new Dictionary<string, string[]>();        // name, price
+
         public static void GetPlayerTransferList(IList<IList<object>> googleSheetPlayersList)
         {
-            var playerPricesMap = new Dictionary<string, string[]>();        // name, price
-            
             foreach (var list in googleSheetPlayersList)
             {
                 // list[0] - Team
@@ -33,25 +33,35 @@ namespace Dashboard
                         nameDataSplit[1] = nameDataSplit[1].Remove(i, nameDataSplit[1].Length - i);
                     }
                 }
+
+                var playerPosition = "";
+                if (nameData.Contains("FW") && nameData.Contains("AM") || nameData.Contains("FW"))
+                    playerPosition = "F";
+                else if (nameData.Contains("D"))
+                    playerPosition = "D";
+                else if (nameData.Contains("GK"))
+                    playerPosition = "Gk";
+                if (nameData.Contains("M") || nameData.Contains("AM"))
+                    playerPosition = "M";
                 
+
                 var playerName = nameDataSplit[1];
                 var playerRating = list[2].ToString();
                 var playerTeam = list[0].ToString();
 
-                var playerDetails = new string[2];
+                var playerDetails = new string[3];
                 playerDetails[0] = playerTeam;
                 playerDetails[1] = playerRating;
+                playerDetails[2] = playerPosition;
 
-                if (!playerPricesMap.ContainsKey(playerName))
-                    playerPricesMap.Add(playerName, playerDetails);
+                if (!PlayerPricesMap.ContainsKey(playerName))
+                    PlayerPricesMap.Add(playerName, playerDetails);
                 else
                     Debug.LogError("playerPricesMap already contains key: " + playerName);
-                
-                InitializePlayerTransferList(playerPricesMap);
             }
         }
 
-        private static void InitializePlayerTransferList(Dictionary<string, string[]> playerPricesMap)
+        public static void InitializePlayerTransferList(Dictionary<string, string[]> playerPricesMap)
         {
             var transferListContent = GameObjectFinder.FindSingleObjectByName("TransferListContent").transform;
             var playerTransferEntry = GameObjectFinder.FindSingleObjectByName("PlayerTransferEntry");
@@ -72,19 +82,25 @@ namespace Dashboard
                 var playerNameObj = entryButton.GetChild(0).gameObject;
                 var playerPriceObj = entryButton.GetChild(1).gameObject;
                 var playerTeamImageObj = entryButton.GetChild(2).gameObject;
+                var playerPositionObj = entryButton.GetChild(3).gameObject;
                 
                 // set football players details component
-                playerTransferEntry.AddComponent<FootballPlayerDetails>();
-                var playerDetails = playerTransferEntry.GetComponent<FootballPlayerDetails>();
-                playerDetails.name = pair.Key;
+                entryObject.AddComponent<FootballPlayerDetails>();
+                var playerDetails = entryObject.GetComponent<FootballPlayerDetails>();
+                playerDetails.playerName = pair.Key;
                 playerDetails.team = pair.Value[0];
                 playerDetails.rating = pair.Value[1];
                 playerDetails.price = pair.Value[1];
+                playerDetails.position = pair.Value[2];
                 
-                TransferList.PlayerTransferEntryMap.Add(pair.Key, playerTransferEntry);
+                if (!TransferList.PlayerTransferEntryMap.ContainsKey(pair.Key))
+                    TransferList.PlayerTransferEntryMap.Add(pair.Key, entryObject);
+                else
+                    Debug.LogError("PlayerTransferEntryMap already contains player name");
                 
                 playerNameObj.GetComponent<TMP_Text>().text = pair.Key;
                 playerPriceObj.GetComponent<TMP_Text>().text = "$" + pair.Value[1];
+                playerPositionObj.GetComponent<TMP_Text>().text = pair.Value[2];
 
                 // team logos!!!
                 var playersTeamLogo = teamLogos.Find(x => x.name == pair.Value[0]);

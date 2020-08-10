@@ -5,9 +5,10 @@ namespace Dashboard
 {
     public class FootballPlayerDetails : MonoBehaviour
     {
-        public string name;
+        public string playerName;
         public string team;
         public string rating;
         public string price;
+        public string position;
     }
 }
