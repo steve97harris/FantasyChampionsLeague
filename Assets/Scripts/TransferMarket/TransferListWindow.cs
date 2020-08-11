@@ -14,12 +14,10 @@ namespace Dashboard
 
         public static void GetPlayerTransferList(IList<IList<object>> googleSheetPlayersList)
         {
+            // 
             foreach (var list in googleSheetPlayersList)
             {
-                // list[0] - Team
-                // list[1] - Name
-                // list[2] - Rating
-            
+                var playerTeam = list[0].ToString();
                 var nameData = list[1].ToString();
                 var nameDataSplit = nameData.Split(new [] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
                 
@@ -33,7 +31,10 @@ namespace Dashboard
                         nameDataSplit[1] = nameDataSplit[1].Remove(i, nameDataSplit[1].Length - i);
                     }
                 }
-
+                var playerName = nameDataSplit[1];
+                var playerRating = list[2].ToString();
+                
+                // needs adjusting
                 var playerPosition = "";
                 if (nameData.Contains("FW") && nameData.Contains("AM") || nameData.Contains("FW"))
                     playerPosition = "F";
@@ -43,11 +44,6 @@ namespace Dashboard
                     playerPosition = "Gk";
                 if (nameData.Contains("M") || nameData.Contains("AM"))
                     playerPosition = "M";
-                
-
-                var playerName = nameDataSplit[1];
-                var playerRating = list[2].ToString();
-                var playerTeam = list[0].ToString();
 
                 var playerDetails = new string[3];
                 playerDetails[0] = playerTeam;
@@ -57,14 +53,13 @@ namespace Dashboard
                 if (!PlayerPricesMap.ContainsKey(playerName))
                     PlayerPricesMap.Add(playerName, playerDetails);
                 else
-                {
                     Debug.LogError("playerPricesMap already contains key: " + playerName);
-                }
             }
         }
 
         public static void InitializePlayerList(Dictionary<string, string[]> playerPricesMap)
         {
+            // locate gameObjects
             var transferListContent = GameObjectFinder.FindSingleObjectByName("TransferListContent").transform;
             var playerTransferEntry = GameObjectFinder.FindSingleObjectByName("PlayerTransferEntry");
             
@@ -104,12 +99,12 @@ namespace Dashboard
                 if (playersTeamLogo != null)
                     playerTeamImageObj.GetComponent<Image>().sprite = playersTeamLogo;
 
-                entryObject.gameObject.GetComponent<Canvas>().enabled = true;
-                entryObject.gameObject.GetComponent<CanvasScaler>().enabled = true;
-                entryObject.gameObject.GetComponent<GraphicRaycaster>().enabled = true;
-                entryButton.gameObject.GetComponent<Image>().enabled = true;
-                entryButton.gameObject.GetComponent<Button>().enabled = true;
-                entryObject.gameObject.SetActive(true);
+                entryObject.GetComponent<Canvas>().enabled = true;
+                entryObject.GetComponent<CanvasScaler>().enabled = true;
+                entryObject.GetComponent<GraphicRaycaster>().enabled = true;
+                entryButton.GetComponent<Image>().enabled = true;
+                entryButton.GetComponent<Button>().enabled = true;
+                entryObject.SetActive(true);
             }
         }
     }
