@@ -35,7 +35,7 @@ namespace GoogleSheetsLevelSynchronizer
                     "user",
                     CancellationToken.None,
                     new FileDataStore(credPath, true)).Result;
-                Console.WriteLine("Credential file saved to: " + credPath);
+                Debug.Log("Credential file saved to: " + credPath);
             }
 
             // Create Google Sheets API service.
@@ -59,7 +59,7 @@ namespace GoogleSheetsLevelSynchronizer
             
             if (values != null && values.Count > 0)
             {
-                Debug.LogError("Data Found!! :)");
+                Debug.Log("Data Found!! :)");
             }
             else
             {

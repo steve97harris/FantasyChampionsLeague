@@ -8,60 +8,47 @@ using Newtonsoft.Json;
 
 public class DashBoardManager : MonoBehaviour
 {
-    private static GameObject _dashboard = null;
-    private static GameObject _pointsPage = null;
-    private static GameObject _teamPage = null;
-    private static GameObject _transfersPage = null;
-
+    private readonly List<string> _fclScreenNames = new List<string>()
+    {
+        "DashBoard",
+        "PointsPage",
+        "TeamPage",
+        "TransfersPage"
+    };
+    
     void Start()
     {
-        _dashboard = GameObjectFinder.FindSingleObjectByName("DashBoard");
-        _pointsPage = GameObjectFinder.FindSingleObjectByName("PointsPage");
-        _teamPage = GameObjectFinder.FindSingleObjectByName("TeamPage");
-        _transfersPage = GameObjectFinder.FindSingleObjectByName("TransfersPage");
+        SetScreenActive(0);
 
-        _dashboard.SetActive(true);
-        _pointsPage.SetActive(false);
-        _teamPage.SetActive(false);
-        _transfersPage.SetActive(false);
-
-        LoadPlayerTransferListWindow();
+        InitiateTransferList();
     }
 
     public void PointsButton()
     {
-        _pointsPage.SetActive(true);
-        _dashboard.SetActive(false);
-        _teamPage.SetActive(false);
-        _transfersPage.SetActive(false);
+        SetScreenActive(1);
     }
 
     public void TeamButton()
     {
-        _teamPage.SetActive(true);
-        _dashboard.SetActive(false);
-        _pointsPage.SetActive(false);
-        _transfersPage.SetActive(false);
+        SetScreenActive(2);
     }
 
     public void TransfersButton()
     {
-        Debug.LogError(_transfersPage.name);
-        
-        _transfersPage.SetActive(true);
-        _dashboard.SetActive(false);
-        _pointsPage.SetActive(false);
-        _teamPage.SetActive(false);
+        SetScreenActive(3);
     }
 
-    private void LoadHome()
-    {
-        
-    }
-
-    private void LoadPlayerTransferListWindow()
+    private void InitiateTransferList()
     {
         var sheet = GoogleSheetReader.Reader("1iufkvofC9UcmJS5ld3R72RJZHz2kFd97BYR-1kL8XeM", "A3:C173");
-        PlayerTransferListWindow.GetPlayerTransferList(sheet);
+        TransferListWindow.GetPlayerTransferList(sheet);
+    }
+
+    private void SetScreenActive(int index)
+    {
+        for (int i = 0; i < _fclScreenNames.Count; i++)
+        {
+            GameObjectFinder.FindSingleObjectByName(_fclScreenNames[i]).SetActive(i == index);
+        }
     }
 }

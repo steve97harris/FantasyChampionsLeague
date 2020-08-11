@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Dashboard
 {
+    [Serializable]
     public class FootballPlayerDetails : MonoBehaviour
     {
         public string playerName;

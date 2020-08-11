@@ -1,99 +1,160 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Dashboard;
 using DefaultNamespace;
 using Newtonsoft.Json;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace TeamSheetDatabase
+namespace DefaultNamespace
 {
     public class TeamSheetDatabase : MonoBehaviour
     {
         private static int maxNumberOfEntries = 15;
-        private static string JsonTablePath => $"{Application.persistentDataPath}/TeamSheetData.json";
+        private static string JsonPath => $"{Application.persistentDataPath}/TeamSheetData.json";
 
         #region Event Functions
 
         private void Start()
         {
-            var savedOrders = GetSavedOrders();
-            
-            SaveOrders(savedOrders);
-        }
-
-        private void Update()
-        {
-            // if (OrderWatcher.CurrentOrderUniqueCode == "" || OrderWatcher.CurrentOrderUniqueCode == _previousOrder) 
-            //     return;
-            //
-            // var currentOrderArray = OrderWatcher.CurrentOrderUniqueCode;
-            // SetOrderEntryInfo(currentOrderArray);
-            //
-            // _previousOrder = OrderWatcher.CurrentOrderUniqueCode;
+            var savedTeamSheetEntries = GetSavedTeamSheet();
+            UpdateTeamSheetUi(savedTeamSheetEntries);
+            SaveTeamSheet(savedTeamSheetEntries);
         }
 
         #endregion
+        
+        #region TeamSheet Entry Functions
 
-        public static TeamSheetSaveData GetSavedOrders()
+        public void InsertPlayerEntry(JsonPlayerDetails playerEntry, string teamSheetPlayerPosition)
         {
-            if (!File.Exists(JsonTablePath))
+            // get TeamSheetSaveData from json
+            var savedTeamSheetEntries = GetSavedTeamSheet();
+            
+            // add or replace selected player
+            if (savedTeamSheetEntries.teamSheetData.Count < maxNumberOfEntries)
             {
-                Debug.LogError("OrderTable does not exist - creating new one");
+                if (!savedTeamSheetEntries.teamSheetData.ContainsKey(teamSheetPlayerPosition))
+                {
+                    savedTeamSheetEntries.teamSheetData.Add(teamSheetPlayerPosition, playerEntry);
+                }
+                else
+                {
+                    savedTeamSheetEntries.teamSheetData[teamSheetPlayerPosition] = playerEntry;
+                }
+            }
+
+            if (savedTeamSheetEntries.teamSheetData.Count > maxNumberOfEntries)
+            {
+                savedTeamSheetEntries.teamSheetData[teamSheetPlayerPosition] = playerEntry;
+            }
+
+            SaveTeamSheet(savedTeamSheetEntries);
+        }
+        
+        #endregion
+
+        #region Private Methods
+
+        private TeamSheetSaveData GetSavedTeamSheet()
+        {
+            if (!File.Exists(JsonPath))
+            {
+                Debug.LogError("TeamSheetData.json does not exist - creating new one");
                 
-                File.Create(JsonTablePath).Dispose();
+                // create json file
+                File.Create(JsonPath).Dispose();
                 return new TeamSheetSaveData();
             }
 
-            using (StreamReader stream = new StreamReader(JsonTablePath))
+            using (StreamReader stream = new StreamReader(JsonPath))
             {
+                // convert json string to TeamSheetSaveData
                 var json = stream.ReadToEnd();
-                return JsonUtility.FromJson<TeamSheetSaveData>(json);
+                var teamSheetSaveData = JsonConvert.DeserializeObject<TeamSheetSaveData>(json);
+                return teamSheetSaveData;
             }
         }
 
-        public static void SaveOrders(TeamSheetSaveData teamSheetSaveData)
+        private void SaveTeamSheet(TeamSheetSaveData teamSheetSaveData)
         {
-            using (StreamWriter stream = new StreamWriter(JsonTablePath))
+            using (StreamWriter stream = new StreamWriter(JsonPath))
             {
+                // convert TeamSheetSaveData to json string
+                var j = JsonConvert.SerializeObject(teamSheetSaveData, Formatting.Indented);
+                Debug.LogError("json String: " + j);
                 
-                // json string not accepting dictionary :(  
-
-                
-                var serializeObject = JsonConvert.SerializeObject(teamSheetSaveData.TeamSheetData);
-                var json = JsonUtility.ToJson(teamSheetSaveData, false);
-                Debug.LogError("json String: " + serializeObject);
-                stream.Write(serializeObject);
+                stream.Write(j);
             }
         }
-        
-        #region New Order Entry Functions
 
-        public static void AddOrderEntry(FootballPlayerDetails orderEntry, string teamSheetPlayerPosition)
+        private void UpdateTeamSheetUi(TeamSheetSaveData teamSheetSaveData)
         {
-            var savedOrders = GetSavedOrders();
-
-            if (savedOrders.TeamSheetData.Count < maxNumberOfEntries)
+            var teamSheetDataMap = teamSheetSaveData.teamSheetData;
+            
+            // set TeamSheetUi
+            var transferTeamSheet = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet");
+            var panel = transferTeamSheet.transform.GetChild(0).GetChild(0);
+            var playerTeamEntryCanvasesCount = panel.childCount;
+            
+            Sprite playerTeamLogo = null;
+            var teamLogosObj = GameObjectFinder.FindSingleObjectByName("TeamLogos");
+            var teamLogos = teamLogosObj.GetComponent<TeamLogos>().teamLogos;
+            
+            var teamLogoNames = new List<string>();
+            for (int i = 0; i < teamLogos.Count; i++)
             {
-                if (!savedOrders.TeamSheetData.ContainsKey(teamSheetPlayerPosition))
+                teamLogoNames.Add(teamLogos[i].name);
+            }
+            
+            for (int i = 0; i < playerTeamEntryCanvasesCount; i++)
+            {
+                var playerTeamEntryCanvas = panel.GetChild(i).gameObject;
+                
+                if (playerTeamEntryCanvas.GetComponent<FootballPlayerDetails>() == null)
+                    continue;
+                
+                var playerTeamSheetPosition = playerTeamEntryCanvas.GetComponent<FootballPlayerDetails>().teamSheetPosition;
+                
+                if (!teamSheetDataMap.ContainsKey(playerTeamSheetPosition))
+                    continue;
+                
+                var jsonPlayerDetails = teamSheetDataMap[playerTeamSheetPosition];
+                
+                SetFootballPlayerDetailsValues(playerTeamEntryCanvas, jsonPlayerDetails);
+
+                var obj = playerTeamEntryCanvas.transform.GetChild(0);
+                obj.transform.GetChild(4).GetComponent<TMP_Text>().text = jsonPlayerDetails.PlayerName;
+                obj.transform.GetChild(3).GetComponent<TMP_Text>().text = jsonPlayerDetails.Price;
+
+                if (teamLogoNames.Contains(jsonPlayerDetails.Team))
                 {
-                    Debug.LogError(savedOrders.TeamSheetData.Count);
-                    savedOrders.TeamSheetData.Add(teamSheetPlayerPosition, orderEntry);
+                    var indexOfTeamName = teamLogoNames.IndexOf(jsonPlayerDetails.Team);
+                    playerTeamLogo = teamLogos[indexOfTeamName];
                 }
-                else
-                    savedOrders.TeamSheetData[teamSheetPlayerPosition] = orderEntry;
                 
-                Debug.LogError("TeamSheetSaveData add: " + savedOrders.TeamSheetData[teamSheetPlayerPosition].playerName + ", " + savedOrders.TeamSheetData[teamSheetPlayerPosition].position);
+                obj.transform.GetChild(2).GetComponent<Image>().sprite = playerTeamLogo;
+                var entryImage = obj.transform.GetChild(2).GetComponent<Image>();
+                var color = entryImage.color;
+                color.a = 1f;
+                entryImage.color = color;
+                obj.transform.GetChild(2).gameObject.transform.GetChild(0).GetComponent<TMP_Text>()
+                    .text = "";
             }
-
-            if (savedOrders.TeamSheetData.Count > maxNumberOfEntries)
-            {
-                savedOrders.TeamSheetData[teamSheetPlayerPosition] = orderEntry;
-                Debug.LogError("Replace player in this position: " + teamSheetPlayerPosition);
-            }
-
-            SaveOrders(savedOrders);
         }
-        
+
+        private void SetFootballPlayerDetailsValues(GameObject playerTeamEntryCanvas, JsonPlayerDetails jsonPlayerDetails)
+        {
+            var playerDetails = playerTeamEntryCanvas.GetComponent<FootballPlayerDetails>();
+            
+            playerDetails.playerName = jsonPlayerDetails.PlayerName;
+            playerDetails.team = jsonPlayerDetails.Team;
+            playerDetails.price = jsonPlayerDetails.Price;
+            playerDetails.rating = jsonPlayerDetails.Rating;
+            playerDetails.position = jsonPlayerDetails.Position;
+        }
         #endregion
     }
 }

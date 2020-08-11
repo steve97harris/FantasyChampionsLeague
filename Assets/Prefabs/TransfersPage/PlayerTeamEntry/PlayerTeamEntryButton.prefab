@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 3385366990690516512}
   - component: {fileID: 7364715011157228946}
   - component: {fileID: 5689687202053545948}
-  - component: {fileID: 6405515714731934215}
+  - component: {fileID: 7216514579088817914}
   m_Layer: 5
   m_Name: PlayerTeamEntryButton
   m_TagString: Untagged
@@ -277,8 +277,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6405515714731934215}
-        m_MethodName: AddPlayerButtonClicked
+      - m_Target: {fileID: 7216514579088817914}
+        m_MethodName: AddPlayerButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -288,7 +288,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6405515714731934215
+--- !u!114 &7216514579088817914
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

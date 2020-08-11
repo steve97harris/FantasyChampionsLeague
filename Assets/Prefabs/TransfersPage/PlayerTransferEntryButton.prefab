@@ -124,7 +124,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8215183704829963340}
-        m_MethodName: PlayerTransferEntryButtonClicked
+        m_MethodName: TransferListEntryButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -146,8 +146,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69f81b9255ea438ab42754ccc1abd774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPositionOptionWindow: {fileID: 4726558232652848220, guid: bb3d6269a2a2afd45867db09e7518443,
-    type: 3}
 --- !u!1 &3199856661760999580
 GameObject:
   m_ObjectHideFlags: 0

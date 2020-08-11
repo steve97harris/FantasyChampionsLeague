@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Dashboard
 {
-    public class PlayerTransferListWindow : MonoBehaviour
+    public class TransferListWindow : MonoBehaviour
     {
         public static readonly Dictionary<string, string[]> PlayerPricesMap = new Dictionary<string, string[]>();        // name, price
 
@@ -57,11 +57,13 @@ namespace Dashboard
                 if (!PlayerPricesMap.ContainsKey(playerName))
                     PlayerPricesMap.Add(playerName, playerDetails);
                 else
+                {
                     Debug.LogError("playerPricesMap already contains key: " + playerName);
+                }
             }
         }
 
-        public static void InitializePlayerTransferList(Dictionary<string, string[]> playerPricesMap)
+        public static void InitializePlayerList(Dictionary<string, string[]> playerPricesMap)
         {
             var transferListContent = GameObjectFinder.FindSingleObjectByName("TransferListContent").transform;
             var playerTransferEntry = GameObjectFinder.FindSingleObjectByName("PlayerTransferEntry");
@@ -92,12 +94,7 @@ namespace Dashboard
                 playerDetails.rating = pair.Value[1];
                 playerDetails.price = pair.Value[1];
                 playerDetails.position = pair.Value[2];
-                
-                if (!TransferList.PlayerTransferEntryMap.ContainsKey(pair.Key))
-                    TransferList.PlayerTransferEntryMap.Add(pair.Key, entryObject);
-                else
-                    Debug.LogError("PlayerTransferEntryMap already contains player name");
-                
+
                 playerNameObj.GetComponent<TMP_Text>().text = pair.Key;
                 playerPriceObj.GetComponent<TMP_Text>().text = "$" + pair.Value[1];
                 playerPositionObj.GetComponent<TMP_Text>().text = pair.Value[2];
