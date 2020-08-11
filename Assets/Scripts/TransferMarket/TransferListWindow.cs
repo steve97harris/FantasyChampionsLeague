@@ -14,7 +14,7 @@ namespace Dashboard
 
         public static void GetPlayerTransferList(IList<IList<object>> googleSheetPlayersList)
         {
-            // 
+            // span each line of playerList
             foreach (var list in googleSheetPlayersList)
             {
                 var playerTeam = list[0].ToString();
