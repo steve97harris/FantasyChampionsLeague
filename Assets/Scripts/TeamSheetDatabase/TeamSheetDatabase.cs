@@ -58,10 +58,11 @@ namespace TeamSheetDatabase
                 
                 // json string not accepting dictionary :(  
 
-                // var serializeObject = JsonConvert.SerializeObject(teamSheetSaveData);
+                
+                var serializeObject = JsonConvert.SerializeObject(teamSheetSaveData.TeamSheetData);
                 var json = JsonUtility.ToJson(teamSheetSaveData, false);
-                Debug.LogError("json String: " + json);
-                stream.Write(json);
+                Debug.LogError("json String: " + serializeObject);
+                stream.Write(serializeObject);
             }
         }
         
