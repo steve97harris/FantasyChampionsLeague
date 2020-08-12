@@ -1,30 +1,20 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
+using System.Net.Http;
+using DefaultNamespace;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace WebReader
 {
     public class WebClientReader : MonoBehaviour
     {
-        public void Start()
-        {
-            var bbcSportsFootballData = WebDataString("https://www.bbc.co.uk/sport/football/scores-fixtures");
-            
-            Debug.LogError(bbcSportsFootballData);
-        }
-
-        private string WebDataString(string address)
-        {
-            WebClient web = new WebClient();
-            System.IO.Stream stream = web.OpenRead(address);
-
-            var text = "";
-            using (System.IO.StreamReader reader = new System.IO.StreamReader(stream))
-            {
-                text = reader.ReadToEnd();
-            }
-
-            return text;
-        }
+        private const string Url =
+            "https://www.bbc.co.uk/sport/football/scores-fixtures";
+        
     }
 }

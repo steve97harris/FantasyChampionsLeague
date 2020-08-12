@@ -12,8 +12,8 @@ public class DashBoardManager : MonoBehaviour
     {
         "DashBoard",
         "PointsPage",
-        "TeamPage",
-        "TransfersPage"
+        "TransfersPage",
+        "FixturesResults"
     };
     
     void Start()
@@ -28,12 +28,17 @@ public class DashBoardManager : MonoBehaviour
         SetScreenActive(1);
     }
 
-    public void TeamButton()
+    public void TransfersButton()
     {
         SetScreenActive(2);
     }
 
-    public void TransfersButton()
+    public void DashboardButton()
+    {
+        SetScreenActive(0);
+    }
+
+    public void FixturesResultsButton()
     {
         SetScreenActive(3);
     }

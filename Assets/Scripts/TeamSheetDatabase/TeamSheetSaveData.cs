@@ -9,11 +9,11 @@ namespace DefaultNamespace
     [Serializable]
     public class TeamSheetSaveData
     {
-        public Dictionary<string, JsonPlayerDetails> teamSheetData = new Dictionary<string, JsonPlayerDetails>();
+        public Dictionary<string, AthleteStats> teamSheetData = new Dictionary<string, AthleteStats>();
     }
 
     // created second player details as MonoBehaviour methods cannot be serialized
-    public class JsonPlayerDetails
+    public class AthleteStats
     {
         public string PlayerName;
         public string Team;

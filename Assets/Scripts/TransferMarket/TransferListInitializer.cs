@@ -9,20 +9,29 @@ namespace DefaultNamespace
         [SerializeField] private GameObject transferTeamSheetObj;
 
         public static GameObject PlayerTeamEntryClickedObj;
-        public void AddPlayerButton()
+        public void TeamSheetPlayerButton()
         {
             var transfersPage = GameObjectFinder.FindSingleObjectByName("TransfersPage");
+            var pointsPage = GameObjectFinder.FindSingleObjectByName("PointsPage");
+
+            if (transfersPage.activeInHierarchy)
+            {
+                var transferList = Instantiate(transferListObj, transfersPage.transform);
+                transferList.SetActive(true);
             
-            var transferList = Instantiate(transferListObj, transfersPage.transform);
-            transferList.SetActive(true);
+                TransferListWindow.InitializePlayerList(TransferListWindow.PlayerPricesMap);
             
-            TransferListWindow.InitializePlayerList(TransferListWindow.PlayerPricesMap);
+                transferTeamSheetObj.SetActive(false);
             
-            transferTeamSheetObj.SetActive(false);
-            
-            var thisButtonObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-            var panel = thisButtonObj.transform.parent.gameObject;
-            PlayerTeamEntryClickedObj = panel.transform.parent.gameObject;
+                var thisButtonObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+                var panel = thisButtonObj.transform.parent.gameObject;
+                PlayerTeamEntryClickedObj = panel.transform.parent.gameObject;
+            }
+
+            if (pointsPage.activeInHierarchy)
+            {
+                // show player details
+            }
         }
     }
 }

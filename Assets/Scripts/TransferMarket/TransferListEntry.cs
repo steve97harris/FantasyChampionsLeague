@@ -17,37 +17,14 @@ namespace Dashboard
             var playerPosition = GetGameObjectChildText(thisButtonObj, 3);
             var playerTeamLogo = thisButtonObj.transform.GetChild(2).GetComponent<Image>().sprite;
             
-            // set transfer teamsheet UI
-            var playerTeamEntryClickedObj = TransferListInitializer.PlayerTeamEntryClickedObj;
-            var playerDetails = playerTeamEntryClickedObj.GetComponent<FootballPlayerDetails>();
-            playerDetails.playerName = playerName;
-            playerDetails.price = playerPrice;
-            playerDetails.position = playerPosition;
-            playerDetails.team = playerTeamLogo.name;
-
-            var obj = playerTeamEntryClickedObj.transform.GetChild(0);
-            obj.transform.GetChild(4).GetComponent<TMP_Text>().text = playerName;
-            obj.transform.GetChild(3).GetComponent<TMP_Text>().text = playerPrice;
-            obj.transform.GetChild(2).GetComponent<Image>().sprite = playerTeamLogo;
-            var entryImage = obj.transform.GetChild(2).GetComponent<Image>();
-            var color = entryImage.color;
-            color.a = 1f;
-            entryImage.color = color;
-            obj.transform.GetChild(2).gameObject.transform.GetChild(0).GetComponent<TMP_Text>()
-                .text = "";
-            
-            var list = GameObjectFinder.FindSingleObjectByName("TransferList(Clone)");
-            var transferTeamSheet = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet");
-            
-            list.SetActive(false);
-            transferTeamSheet.SetActive(true);
-            DestroyImmediate(list,true);
-            
             // Save new player entry to json
             var teamSheetDatabaseObj = GameObjectFinder.FindSingleObjectByName("TeamSheetDatabase");
             var teamDatabase = teamSheetDatabaseObj.GetComponent<TeamSheetDatabase>();
+            
+            var playerTeamEntryClickedObj = TransferListInitializer.PlayerTeamEntryClickedObj;
+            var playerDetails = playerTeamEntryClickedObj.GetComponent<FootballPlayerDetails>();
 
-            var jsonPlayerDetails = new JsonPlayerDetails
+            var athleteStats = new AthleteStats
             {
                 PlayerName = playerName, 
                 Price = playerPrice, 
@@ -55,8 +32,18 @@ namespace Dashboard
                 Team = playerTeamLogo.name,
                 TeamSheetPosition = playerDetails.teamSheetPosition
             };
+            
+            teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);
+            var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
+            teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "TransferTeamSheet");
+            teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
 
-            teamDatabase.InsertPlayerEntry(jsonPlayerDetails, jsonPlayerDetails.TeamSheetPosition);
+            var list = GameObjectFinder.FindSingleObjectByName("TransferList(Clone)");
+            var transferTeamSheet = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet");
+            
+            list.SetActive(false);
+            transferTeamSheet.SetActive(true);
+            DestroyImmediate(list,true);
         }
 
         private string GetGameObjectChildText(GameObject obj, int childIndex)

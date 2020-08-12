@@ -83,12 +83,14 @@ namespace Dashboard
                 
                 // set football players details component
                 entryObject.AddComponent<FootballPlayerDetails>();
-                var playerDetails = entryObject.GetComponent<FootballPlayerDetails>();
-                playerDetails.playerName = pair.Key;
-                playerDetails.team = pair.Value[0];
-                playerDetails.rating = pair.Value[1];
-                playerDetails.price = pair.Value[1];
-                playerDetails.position = pair.Value[2];
+                TeamSheetDatabase.SetFootballPlayerDetailsValues(entryObject, new AthleteStats()
+                {
+                    PlayerName = pair.Key,
+                    Team = pair.Value[0],
+                    Rating = pair.Value[1],
+                    Price = pair.Value[1],        // need to create suitable price and update values
+                    Position = pair.Value[2]
+                });
 
                 playerNameObj.GetComponent<TMP_Text>().text = pair.Key;
                 playerPriceObj.GetComponent<TMP_Text>().text = "$" + pair.Value[1];
