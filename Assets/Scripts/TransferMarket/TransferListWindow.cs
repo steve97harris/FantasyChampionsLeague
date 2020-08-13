@@ -18,43 +18,61 @@ namespace Dashboard
             foreach (var list in googleSheetPlayersList)
             {
                 var playerTeam = list[0].ToString();
-                var nameData = list[1].ToString();
-                var nameDataSplit = nameData.Split(new [] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
-                
-                if (nameDataSplit.Length != 2)
-                    continue;
-                
-                for (int i = 0; i < nameDataSplit[1].Length; i++)
-                {
-                    if (int.TryParse(nameDataSplit[1][i].ToString(), out var res))
-                    {
-                        nameDataSplit[1] = nameDataSplit[1].Remove(i, nameDataSplit[1].Length - i);
-                    }
-                }
-                var playerName = nameDataSplit[1];
                 var playerRating = list[2].ToString();
-                
-                // needs adjusting
-                var playerPosition = "";
-                if (nameData.Contains("FW") && nameData.Contains("AM") || nameData.Contains("FW"))
-                    playerPosition = "F";
-                else if (nameData.Contains("D"))
-                    playerPosition = "D";
-                else if (nameData.Contains("GK"))
-                    playerPosition = "Gk";
-                if (nameData.Contains("M") || nameData.Contains("AM"))
-                    playerPosition = "M";
+                var playerPrice = list[3].ToString();
+                var playerFclPoints = list[4].ToString();
 
-                var playerDetails = new string[3];
+                var nameData = list[1].ToString();
+                var playerNameData = AnalyzePlayerNameData(nameData);
+                var playerName = playerNameData[0];
+                var playerPosition = playerNameData[1];
+
+                var playerDetails = new string[5];
                 playerDetails[0] = playerTeam;
                 playerDetails[1] = playerRating;
                 playerDetails[2] = playerPosition;
+                playerDetails[3] = playerPrice;
+                playerDetails[4] = playerFclPoints;
 
                 if (!PlayerPricesMap.ContainsKey(playerName))
                     PlayerPricesMap.Add(playerName, playerDetails);
                 else
                     Debug.LogError("playerPricesMap already contains key: " + playerName);
             }
+        }
+
+        private static string[] AnalyzePlayerNameData(string nameData)
+        {
+            var nameDataSplit = nameData.Split(new [] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
+                
+            if (nameDataSplit.Length != 2)
+                return new string[2];
+                
+            for (int i = 0; i < nameDataSplit[1].Length; i++)
+            {
+                if (int.TryParse(nameDataSplit[1][i].ToString(), out var res))
+                {
+                    nameDataSplit[1] = nameDataSplit[1].Remove(i, nameDataSplit[1].Length - i);
+                }
+            }
+            var playerName = nameDataSplit[1];
+            
+            var indexOfComa = nameData.IndexOf(",", StringComparison.Ordinal);
+            var nameDataPlayerPositions = nameData.Remove(0, indexOfComa);
+            // needs adjusting
+            var playerPosition = "";
+            if (nameDataPlayerPositions.Contains("FW") && nameDataPlayerPositions.Contains("AM") || nameDataPlayerPositions.Contains("FW"))
+                playerPosition = "F";
+            else if (nameDataPlayerPositions.Contains("D"))
+                playerPosition = "D";
+            else if (nameDataPlayerPositions.Contains("GK"))
+                playerPosition = "Gk";
+            else if (nameDataPlayerPositions.Contains("M") || nameDataPlayerPositions.Contains("AM"))
+                playerPosition = "M";
+
+            var namePositionArray = new string[] {playerName, playerPosition};
+
+            return namePositionArray;
         }
 
         public static void InitializePlayerList(Dictionary<string, string[]> playerPricesMap)
@@ -87,9 +105,10 @@ namespace Dashboard
                 {
                     PlayerName = pair.Key,
                     Team = pair.Value[0],
-                    Rating = pair.Value[1],
-                    Price = pair.Value[1],        // need to create suitable price and update values
-                    Position = pair.Value[2]
+                    Rating = pair.Value[1], 
+                    Position = pair.Value[2],
+                    Price = pair.Value[3],
+                    Points = pair.Value[4]
                 });
 
                 playerNameObj.GetComponent<TMP_Text>().text = pair.Key;
@@ -108,6 +127,22 @@ namespace Dashboard
                 entryButton.GetComponent<Button>().enabled = true;
                 entryObject.SetActive(true);
             }
+            
+        }
+
+        public void BackButton_ToTransferTeamSheet()
+        {
+            DestroyTransferList_LoadTransferTeamSheet();
+        }
+
+        public static void DestroyTransferList_LoadTransferTeamSheet()
+        {
+            var list = GameObjectFinder.FindSingleObjectByName("TransferList(Clone)");
+            var transferTeamSheet = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet");
+            
+            list.SetActive(false);
+            transferTeamSheet.SetActive(true);
+            DestroyImmediate(list,true);
         }
     }
 }

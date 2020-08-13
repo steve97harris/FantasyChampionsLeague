@@ -45,7 +45,7 @@ public class DashBoardManager : MonoBehaviour
 
     private void InitiateTransferList()
     {
-        var sheet = GoogleSheetReader.Reader("1iufkvofC9UcmJS5ld3R72RJZHz2kFd97BYR-1kL8XeM", "A3:C173");
+        var sheet = GoogleSheetReader.Reader("1iufkvofC9UcmJS5ld3R72RJZHz2kFd97BYR-1kL8XeM", "A3:E173");
         TransferListWindow.GetPlayerTransferList(sheet);
     }
 

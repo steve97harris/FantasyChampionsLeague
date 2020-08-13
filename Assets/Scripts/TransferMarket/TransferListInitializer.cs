@@ -30,7 +30,7 @@ namespace DefaultNamespace
 
             if (pointsPage.activeInHierarchy)
             {
-                // show player details
+                // show player details 
             }
         }
     }

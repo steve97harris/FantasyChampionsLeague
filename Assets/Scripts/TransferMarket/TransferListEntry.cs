@@ -1,4 +1,6 @@
-﻿using DefaultNamespace;
+﻿using System.Collections;
+using System.Linq;
+using DefaultNamespace;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,25 +32,71 @@ namespace Dashboard
                 Price = playerPrice, 
                 Position = playerPosition, 
                 Team = playerTeamLogo.name,
-                TeamSheetPosition = playerDetails.teamSheetPosition
+                TeamSheetPosition = playerDetails.teamSheetPosition,
+                Points = playerDetails.points
             };
-            
-            teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);
-            var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
-            teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "TransferTeamSheet");
-            teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
 
-            var list = GameObjectFinder.FindSingleObjectByName("TransferList(Clone)");
-            var transferTeamSheet = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet");
-            
-            list.SetActive(false);
-            transferTeamSheet.SetActive(true);
-            DestroyImmediate(list,true);
+            if (IsValidPlayerPosition(playerPosition, playerDetails.teamSheetPosition) && !PlayerAlreadyInTeam(teamDatabase, playerName))
+            {
+                teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);
+                var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
+                teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "TransferTeamSheet");
+                teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
+                
+                TransferListWindow.DestroyTransferList_LoadTransferTeamSheet();
+            }
+            else
+            {
+                StartCoroutine(DisplayInvalidPlayerPosition());
+            }
         }
 
         private string GetGameObjectChildText(GameObject obj, int childIndex)
         {
             return obj.transform.GetChild(childIndex).GetComponent<TMP_Text>().text;
+        }
+
+        private bool IsValidPlayerPosition(string playerPosition, string teamSheetPosition)
+        {
+            switch (playerPosition)
+            {
+                case "D":
+                    if (teamSheetPosition == "Cb_L" || teamSheetPosition == "Cb_R" || teamSheetPosition == "Rb" ||
+                        teamSheetPosition == "Lb" || teamSheetPosition.Contains("Sub"))
+                        return true;
+                    break;
+                case "M":
+                    if (teamSheetPosition == "Cm_L" || teamSheetPosition == "Cm_C" || teamSheetPosition == "Cm_R" || teamSheetPosition.Contains("Sub"))
+                        return true;
+                    break;
+                case "F":
+                    if (teamSheetPosition == "Fw_L" || teamSheetPosition == "Fw_C" || teamSheetPosition == "Fw_R" || teamSheetPosition.Contains("Sub"))
+                        return true;
+                    break;
+                case "Gk":
+                    if (teamSheetPosition == "Gk" || teamSheetPosition.Contains("Sub"))
+                        return true;
+                    break;
+                case "":
+                    Debug.LogError("playerPosition not set");
+                    break;
+            }
+
+            return false;
+        }
+
+        private bool PlayerAlreadyInTeam(TeamSheetDatabase teamSheetDatabase, string playerName)
+        {
+            var teamSheet = teamSheetDatabase.GetSavedTeamSheet();
+            return teamSheet.teamSheetData.Any(pair => pair.Value.PlayerName == playerName);
+        }
+
+        private IEnumerator DisplayInvalidPlayerPosition()
+        {
+            var invalidPlayerPosText = GameObjectFinder.FindSingleObjectByName("InvalidPlayerText");
+            invalidPlayerPosText.SetActive(true);
+            yield return new WaitForSeconds(3);
+            invalidPlayerPosText.SetActive(false);
         }
     }
 }

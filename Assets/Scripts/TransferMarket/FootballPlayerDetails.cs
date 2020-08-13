@@ -13,5 +13,6 @@ namespace Dashboard
         public string price;
         public string position;
         public string teamSheetPosition;
+        public string points;
     }
 }

@@ -306,6 +306,11 @@ PrefabInstance:
       propertyPath: transferTeamSheetObj
       value: 
       objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: 000ba85171478d34c95f46982fc9f2da,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
     - target: {fileID: 5692061487985729599, guid: 000ba85171478d34c95f46982fc9f2da,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -492,6 +497,11 @@ PrefabInstance:
     m_TransformParent: {fileID: 2004101408468807841}
     m_Modifications:
     - target: {fileID: 410547314088134383, guid: b775ce571c514814c9333e8bd0a14461,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: b775ce571c514814c9333e8bd0a14461,
         type: 3}
       propertyPath: transferTeamSheetObj
       value: 
@@ -686,6 +696,11 @@ PrefabInstance:
       propertyPath: transferTeamSheetObj
       value: 
       objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: 3db1b05e8cd2e3b4f8a51e2ea0b01387,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
     - target: {fileID: 5692061487985729599, guid: 3db1b05e8cd2e3b4f8a51e2ea0b01387,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -872,6 +887,11 @@ PrefabInstance:
     m_TransformParent: {fileID: 2004101408468807841}
     m_Modifications:
     - target: {fileID: 410547314088134383, guid: c99f5012fe7940b46aaaf2883b9b2347,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: c99f5012fe7940b46aaaf2883b9b2347,
         type: 3}
       propertyPath: transferTeamSheetObj
       value: 
@@ -1066,6 +1086,11 @@ PrefabInstance:
       propertyPath: transferTeamSheetObj
       value: 
       objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: 90fd146de3a1d7840898e6bb678d5f67,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
     - target: {fileID: 5692061487985729599, guid: 90fd146de3a1d7840898e6bb678d5f67,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1252,6 +1277,11 @@ PrefabInstance:
     m_TransformParent: {fileID: 2004101408468807841}
     m_Modifications:
     - target: {fileID: 410547314088134383, guid: a8e1394a6e89a604c8f185d6adc52d86,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: a8e1394a6e89a604c8f185d6adc52d86,
         type: 3}
       propertyPath: transferTeamSheetObj
       value: 
@@ -1446,6 +1476,11 @@ PrefabInstance:
       propertyPath: transferTeamSheetObj
       value: 
       objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: d2a95afdbdf0e8d449df8372fa3b7dd1,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
     - target: {fileID: 5692061487985729599, guid: d2a95afdbdf0e8d449df8372fa3b7dd1,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1632,6 +1667,11 @@ PrefabInstance:
     m_TransformParent: {fileID: 2004101408468807841}
     m_Modifications:
     - target: {fileID: 410547314088134383, guid: e0a05cde7c0ae554ab69a5abb6aa70c4,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: e0a05cde7c0ae554ab69a5abb6aa70c4,
         type: 3}
       propertyPath: transferTeamSheetObj
       value: 
@@ -1826,6 +1866,11 @@ PrefabInstance:
       propertyPath: transferTeamSheetObj
       value: 
       objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: 29ea1a6de6b62424f906eaba350f510b,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
     - target: {fileID: 5692061487985729599, guid: 29ea1a6de6b62424f906eaba350f510b,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -2012,6 +2057,11 @@ PrefabInstance:
     m_TransformParent: {fileID: 2004101408468807841}
     m_Modifications:
     - target: {fileID: 410547314088134383, guid: 87db0f62ddc37044cb50438a735058ea,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: 87db0f62ddc37044cb50438a735058ea,
         type: 3}
       propertyPath: transferTeamSheetObj
       value: 
@@ -2206,6 +2256,11 @@ PrefabInstance:
       propertyPath: transferTeamSheetObj
       value: 
       objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: 5cda115d86b53614a99c829217a864df,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
     - target: {fileID: 5692061487985729599, guid: 5cda115d86b53614a99c829217a864df,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -2392,6 +2447,11 @@ PrefabInstance:
     m_TransformParent: {fileID: 2004101408468807841}
     m_Modifications:
     - target: {fileID: 410547314088134383, guid: 4c949de54903a8947890bef030d16b38,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: 4c949de54903a8947890bef030d16b38,
         type: 3}
       propertyPath: transferTeamSheetObj
       value: 
@@ -2586,6 +2646,11 @@ PrefabInstance:
       propertyPath: transferTeamSheetObj
       value: 
       objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: fe759fe66649f1b4f9e4048922120737,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
     - target: {fileID: 5692061487985729599, guid: fe759fe66649f1b4f9e4048922120737,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -2776,6 +2841,11 @@ PrefabInstance:
       propertyPath: transferTeamSheetObj
       value: 
       objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: 6bb5059280eba1440904c1e17f0723c8,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
     - target: {fileID: 5692061487985729599, guid: 6bb5059280eba1440904c1e17f0723c8,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -2962,6 +3032,11 @@ PrefabInstance:
     m_TransformParent: {fileID: 2004101408468807841}
     m_Modifications:
     - target: {fileID: 410547314088134383, guid: 6d6d8bf33b3588049bc1ec0aedff83c2,
+        type: 3}
+      propertyPath: transferTeamSheetObj
+      value: 
+      objectReference: {fileID: 6117673012810239751}
+    - target: {fileID: 4138893578060790290, guid: 6d6d8bf33b3588049bc1ec0aedff83c2,
         type: 3}
       propertyPath: transferTeamSheetObj
       value: 

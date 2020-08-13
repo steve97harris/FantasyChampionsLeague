@@ -9,6 +9,7 @@ namespace DefaultNamespace
     [Serializable]
     public class TeamSheetSaveData
     {
+        // key: teamSheetPosition, value: AthleteStats
         public Dictionary<string, AthleteStats> teamSheetData = new Dictionary<string, AthleteStats>();
     }
 
@@ -21,5 +22,6 @@ namespace DefaultNamespace
         public string Price;
         public string Position;
         public string TeamSheetPosition;
+        public string Points;
     }
 }
