@@ -36,7 +36,6 @@ namespace DefaultNamespace
         {
             _pointsTeamSheet = GameObjectFinder.FindSingleObjectByName("PointsTeamSheet");
             var grandChildrenOfTeamSheet = GetGrandChildren(_pointsTeamSheet);
-            var panel = _pointsTeamSheet.transform.GetChild(0);
 
             for (int i = 0; i < grandChildrenOfTeamSheet.Count; i++)
             {
