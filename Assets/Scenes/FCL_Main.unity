@@ -842,6 +842,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PointsTeamSheetManager
       objectReference: {fileID: 0}
+    - target: {fileID: 752585420176056208, guid: f3938f7fbe8890b4a9091123649ec6be,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8679206642463128456, guid: f3938f7fbe8890b4a9091123649ec6be,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -965,6 +970,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TransferListWindow
+      objectReference: {fileID: 0}
+    - target: {fileID: 5356148817553067514, guid: 262a576fbcfb5264e879352375140bf7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}

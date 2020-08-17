@@ -30,13 +30,14 @@ namespace Dashboard
             {
                 PlayerName = playerName, 
                 Price = playerPrice, 
+                Rating = playerPrice,
                 Position = playerPosition, 
                 Team = playerTeamLogo.name,
                 TeamSheetPosition = playerDetails.teamSheetPosition,
-                Points = playerDetails.points
+                Points = "0"
             };
 
-            if (IsValidPlayerPosition(playerPosition, playerDetails.teamSheetPosition) && !PlayerAlreadyInTeam(teamDatabase, playerName))
+            if (IsValidPlayerPosition(playerPosition, playerDetails.teamSheetPosition) && !PlayerAlreadyInTeam(teamDatabase, playerName) || playerName == "")
             {
                 teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);
                 var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
@@ -88,7 +89,16 @@ namespace Dashboard
         private bool PlayerAlreadyInTeam(TeamSheetDatabase teamSheetDatabase, string playerName)
         {
             var teamSheet = teamSheetDatabase.GetSavedTeamSheet();
-            return teamSheet.teamSheetData.Any(pair => pair.Value.PlayerName == playerName);
+            
+            if (teamSheet == null)
+                return false;
+            
+            foreach (var pair in teamSheet.teamSheetData)
+            {
+                if (pair.Value.PlayerName == playerName) return true;
+            }
+
+            return false;
         }
 
         private IEnumerator DisplayInvalidPlayerPosition()

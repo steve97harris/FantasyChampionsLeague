@@ -17,6 +17,9 @@ namespace Dashboard
             // span each line of playerList
             foreach (var list in googleSheetPlayersList)
             {
+                if (list[0].ToString() == "Team")
+                    continue;
+                
                 var playerTeam = list[0].ToString();
                 var playerRating = list[2].ToString();
                 var playerPrice = list[3].ToString();
@@ -33,7 +36,7 @@ namespace Dashboard
                 playerDetails[2] = playerPosition;
                 playerDetails[3] = playerPrice;
                 playerDetails[4] = playerFclPoints;
-
+                
                 if (!PlayerPricesMap.ContainsKey(playerName))
                     PlayerPricesMap.Add(playerName, playerDetails);
                 else
@@ -77,6 +80,7 @@ namespace Dashboard
 
         public static void InitializePlayerList(Dictionary<string, string[]> playerPricesMap)
         {
+            Debug.LogError("hello");
             // locate gameObjects
             var transferListContent = GameObjectFinder.FindSingleObjectByName("TransferListContent").transform;
             var playerTransferEntry = GameObjectFinder.FindSingleObjectByName("PlayerTransferEntry");
@@ -110,7 +114,7 @@ namespace Dashboard
                     Price = pair.Value[3],
                     Points = pair.Value[4]
                 });
-
+                
                 playerNameObj.GetComponent<TMP_Text>().text = pair.Key;
                 playerPriceObj.GetComponent<TMP_Text>().text = "$" + pair.Value[1];
                 playerPositionObj.GetComponent<TMP_Text>().text = pair.Value[2];

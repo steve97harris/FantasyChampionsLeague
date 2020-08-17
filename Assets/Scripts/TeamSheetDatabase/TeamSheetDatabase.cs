@@ -32,8 +32,8 @@ namespace DefaultNamespace
         public void InsertPlayerEntry(AthleteStats playerEntry, string teamSheetPlayerPosition)
         {
             // get TeamSheetSaveData from json
-            var savedTeamSheetEntries = GetSavedTeamSheet();
-            
+            var savedTeamSheetEntries = GetSavedTeamSheet() ?? new TeamSheetSaveData();
+
             // add or replace selected player
             if (savedTeamSheetEntries.teamSheetData.Count < maxNumberOfEntries)
             {
@@ -94,6 +94,9 @@ namespace DefaultNamespace
 
         public void UpdateTeamSheetUi(TeamSheetSaveData teamSheetSaveData, string teamSheetObjName)
         {
+            if (teamSheetSaveData == null)
+                return;
+            
             var teamSheetDataMap = teamSheetSaveData.teamSheetData;
             
             // set TeamSheetUi
@@ -129,7 +132,16 @@ namespace DefaultNamespace
 
                 var obj = playerTeamEntryCanvas.transform.GetChild(0);
                 obj.transform.GetChild(4).GetComponent<TMP_Text>().text = athleteStats.PlayerName;
-                obj.transform.GetChild(3).GetComponent<TMP_Text>().text = athleteStats.Price;
+                
+                switch (teamSheetObjName)
+                {
+                    case "TransferTeamSheet":
+                        obj.transform.GetChild(3).GetComponent<TMP_Text>().text = athleteStats.Price;
+                        break;
+                    case "PointsTeamSheet":
+                        obj.transform.GetChild(3).GetComponent<TMP_Text>().text = athleteStats.Points;
+                        break;
+                }
 
                 if (teamLogoNames.Contains(athleteStats.Team))
                 {
@@ -156,6 +168,7 @@ namespace DefaultNamespace
             playerDetails.price = athleteStats.Price;
             playerDetails.rating = athleteStats.Rating;
             playerDetails.position = athleteStats.Position;
+            playerDetails.points = athleteStats.Points;
         }
         #endregion
     }

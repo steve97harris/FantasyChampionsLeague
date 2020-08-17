@@ -15,8 +15,8 @@ namespace DefaultNamespace
 
         public void Start()
         {
-            GetPlayerMap();
-            SetPlayerPoints();
+            // GetPlayerMap();
+            // SetPlayerPoints();
         }
 
         private void SetPlayerPoints()
@@ -28,7 +28,7 @@ namespace DefaultNamespace
                 
                 var playerTeamEntryCanvasGrandChildren = GetGrandChildren(playerTeamEntryCanvas);
                 var priceScoreObj = playerTeamEntryCanvasGrandChildren.Find(x => x.name == "PriceScore");
-                priceScoreObj.GetComponent<TMP_Text>().text = footballPlayerDetails.points; // - playerScore 
+                priceScoreObj.GetComponent<TMP_Text>().text = footballPlayerDetails.points;
             }
         }
 
@@ -40,10 +40,10 @@ namespace DefaultNamespace
             for (int i = 0; i < grandChildrenOfTeamSheet.Count; i++)
             {
                 var playerObj = grandChildrenOfTeamSheet[i];
-                var playerName = playerObj.GetComponent<FootballPlayerDetails>().playerName;
 
-                if (playerName == null)
+                if (playerObj.GetComponent<FootballPlayerDetails>() == null)
                     continue;
+                var playerName = playerObj.GetComponent<FootballPlayerDetails>().playerName;
                 
                 playerMap.Add(playerName, playerObj);
             }
