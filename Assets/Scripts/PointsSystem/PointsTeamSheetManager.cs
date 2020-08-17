@@ -17,29 +17,33 @@ namespace DefaultNamespace
         
         [SerializeField] private Dictionary<string, GameObject> playerMap = new Dictionary<string, GameObject>();
         
-        private Dictionary<string,string[]> _gameweekPlayerPointsMap = new Dictionary<string, string[]>();
+        private static Dictionary<string,string[]> _gameweekPlayerPointsMap = new Dictionary<string, string[]>();
 
         public void Start()
         {
-            GetPlayerMap();
-            _gameweekPlayerPointsMap = GetGameweekPoints();
-            // SetPlayerPoints(_currentGameweekIndex);        // Gw1 - index 0
-            // var currentGwNo = _currentGameweekIndex;
-            // SetGameweekTitleNo(currentGwNo.ToString());
-            Debug.LogError(_currentGameweekIndex);
+            SetPlayerPoints(0);
         }
 
         private void SetPlayerPoints(int currentGwIndex)
         {
+            if (playerMap.Count == 0)
+                GetPlayerMap();
+            if (_gameweekPlayerPointsMap.Count == 0)
+                GetGameweekPoints();
+
             foreach (var pair1 in playerMap)
             {
                 var playerTeamEntryCanvas = pair1.Value;
                 var footballPlayerDetails = playerTeamEntryCanvas.GetComponent<FootballPlayerDetails>();
-                foreach (var pair2 in _gameweekPlayerPointsMap.Where(pair2 => pair2.Key == footballPlayerDetails.playerName))
+
+                foreach (var pair2 in _gameweekPlayerPointsMap)
                 {
-                    footballPlayerDetails.gameweekPoints = pair2.Value[currentGwIndex];        
+                    if (pair2.Key == footballPlayerDetails.playerName)
+                    {
+                        footballPlayerDetails.gameweekPoints = pair2.Value[currentGwIndex];
+                    }
                 }
-                
+
                 var playerTeamEntryCanvasGrandChildren = GetGrandChildren(playerTeamEntryCanvas);
                 var priceScoreObj = playerTeamEntryCanvasGrandChildren.Find(x => x.name == "PriceScore");
                 priceScoreObj.GetComponent<TMP_Text>().text = footballPlayerDetails.gameweekPoints;
@@ -67,6 +71,7 @@ namespace DefaultNamespace
                 
                 playerMap.Add(playerName, playerObj);
             }
+            Debug.LogError(playerMap.Count);
         }
 
         private List<GameObject> GetGrandChildren(GameObject canvas)
@@ -97,11 +102,10 @@ namespace DefaultNamespace
             return grandchildren;
         }
         
-        private Dictionary<string,string[]> GetGameweekPoints()
+        private void GetGameweekPoints()
         {
             var sheet = GoogleSheetReader.Reader("1iufkvofC9UcmJS5ld3R72RJZHz2kFd97BYR-1kL8XeM", "Sheet2!A3:F203");
-
-            var gameweekPlayerPointsMap = new Dictionary<string, string[]>();        // playerName, gameweekPoints
+            
             foreach (var list in sheet)
             {
                 var playerNameData = list[1].ToString();
@@ -117,22 +121,19 @@ namespace DefaultNamespace
                 if (namePos[0] == null)
                     continue;
 
-                if (!gameweekPlayerPointsMap.ContainsKey(playerName))
+                if (!_gameweekPlayerPointsMap.ContainsKey(playerName))
                 {
-                    gameweekPlayerPointsMap.Add(playerName, gameweekPoints);
+                    _gameweekPlayerPointsMap.Add(playerName, gameweekPoints);
                 }
                 else
                 {
                     Debug.LogError("gameweekPlayerPointsMap already contains player");
                 }
             }
-
-            return gameweekPlayerPointsMap;
         }
 
         public void GameweekPointsButtonRight()
         {
-            Debug.LogError(_currentGameweekIndex);
             _currentGameweekIndex = UpIndex(_currentGameweekIndex, 3);
             SetPlayerPoints(_currentGameweekIndex);
             SetGameweekTitleNo(_currentGameweekIndex.ToString());
@@ -160,11 +161,10 @@ namespace DefaultNamespace
         private int UpIndex(int index, int arrayCount)
         {
             index++;
-            Debug.LogError("index = " + index);
+
             if (index <= arrayCount - 1) 
                 return index;
             
-            Debug.LogError("bye");
             index = arrayCount - 1;
             return index;
 
