@@ -34,7 +34,7 @@ namespace Dashboard
                 Position = playerPosition, 
                 Team = playerTeamLogo.name,
                 TeamSheetPosition = playerDetails.teamSheetPosition,
-                Points = "0"
+                TotalPoints = "0"
             };
 
             if (IsValidPlayerPosition(playerPosition, playerDetails.teamSheetPosition) && !PlayerAlreadyInTeam(teamDatabase, playerName) || playerName == "")

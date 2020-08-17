@@ -44,7 +44,7 @@ namespace Dashboard
             }
         }
 
-        private static string[] AnalyzePlayerNameData(string nameData)
+        public static string[] AnalyzePlayerNameData(string nameData)
         {
             var nameDataSplit = nameData.Split(new [] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
                 
@@ -112,7 +112,7 @@ namespace Dashboard
                     Rating = pair.Value[1], 
                     Position = pair.Value[2],
                     Price = pair.Value[3],
-                    Points = pair.Value[4]
+                    TotalPoints = pair.Value[4]
                 });
                 
                 playerNameObj.GetComponent<TMP_Text>().text = pair.Key;

@@ -22,6 +22,6 @@ namespace DefaultNamespace
         public string Price;
         public string Position;
         public string TeamSheetPosition;
-        public string Points;
+        public string TotalPoints;
     }
 }

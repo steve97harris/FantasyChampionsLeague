@@ -139,7 +139,7 @@ namespace DefaultNamespace
                         obj.transform.GetChild(3).GetComponent<TMP_Text>().text = athleteStats.Price;
                         break;
                     case "PointsTeamSheet":
-                        obj.transform.GetChild(3).GetComponent<TMP_Text>().text = athleteStats.Points;
+                        obj.transform.GetChild(3).GetComponent<TMP_Text>().text = athleteStats.TotalPoints;
                         break;
                 }
 
@@ -168,7 +168,7 @@ namespace DefaultNamespace
             playerDetails.price = athleteStats.Price;
             playerDetails.rating = athleteStats.Rating;
             playerDetails.position = athleteStats.Position;
-            playerDetails.points = athleteStats.Points;
+            playerDetails.gameweekPoints = athleteStats.TotalPoints;
         }
         #endregion
     }
