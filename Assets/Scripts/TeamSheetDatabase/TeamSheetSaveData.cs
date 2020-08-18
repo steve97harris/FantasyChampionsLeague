@@ -13,7 +13,7 @@ namespace DefaultNamespace
         public Dictionary<string, AthleteStats> teamSheetData = new Dictionary<string, AthleteStats>();
     }
 
-    // created second player details as MonoBehaviour methods cannot be serialized
+    // created second football player details as MonoBehaviour methods cannot be serialized
     public class AthleteStats
     {
         public string PlayerName;

@@ -10,6 +10,7 @@ public class DashBoardManager : MonoBehaviour
 {
     private readonly List<string> _fclScreenNames = new List<string>()
     {
+        "LoginPanel",
         "DashBoard",
         "PointsPage",
         "TransfersPage",
@@ -25,22 +26,22 @@ public class DashBoardManager : MonoBehaviour
 
     public void PointsButton()
     {
-        SetScreenActive(1);
+        SetScreenActive(2);
     }
 
     public void TransfersButton()
     {
-        SetScreenActive(2);
+        SetScreenActive(3);
     }
 
     public void DashboardButton()
     {
-        SetScreenActive(0);
+        SetScreenActive(1);
     }
 
     public void FixturesResultsButton()
     {
-        SetScreenActive(3);
+        SetScreenActive(4);
     }
 
     private void InitiateTransferList()
