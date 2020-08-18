@@ -1,6 +1,7 @@
 ﻿using DefaultNamespace;
 using PlayFab.ClientModels;
 using UnityEngine;
+using UnityEngine.iOS;
 
 namespace PlayFab
 {
@@ -21,20 +22,29 @@ namespace PlayFab
             {
                 _userEmail = PlayerPrefs.GetString("EMAIL");
                 _userPassword = PlayerPrefs.GetString("PASSWORD");
-#if UNITY_STANDALONE || UNITY_EDITOR
                 var request = new LoginWithEmailAddressRequest { Email = _userEmail, Password = _userPassword };
                 PlayFabClientAPI.LoginWithEmailAddress(request, OnLoginSuccess, OnLoginFailure);
-#endif
             }
             else
             {
 #if UNITY_IOS
-                
+                var requestIos = new LoginWithIOSDeviceIDRequest{ DeviceId = ReturnMobileId() , CreateAccount = true };
+                PlayFabClientAPI.LoginWithIOSDeviceID(requestIos, OnIosLoginSuccess, OnIosLoginFailure);
 #endif
             }
         }
 
         private void OnLoginSuccess(LoginResult result)
+        {
+            Debug.Log("Boom!! Successful API Login.");
+            
+            PlayerPrefs.SetString("EMAIL", _userEmail);
+            PlayerPrefs.SetString("PASSWORD", _userPassword);
+            
+            ActivateDashBoard();
+        }
+        
+        private void OnIosLoginSuccess(LoginResult result)
         {
             Debug.Log("Boom!! Successful API Login.");
             
@@ -58,6 +68,13 @@ namespace PlayFab
         {
             var registerRequest = new RegisterPlayFabUserRequest {Email = _userEmail, Password = _userPassword, Username = _userName};
             PlayFabClientAPI.RegisterPlayFabUser(registerRequest, OnRegisterSuccess, OnRegisterFailure);
+        }
+        
+        private void OnIosLoginFailure(PlayFabError error)
+        {
+            // var registerRequest = new RegisterPlayFabUserRequest {Email = _userEmail, Password = _userPassword, Username = _userName};
+            // PlayFabClientAPI.RegisterPlayFabUser(registerRequest, OnRegisterSuccess, OnRegisterFailure);
+            Debug.LogError(error.GenerateErrorReport());
         }
 
         private void OnRegisterFailure(PlayFabError error)
@@ -94,6 +111,12 @@ namespace PlayFab
         {
             var request = new LoginWithEmailAddressRequest { Email = _userEmail, Password = _userPassword };
             PlayFabClientAPI.LoginWithEmailAddress(request, OnLoginSuccess, OnLoginFailure);
+        }
+
+        public static string ReturnMobileId()
+        {
+            var deviceId = SystemInfo.deviceUniqueIdentifier;
+            return deviceId;
         }
     }
 }
