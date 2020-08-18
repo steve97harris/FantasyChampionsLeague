@@ -67,7 +67,8 @@ namespace DefaultNamespace
                     continue;
                 var playerName = playerObj.GetComponent<FootballPlayerDetails>().playerName;
                 
-                PointsTeamSheetPlayerMap.Add(playerName, playerObj);
+                if (!PointsTeamSheetPlayerMap.ContainsKey(playerName))
+                    PointsTeamSheetPlayerMap.Add(playerName, playerObj);
             }
         }
         
