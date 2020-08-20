@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using CSV;
 using Dashboard;
 using DefaultNamespace;
 using GoogleSheetsLevelSynchronizer;
@@ -47,8 +48,10 @@ public class DashBoardManager : MonoBehaviour
 
     private void InitiateTransferList()
     {
-        var sheet = GoogleSheetReader.Reader("1iufkvofC9UcmJS5ld3R72RJZHz2kFd97BYR-1kL8XeM", "A3:E173");
-        TransferListWindow.GetPlayerTransferList(sheet);
+        // var sheet = GoogleSheetReader.Reader("1iufkvofC9UcmJS5ld3R72RJZHz2kFd97BYR-1kL8XeM", "A3:E173");
+
+        var x = CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/Sheet1.csv");
+        TransferListWindow.GetPlayerTransferList(x);
     }
 
     private void SetScreenActive(int index)

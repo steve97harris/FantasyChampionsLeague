@@ -12,23 +12,22 @@ namespace Dashboard
     {
         public static readonly Dictionary<string, string[]> PlayerPricesMap = new Dictionary<string, string[]>();        // name, price
 
-        public static void GetPlayerTransferList(IList<IList<object>> googleSheetPlayersList)
+        public static void GetPlayerTransferList(List<string> playerDatabaseCsv)
         {
             // span each line of playerList
-            foreach (var list in googleSheetPlayersList)
+            foreach (var line in playerDatabaseCsv)
             {
-                if (list[0].ToString() == "Team")
-                    continue;
-                
-                var playerTeam = list[0].ToString();
-                var playerRating = list[2].ToString();
-                var playerPrice = list[3].ToString();
-                var playerFclPoints = list[4].ToString();
+                var playerInformation = line.Split(',');
 
-                var nameData = list[1].ToString();
-                var playerNameData = AnalyzePlayerNameData(nameData);
-                var playerName = playerNameData[0];
-                var playerPosition = playerNameData[1];
+                var playerTeam = playerInformation[0];
+                var nameData = playerInformation[2];
+                var positionData = playerInformation[3];
+                var playerRating = playerInformation[4];
+                var playerPrice = playerInformation[5];
+                var playerFclPoints = playerInformation[6];
+
+                var playerName = AnalyzePlayerNameData(nameData);
+                var playerPosition = AnalyzePlayerPositionData(positionData);
 
                 var playerDetails = new string[5];
                 playerDetails[0] = playerTeam;
@@ -44,38 +43,34 @@ namespace Dashboard
             }
         }
 
-        public static string[] AnalyzePlayerNameData(string nameData)
+        public static string AnalyzePlayerNameData(string nameData)
         {
-            var nameDataSplit = nameData.Split(new [] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
-                
-            if (nameDataSplit.Length != 2)
-                return new string[2];
-                
-            for (int i = 0; i < nameDataSplit[1].Length; i++)
+            for (int i = 0; i < nameData.Length; i++)
             {
-                if (int.TryParse(nameDataSplit[1][i].ToString(), out var res))
+                if (int.TryParse(nameData[i].ToString(), out var res))
                 {
-                    nameDataSplit[1] = nameDataSplit[1].Remove(i, nameDataSplit[1].Length - i);
+                    nameData = nameData.Remove(i, nameData.Length - i);
                 }
             }
-            var playerName = nameDataSplit[1];
-            
-            var indexOfComa = nameData.IndexOf(",", StringComparison.Ordinal);
-            var nameDataPlayerPositions = nameData.Remove(0, indexOfComa);
+            var playerName = nameData;
+
+            return playerName;
+        }
+
+        public static string AnalyzePlayerPositionData(string positionData)
+        {
             // needs adjusting
             var playerPosition = "";
-            if (nameDataPlayerPositions.Contains("FW") && nameDataPlayerPositions.Contains("AM") || nameDataPlayerPositions.Contains("FW"))
+            if (positionData.Contains("FW") && positionData.Contains("AM") || positionData.Contains("FW"))
                 playerPosition = "F";
-            else if (nameDataPlayerPositions.Contains("D"))
+            else if (positionData.Contains("D"))
                 playerPosition = "D";
-            else if (nameDataPlayerPositions.Contains("GK"))
+            else if (positionData.Contains("GK"))
                 playerPosition = "Gk";
-            else if (nameDataPlayerPositions.Contains("M") || nameDataPlayerPositions.Contains("AM"))
+            else if (positionData.Contains("M") || positionData.Contains("AM"))
                 playerPosition = "M";
 
-            var namePositionArray = new string[] {playerName, playerPosition};
-
-            return namePositionArray;
+            return playerPosition;
         }
 
         public static void InitializePlayerList(Dictionary<string, string[]> playerPricesMap)

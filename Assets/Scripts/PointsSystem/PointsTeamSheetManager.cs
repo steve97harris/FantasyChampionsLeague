@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSV;
 using Dashboard;
 using GoogleSheetsLevelSynchronizer;
 using TMPro;
@@ -74,27 +75,29 @@ namespace DefaultNamespace
         
         private void GetGameweekPoints()
         {
-            var sheet = GoogleSheetReader.Reader("1iufkvofC9UcmJS5ld3R72RJZHz2kFd97BYR-1kL8XeM", "Sheet2!A3:F203");
-            
+            var sheet = CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/Sheet2.csv");
+
             foreach (var list in sheet)
             {
-                var playerNameData = list[1].ToString();
-                var namePos = TransferListWindow.AnalyzePlayerNameData(playerNameData);
-                var playerName = namePos[0];
-                var gameweekPoints = new string[]
-                {
-                    list[3].ToString(),       // Gw0
-                    list[4].ToString(),       // Gw1
-                    list[5].ToString()        // Gw2
-                };
-                _noOfGameweeks = gameweekPoints.Length;
+                var playerInformation = list.Split(',');
+
+                var playerTeam = playerInformation[0];
+                var nameData = playerInformation[2];
+                var playerTotalFclPoints = playerInformation[6];
+
+                var playerName = TransferListWindow.AnalyzePlayerNameData(nameData);
                 
-                if (namePos[0] == null)
-                    continue;
+                var gameweekPoints = new List<string>();
+                for (int i = 4; i < 14; i++)
+                {
+                    gameweekPoints.Add(playerInformation[i]);
+                    Debug.LogError(playerInformation[i]);
+                }
+                _noOfGameweeks = gameweekPoints.Count;
 
                 if (!GameweekAllPlayerPointsMap.ContainsKey(playerName))
                 {
-                    GameweekAllPlayerPointsMap.Add(playerName, gameweekPoints);
+                    GameweekAllPlayerPointsMap.Add(playerName, gameweekPoints.ToArray());
                 }
                 else
                 {
