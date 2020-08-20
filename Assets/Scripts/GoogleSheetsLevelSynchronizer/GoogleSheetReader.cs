@@ -24,7 +24,7 @@ namespace GoogleSheetsLevelSynchronizer
             UserCredential credential;
 
             using (var stream =
-                new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+                new FileStream(Application.streamingAssetsPath + "/credentials.json", FileMode.Open, FileAccess.Read))
             {
                 // The file token.json stores the user's access and refresh tokens, and is created
                 // automatically when the authorization flow completes for the first time.
@@ -49,7 +49,8 @@ namespace GoogleSheetsLevelSynchronizer
             // String spreadsheetId = "1iufkvofC9UcmJS5ld3R72RJZHz2kFd97BYR-1kL8XeM";
             // String range = "A1:E173";
             
-            var request = service.Spreadsheets.Values.Get(spreadsheetId, range);
+            SpreadsheetsResource.ValuesResource.GetRequest request =
+                    service.Spreadsheets.Values.Get(spreadsheetId, range);
 
             // Prints the names and majors of students in a sample spreadsheet:
             // https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit

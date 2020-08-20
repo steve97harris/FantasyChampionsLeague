@@ -1,7 +1,6 @@
 ﻿using DefaultNamespace;
 using PlayFab.ClientModels;
 using UnityEngine;
-using UnityEngine.iOS;
 
 namespace PlayFab
 {
