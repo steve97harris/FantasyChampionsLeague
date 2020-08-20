@@ -27,7 +27,7 @@ public class DashBoardManager : MonoBehaviour
 
     public void PointsButton()
     {
-        SetScreenActive(2);
+        SetScreenActive(2); 
     }
 
     public void TransfersButton()

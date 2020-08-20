@@ -80,7 +80,6 @@ namespace Dashboard
 
         public static void InitializePlayerList(Dictionary<string, string[]> playerPricesMap)
         {
-            Debug.LogError("hello");
             // locate gameObjects
             var transferListContent = GameObjectFinder.FindSingleObjectByName("TransferListContent").transform;
             var playerTransferEntry = GameObjectFinder.FindSingleObjectByName("PlayerTransferEntry");
