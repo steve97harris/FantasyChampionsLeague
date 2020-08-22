@@ -23,5 +23,6 @@ namespace DefaultNamespace
         public string Position;
         public string TeamSheetPosition;
         public string TotalPoints;
+        public string RemoteConfigKey;
     }
 }

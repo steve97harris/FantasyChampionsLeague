@@ -44,15 +44,15 @@ namespace DefaultNamespace
             GetPlayerMap(); 
             GetGameweekPoints();
             
-            _gameweekTeamSheetPointsArray = new Dictionary<string, int>[_noOfGameweeks];
-            
-            for (int i = 0; i < _noOfGameweeks; i++)
-            {
-                SetGwTeamSheetPointsArray(i);
-            }
-            SetHeadCoachPoints();
-            
-            SetPlayerPointsUi(0);
+            // _gameweekTeamSheetPointsArray = new Dictionary<string, int>[_noOfGameweeks];
+            //
+            // for (int i = 0; i < _noOfGameweeks; i++)
+            // {
+            //     SetGwTeamSheetPointsArray(i);
+            // }
+            // SetHeadCoachPoints();
+            //
+            // SetPlayerPointsUi(0);
         }
         
         private void GetPlayerMap()
@@ -75,35 +75,7 @@ namespace DefaultNamespace
         
         private void GetGameweekPoints()
         {
-            var sheet = CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/Sheet2.csv");
-
-            foreach (var list in sheet)
-            {
-                var playerInformation = list.Split(',');
-
-                var playerTeam = playerInformation[0];
-                var nameData = playerInformation[2];
-                var playerTotalFclPoints = playerInformation[6];
-
-                var playerName = TransferListWindow.AnalyzePlayerNameData(nameData);
-                
-                var gameweekPoints = new List<string>();
-                for (int i = 4; i < 14; i++)
-                {
-                    gameweekPoints.Add(playerInformation[i]);
-                    Debug.LogError(playerInformation[i]);
-                }
-                _noOfGameweeks = gameweekPoints.Count;
-
-                if (!GameweekAllPlayerPointsMap.ContainsKey(playerName))
-                {
-                    GameweekAllPlayerPointsMap.Add(playerName, gameweekPoints.ToArray());
-                }
-                else
-                {
-                    Debug.LogError("gameweekPlayerPointsMap already contains player");
-                }
-            }
+            
         }
         
         private void SetGwTeamSheetPointsArray(int currentGwIndex)

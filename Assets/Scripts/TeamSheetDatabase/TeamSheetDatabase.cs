@@ -19,6 +19,11 @@ namespace DefaultNamespace
 
         private void Start()
         {
+            UpdateTeamSheetUiSaveTeamSheet();
+        }
+
+        private void UpdateTeamSheetUiSaveTeamSheet()
+        {
             var savedTeamSheetEntries = GetSavedTeamSheet();
             UpdateTeamSheetUi(savedTeamSheetEntries, "TransferTeamSheet");
             UpdateTeamSheetUi(savedTeamSheetEntries, "PointsTeamSheet");
@@ -31,9 +36,12 @@ namespace DefaultNamespace
 
         public void InsertPlayerEntry(AthleteStats playerEntry, string teamSheetPlayerPosition)
         {
+            Debug.LogError("Inserting player into json file..");
+            
             // get TeamSheetSaveData from json
             var savedTeamSheetEntries = GetSavedTeamSheet() ?? new TeamSheetSaveData();
-
+            Debug.LogError("savedTeamsheetEntries: " + savedTeamSheetEntries);
+            
             // add or replace selected player
             if (savedTeamSheetEntries.teamSheetData.Count < maxNumberOfEntries)
             {
@@ -94,6 +102,7 @@ namespace DefaultNamespace
 
         public void UpdateTeamSheetUi(TeamSheetSaveData teamSheetSaveData, string teamSheetObjName)
         {
+            Debug.LogError("updating teamsheet ui");
             if (teamSheetSaveData == null)
                 return;
             
@@ -169,6 +178,7 @@ namespace DefaultNamespace
             playerDetails.rating = athleteStats.Rating;
             playerDetails.position = athleteStats.Position;
             playerDetails.gameweekPoints = athleteStats.TotalPoints;
+            playerDetails.remoteConfigKey = athleteStats.RemoteConfigKey;
         }
         #endregion
     }

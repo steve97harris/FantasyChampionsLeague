@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using DefaultNamespace;
+using Unity.RemoteConfig;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ namespace Dashboard
 {
     public class TransferListWindow : MonoBehaviour
     {
+        public static readonly Dictionary<string, AthleteStats> PlayerRemoteKeyMap = new Dictionary<string, AthleteStats>();
         public static readonly Dictionary<string, string[]> PlayerPricesMap = new Dictionary<string, string[]>();        // name, price
 
         public static void GetPlayerTransferList(List<string> playerDatabaseCsv)
@@ -20,21 +22,36 @@ namespace Dashboard
                 var playerInformation = line.Split(',');
 
                 var playerTeam = playerInformation[0];
-                var nameData = playerInformation[2];
-                var positionData = playerInformation[3];
-                var playerRating = playerInformation[4];
-                var playerPrice = playerInformation[5];
-                var playerFclPoints = playerInformation[6];
+                var playerName = playerInformation[1];
+                var playerPosition = playerInformation[2];
+                var playerRating = playerInformation[3];
+                var playerPrice = playerInformation[4];
+                var playerFclPoints = playerInformation[5];
+                var playerRemoteConfigKey = playerInformation[6];
+                RemoteConfigManager.PlayerRemoteConfigKeys.Add(playerRemoteConfigKey);
+                RemoteConfigManager.PlayerConfigKeyMap.Add(playerRemoteConfigKey, playerName);
+                
+                PlayerRemoteKeyMap.Add(playerRemoteConfigKey, new AthleteStats() 
+                {
+                    PlayerName = playerName,
+                    Position = playerPosition,
+                    Price = playerPrice,
+                    Rating = playerRating,
+                    RemoteConfigKey = playerRemoteConfigKey,
+                    Team = playerTeam,
+                    TotalPoints = playerFclPoints
+                });
+                
 
-                var playerName = AnalyzePlayerNameData(nameData);
-                var playerPosition = AnalyzePlayerPositionData(positionData);
-
-                var playerDetails = new string[5];
-                playerDetails[0] = playerTeam;
-                playerDetails[1] = playerRating;
-                playerDetails[2] = playerPosition;
-                playerDetails[3] = playerPrice;
-                playerDetails[4] = playerFclPoints;
+                var playerDetails = new string[]
+                {
+                    playerTeam,
+                    playerRating,
+                    playerPosition,
+                    playerPrice,
+                    playerFclPoints,
+                    playerRemoteConfigKey
+                };
                 
                 if (!PlayerPricesMap.ContainsKey(playerName))
                     PlayerPricesMap.Add(playerName, playerDetails);
@@ -106,7 +123,8 @@ namespace Dashboard
                     Rating = pair.Value[1], 
                     Position = pair.Value[2],
                     Price = pair.Value[3],
-                    TotalPoints = pair.Value[4]
+                    TotalPoints = pair.Value[4],
+                    RemoteConfigKey = pair.Value[5]
                 });
                 
                 playerNameObj.GetComponent<TMP_Text>().text = pair.Key;
@@ -135,9 +153,11 @@ namespace Dashboard
 
         public static void DestroyTransferList_LoadTransferTeamSheet()
         {
+            Debug.LogError("destroy list, load teamsheet");
             var list = GameObjectFinder.FindSingleObjectByName("TransferList(Clone)");
             var transferTeamSheet = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet");
-            
+            Debug.LogError("transferTeamSheet: " + transferTeamSheet);
+
             list.SetActive(false);
             transferTeamSheet.SetActive(true);
             DestroyImmediate(list,true);

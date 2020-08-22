@@ -15,41 +15,53 @@ namespace Dashboard
             
             // footballer data of player clicked 
             var playerName = GetGameObjectChildText(thisButtonObj, 0);
-            var playerPrice = GetGameObjectChildText(thisButtonObj, 1);
-            var playerPosition = GetGameObjectChildText(thisButtonObj, 3);
-            var playerTeamLogo = thisButtonObj.transform.GetChild(2).GetComponent<Image>().sprite;
+
+            var playerDetails = new AthleteStats();
+            var playerRemoteKeyMap = TransferListWindow.PlayerRemoteKeyMap;
+            foreach (var pair in playerRemoteKeyMap.Where(pair => pair.Value.PlayerName == playerName))
+            {
+                playerDetails = pair.Value;
+            }
             
             // Save new player entry to json
             var teamSheetDatabaseObj = GameObjectFinder.FindSingleObjectByName("TeamSheetDatabase");
             var teamDatabase = teamSheetDatabaseObj.GetComponent<TeamSheetDatabase>();
             
             var playerTeamEntryClickedObj = TransferListInitializer.PlayerTeamEntryClickedObj;
-            var playerDetails = playerTeamEntryClickedObj.GetComponent<FootballPlayerDetails>();
+            var playerTeamSheetEntryDetails = playerTeamEntryClickedObj.GetComponent<FootballPlayerDetails>();
 
             var athleteStats = new AthleteStats
             {
                 PlayerName = playerName, 
-                Price = playerPrice, 
-                Rating = playerPrice,
-                Position = playerPosition, 
-                Team = playerTeamLogo.name,
-                TeamSheetPosition = playerDetails.teamSheetPosition,
-                TotalPoints = "0"
+                Price = playerDetails.Price, 
+                Rating = playerDetails.Rating,
+                Position = playerDetails.Position, 
+                Team = playerDetails.Team,
+                TeamSheetPosition = playerTeamSheetEntryDetails.teamSheetPosition,
+                TotalPoints = playerDetails.TotalPoints,
+                RemoteConfigKey = playerDetails.RemoteConfigKey
             };
 
-            if (IsValidPlayerPosition(playerPosition, playerDetails.teamSheetPosition) && !PlayerAlreadyInTeam(teamDatabase, playerName) || playerName == "")
+            if (IsValidPlayerPosition(playerDetails.Position, playerTeamSheetEntryDetails.teamSheetPosition) && !PlayerAlreadyInTeam(teamDatabase, playerName) || playerName == "")
             {
-                teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);
-                var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
-                teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "TransferTeamSheet");
-                teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
-                
+                Debug.LogError("Valid player, insert player into team...");
+                InsertPlayerUpdateTeamSheetUi(teamDatabase, athleteStats);
                 TransferListWindow.DestroyTransferList_LoadTransferTeamSheet();
             }
             else
             {
+                Debug.LogError("Invalid player choice...");
                 StartCoroutine(DisplayInvalidPlayerPosition());
             }
+        }
+
+        private void InsertPlayerUpdateTeamSheetUi(TeamSheetDatabase teamDatabase, AthleteStats athleteStats)
+        {
+            teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);
+            var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
+            Debug.LogError("teamsheetsavedata: " + teamSheetSaveData);
+            teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "TransferTeamSheet");
+            teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
         }
 
         private string GetGameObjectChildText(GameObject obj, int childIndex)
@@ -61,20 +73,20 @@ namespace Dashboard
         {
             switch (playerPosition)
             {
-                case "D":
+                case "Defender":
                     if (teamSheetPosition == "Cb_L" || teamSheetPosition == "Cb_R" || teamSheetPosition == "Rb" ||
                         teamSheetPosition == "Lb" || teamSheetPosition.Contains("Sub"))
                         return true;
                     break;
-                case "M":
+                case "Midfielder":
                     if (teamSheetPosition == "Cm_L" || teamSheetPosition == "Cm_C" || teamSheetPosition == "Cm_R" || teamSheetPosition.Contains("Sub"))
                         return true;
                     break;
-                case "F":
+                case "Forward":
                     if (teamSheetPosition == "Fw_L" || teamSheetPosition == "Fw_C" || teamSheetPosition == "Fw_R" || teamSheetPosition.Contains("Sub"))
                         return true;
                     break;
-                case "Gk":
+                case "Goalkeeper":
                     if (teamSheetPosition == "Gk" || teamSheetPosition.Contains("Sub"))
                         return true;
                     break;

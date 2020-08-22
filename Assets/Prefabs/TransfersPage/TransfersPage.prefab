@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2362710834898815585
 RectTransform:
   m_ObjectHideFlags: 0
@@ -367,6 +367,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2362710834898815585}
     m_Modifications:
+    - target: {fileID: 171367277966031679, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.12156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 171367277966031679, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 235124444741000278, guid: c34230f471d8c4f4491b06c70865a996,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -407,6 +417,151 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 308953653619303611, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: playerName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 308953653619303611, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: team
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 308953653619303611, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: rating
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 308953653619303611, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: price
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 308953653619303611, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: position
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 308953653619303611, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: gameweekPoints
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 605618186974811549, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: playerName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 605618186974811549, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: team
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 605618186974811549, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: rating
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 605618186974811549, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: price
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 605618186974811549, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: position
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 605618186974811549, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: gameweekPoints
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 713859692174317738, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: +
+      objectReference: {fileID: 0}
+    - target: {fileID: 963242125167616287, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: playerName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 963242125167616287, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: team
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 963242125167616287, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: rating
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 963242125167616287, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: price
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 963242125167616287, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: position
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 963242125167616287, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: gameweekPoints
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182224068131150229, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: PlayerName
+      objectReference: {fileID: 0}
+    - target: {fileID: 1361513316746718533, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1433627266187105992, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.12156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 1433627266187105992, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1570641848549394764, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: playerName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1570641848549394764, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: team
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1570641848549394764, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: rating
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1570641848549394764, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: price
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1570641848549394764, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: position
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1570641848549394764, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: gameweekPoints
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1606361157479261831, guid: c34230f471d8c4f4491b06c70865a996,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -426,6 +581,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1941830214982226796, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.12156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 1941830214982226796, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2291009881794832366, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.12156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 2291009881794832366, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2575616013845414454, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.12156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 2575616013845414454, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2666285403450091537, guid: c34230f471d8c4f4491b06c70865a996,
         type: 3}
@@ -467,6 +652,76 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2959591682373121390, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.12156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 2959591682373121390, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2970013254651489606, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: playerName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2970013254651489606, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: team
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2970013254651489606, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: rating
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2970013254651489606, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: price
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2970013254651489606, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: position
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2970013254651489606, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: gameweekPoints
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999575151036218552, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: playerName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999575151036218552, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: team
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999575151036218552, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: rating
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999575151036218552, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: price
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999575151036218552, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: position
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999575151036218552, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: gameweekPoints
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3026194795562737314, guid: c34230f471d8c4f4491b06c70865a996,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -487,6 +742,86 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3046292730562528248, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: +
+      objectReference: {fileID: 0}
+    - target: {fileID: 3303268169411765054, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: playerName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3303268169411765054, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: team
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3303268169411765054, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: rating
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3303268169411765054, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: price
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3303268169411765054, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: position
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3303268169411765054, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: gameweekPoints
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3552119267131078167, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3730847479744299719, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: PlayerName
+      objectReference: {fileID: 0}
+    - target: {fileID: 3752262441379852357, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: playerName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3752262441379852357, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: team
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3752262441379852357, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: rating
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3752262441379852357, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: price
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3752262441379852357, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: position
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4214044576581194061, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.12156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 4214044576581194061, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4371087195482749315, guid: c34230f471d8c4f4491b06c70865a996,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -507,6 +842,56 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4471083100926250699, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.12156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 4471083100926250699, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4511270372671758133, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.12156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 4511270372671758133, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521138098161108765, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: playerName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521138098161108765, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: team
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521138098161108765, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: rating
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521138098161108765, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: price
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521138098161108765, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: position
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521138098161108765, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: gameweekPoints
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4953533640996888980, guid: c34230f471d8c4f4491b06c70865a996,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -526,6 +911,81 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4975966741633314068, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: PlayerName
+      objectReference: {fileID: 0}
+    - target: {fileID: 5153002806118914500, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5221574407327377614, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: playerName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5221574407327377614, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: team
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5221574407327377614, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: price
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5221574407327377614, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: position
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406503228835104368, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: +
+      objectReference: {fileID: 0}
+    - target: {fileID: 5445125650720888718, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: +
+      objectReference: {fileID: 0}
+    - target: {fileID: 5561907237457473180, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738384760500820556, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: PlayerName
+      objectReference: {fileID: 0}
+    - target: {fileID: 5757792462632945672, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: +
+      objectReference: {fileID: 0}
+    - target: {fileID: 5767686932269888415, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5809021541248524897, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5913439560876742321, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: PlayerName
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946997911549298511, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: PlayerName
       objectReference: {fileID: 0}
     - target: {fileID: 5957097895975311933, guid: c34230f471d8c4f4491b06c70865a996,
         type: 3}
@@ -582,6 +1042,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TransferTeamSheet
       objectReference: {fileID: 0}
+    - target: {fileID: 6118979035709799911, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6185250901346933889, guid: c34230f471d8c4f4491b06c70865a996,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -602,6 +1067,31 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6206786657290574707, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: +
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226209580854167863, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: PlayerName
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669292830272056363, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: +
+      objectReference: {fileID: 0}
+    - target: {fileID: 6906861097818053309, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.12156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 6906861097818053309, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7087800529618686417, guid: c34230f471d8c4f4491b06c70865a996,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -622,6 +1112,16 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7384151785696759693, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: +
+      objectReference: {fileID: 0}
+    - target: {fileID: 7662821797651971755, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: +
+      objectReference: {fileID: 0}
     - target: {fileID: 7722368438699694473, guid: c34230f471d8c4f4491b06c70865a996,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -641,6 +1141,96 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771096124387570588, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: playerName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771096124387570588, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: team
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771096124387570588, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: rating
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771096124387570588, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: price
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771096124387570588, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: position
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771096124387570588, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: gameweekPoints
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7850162921887340437, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7961355024606470981, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: PlayerName
+      objectReference: {fileID: 0}
+    - target: {fileID: 8029432980076415529, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: +
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168119519320574788, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8347411800998854548, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: PlayerName
+      objectReference: {fileID: 0}
+    - target: {fileID: 8386675018148429766, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8569927731571591958, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: PlayerName
+      objectReference: {fileID: 0}
+    - target: {fileID: 8645876831446786682, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: +
+      objectReference: {fileID: 0}
+    - target: {fileID: 8967969855154487791, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.12156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 8967969855154487791, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040118990972025442, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9221683119220805298, guid: c34230f471d8c4f4491b06c70865a996,
+        type: 3}
+      propertyPath: m_text
+      value: PlayerName
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c34230f471d8c4f4491b06c70865a996, type: 3}

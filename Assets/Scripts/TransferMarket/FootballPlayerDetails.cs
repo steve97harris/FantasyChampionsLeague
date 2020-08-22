@@ -14,5 +14,6 @@ namespace Dashboard
         public string position;
         public string teamSheetPosition;
         public string gameweekPoints;
+        public string remoteConfigKey;
     }
 }

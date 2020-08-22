@@ -50,8 +50,8 @@ public class DashBoardManager : MonoBehaviour
     {
         // var sheet = GoogleSheetReader.Reader("1iufkvofC9UcmJS5ld3R72RJZHz2kFd97BYR-1kL8XeM", "A3:E173");
 
-        var x = CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/Sheet1.csv");
-        TransferListWindow.GetPlayerTransferList(x);
+        var footballPlayerDatabase = CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/FootballPlayerDatabase.csv");
+        TransferListWindow.GetPlayerTransferList(footballPlayerDatabase);
     }
 
     private void SetScreenActive(int index)
