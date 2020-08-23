@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Dashboard;
 using DefaultNamespace;
 using Newtonsoft.Json;
@@ -13,7 +14,14 @@ namespace DefaultNamespace
     public class TeamSheetDatabase : MonoBehaviour
     {
         private static int maxNumberOfEntries = 15;
-        private static string JsonPath => $"{Application.persistentDataPath}/TeamSheetData.json";
+        private static string JsonPath
+        {
+            get
+            {
+                // return Application.persistentDataPath + "/TeamSheetData.json";
+                return Path.Combine(Application.persistentDataPath,"TeamSheetData.json");
+            }
+        }
 
         #region Event Functions
 
@@ -70,6 +78,8 @@ namespace DefaultNamespace
 
         public TeamSheetSaveData GetSavedTeamSheet()
         {
+            Debug.LogError(JsonPath);
+            
             if (!File.Exists(JsonPath))
             {
                 Debug.LogError("TeamSheetData.json does not exist - creating new one");
@@ -78,12 +88,15 @@ namespace DefaultNamespace
                 File.Create(JsonPath).Dispose();
                 return new TeamSheetSaveData();
             }
-
+            
             using (StreamReader stream = new StreamReader(JsonPath))
             {
                 // convert json string to TeamSheetSaveData
                 var json = stream.ReadToEnd();
                 var teamSheetSaveData = JsonConvert.DeserializeObject<TeamSheetSaveData>(json);
+                
+                Debug.LogError("using StreamReader JsonPath, JsonConvert.DeserializeObject<TeamSheetSaveData>(json)");
+                Debug.LogError("teamSheetSaveData Count: " + teamSheetSaveData.teamSheetData.Count);
                 return teamSheetSaveData;
             }
         }
@@ -93,18 +106,20 @@ namespace DefaultNamespace
             using (StreamWriter stream = new StreamWriter(JsonPath))
             {
                 // convert TeamSheetSaveData to json string
-                var j = JsonConvert.SerializeObject(teamSheetSaveData, Formatting.Indented);
-                Debug.LogError("json String: " + j);
+                var teamSheetSaveDataJson = JsonConvert.SerializeObject(teamSheetSaveData, Formatting.Indented);
+                Debug.LogError("json String: " + teamSheetSaveDataJson);
                 
-                stream.Write(j);
+                stream.Write(teamSheetSaveDataJson);
             }
         }
 
         public void UpdateTeamSheetUi(TeamSheetSaveData teamSheetSaveData, string teamSheetObjName)
         {
-            Debug.LogError("updating teamsheet ui");
             if (teamSheetSaveData == null)
+            {
+                Debug.LogError("teamSheetSaveData returned NULL");
                 return;
+            }
             
             var teamSheetDataMap = teamSheetSaveData.teamSheetData;
             
@@ -112,6 +127,8 @@ namespace DefaultNamespace
             var transferTeamSheet = GameObjectFinder.FindSingleObjectByName(teamSheetObjName);
             var panel = transferTeamSheet.transform.GetChild(0).GetChild(0);
             var playerTeamEntryCanvasesCount = panel.childCount;
+            
+            Debug.LogError("transferTeamSheet obj: " + transferTeamSheet.name);
             
             Sprite playerTeamLogo = null;
             var teamLogosObj = GameObjectFinder.FindSingleObjectByName("TeamLogos");
@@ -144,8 +161,8 @@ namespace DefaultNamespace
                 
                 switch (teamSheetObjName)
                 {
-                    case "TransferTeamSheet":
-                        obj.transform.GetChild(3).GetComponent<TMP_Text>().text = athleteStats.Price;
+                    case "TransferTeamSheet(Clone)":
+                        obj.transform.GetChild(3).GetComponent<TMP_Text>().text = "$" + athleteStats.Price;
                         break;
                     case "PointsTeamSheet":
                         obj.transform.GetChild(3).GetComponent<TMP_Text>().text = athleteStats.TotalPoints;

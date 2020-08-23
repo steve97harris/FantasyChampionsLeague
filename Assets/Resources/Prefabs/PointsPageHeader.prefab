@@ -64,7 +64,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Gameweek 0 Points
+  m_text: Gameweek 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d917b449b149c2044aee65d6c9150afd, type: 2}
   m_sharedMaterial: {fileID: -8095979782344895364, guid: d917b449b149c2044aee65d6c9150afd,

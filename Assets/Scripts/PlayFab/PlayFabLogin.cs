@@ -9,6 +9,8 @@ namespace PlayFab
         private string _userEmail;
         private string _userPassword;
         private string _userName;
+
+        private GameObject addLoginPanel;
         
         public void Start()
         {
@@ -116,6 +118,27 @@ namespace PlayFab
         {
             var deviceId = SystemInfo.deviceUniqueIdentifier;
             return deviceId;
+        }
+
+        public void OpenAddLogin()
+        {
+            addLoginPanel.SetActive(true);
+        }
+
+        public void OnClickAddLogin()
+        {
+            var addLoginRequest = new AddUsernamePasswordRequest() {Email = _userEmail, Password = _userPassword, Username = _userName};
+            PlayFabClientAPI.AddUsernamePassword(addLoginRequest, OnAddLoginSuccess, OnRegisterFailure);
+        }
+        
+        private void OnAddLoginSuccess(AddUsernamePasswordResult result)
+        {
+            Debug.Log("Boom!! Successful API Registration.");
+            
+            PlayerPrefs.SetString("EMAIL", _userEmail);
+            PlayerPrefs.SetString("PASSWORD", _userPassword);
+            
+            ActivateDashBoard();
         }
     }
 }

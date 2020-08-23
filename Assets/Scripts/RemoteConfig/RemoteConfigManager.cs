@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using Unity.RemoteConfig;
 using UnityEngine.Serialization;
@@ -13,22 +14,35 @@ namespace DefaultNamespace
         
         public struct appAttributes {}
         
-        public static readonly Dictionary<string, string> PlayerConfigKeyMap = new Dictionary<string, string>();
-        public static readonly List<string> PlayerRemoteConfigKeys = new List<string>();
+        public static readonly List<string> PlayerRemoteConfigKeysList = new List<string>();
         
         public void Awake()
         {
             ConfigManager.FetchCompleted += UpdatePlayerPoints;
+            ConfigManager.FetchCompleted += UpdateGameweekTitle;
             ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
+        }
+        
+        public void FetchFootballPlayerPoints()
+        {
+            Debug.LogError("fetch");
+            ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
+        }
+
+        private void UpdateGameweekTitle(ConfigResponse obj)
+        {
+            var currentGameweek = ConfigManager.appConfig.GetString("CURRENT_GAMEWEEK");
+            var gameweekTitleObj = GameObjectFinder.FindSingleObjectByName("TotalGameweekPointsTitle");
+            gameweekTitleObj.GetComponent<TMP_Text>().text = "Gameweek " + currentGameweek;
         }
 
         private void UpdatePlayerPoints(ConfigResponse obj)
         {
             var footballPlayerGwPointsMap = new Dictionary<string,int>();
-            for (int i = 0; i < PlayerRemoteConfigKeys.Count; i++)
+            for (int i = 0; i < PlayerRemoteConfigKeysList.Count; i++)
             {
-                var gwPoints = ConfigManager.appConfig.GetInt(PlayerRemoteConfigKeys[i]);
-                footballPlayerGwPointsMap.Add(PlayerRemoteConfigKeys[i],gwPoints);
+                var gwPoints = ConfigManager.appConfig.GetInt(PlayerRemoteConfigKeysList[i]);
+                footballPlayerGwPointsMap.Add(PlayerRemoteConfigKeysList[i],gwPoints);
             }
             
             var teamSheetDatabaseObj = GameObjectFinder.FindSingleObjectByName("TeamSheetDatabase");
@@ -53,17 +67,10 @@ namespace DefaultNamespace
             teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
         }
 
-        public void FetchFootballPlayerPoints()
-        {
-            Debug.LogError("fetch");
-            ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
-        }
-
         private void OnDestroy()
         {
             ConfigManager.FetchCompleted -= UpdatePlayerPoints;
+            ConfigManager.FetchCompleted -= UpdateGameweekTitle;
         }
-        
-        
     }
 }

@@ -28,8 +28,7 @@ namespace Dashboard
                 var playerPrice = playerInformation[4];
                 var playerFclPoints = playerInformation[5];
                 var playerRemoteConfigKey = playerInformation[6];
-                RemoteConfigManager.PlayerRemoteConfigKeys.Add(playerRemoteConfigKey);
-                RemoteConfigManager.PlayerConfigKeyMap.Add(playerRemoteConfigKey, playerName);
+                RemoteConfigManager.PlayerRemoteConfigKeysList.Add(playerRemoteConfigKey);
                 
                 PlayerRemoteKeyMap.Add(playerRemoteConfigKey, new AthleteStats() 
                 {
@@ -148,19 +147,31 @@ namespace Dashboard
 
         public void BackButton_ToTransferTeamSheet()
         {
-            DestroyTransferList_LoadTransferTeamSheet();
+            DestroyTransferList();
+            InstantiateTransferTeamSheet();
         }
 
-        public static void DestroyTransferList_LoadTransferTeamSheet()
+        public void InstantiateTransferTeamSheet()
+        {
+            var transferListEntry = gameObject.GetComponent<TransferListEntry>();
+            var teamSheetDatabaseObj = GameObjectFinder.FindSingleObjectByName("TeamSheetDatabase");
+            var teamDatabase = teamSheetDatabaseObj.GetComponent<TeamSheetDatabase>();
+            transferListEntry.InstantiateTransferTeamSheet(teamDatabase);
+            var teamSavedData = teamDatabase.GetSavedTeamSheet();
+            teamDatabase.UpdateTeamSheetUi(teamSavedData, "TransferTeamSheet(Clone)");
+        }
+
+        public static void DestroyTransferList()
         {
             Debug.LogError("destroy list, load teamsheet");
             var list = GameObjectFinder.FindSingleObjectByName("TransferList(Clone)");
-            var transferTeamSheet = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet");
+            var transferTeamSheet = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)");
             Debug.LogError("transferTeamSheet: " + transferTeamSheet);
 
             list.SetActive(false);
-            transferTeamSheet.SetActive(true);
-            DestroyImmediate(list,true);
+            transferTeamSheet.SetActive(false);
+            DestroyImmediate(list.gameObject,true);
+            DestroyImmediate(transferTeamSheet.gameObject, true);
         }
     }
 }

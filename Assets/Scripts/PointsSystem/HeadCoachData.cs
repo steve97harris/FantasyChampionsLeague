@@ -12,7 +12,14 @@ namespace DefaultNamespace
         public int coachTotalPoints;
         public int[] coachPointsPerGw;
 
-        private static string JsonPath => $"{Application.persistentDataPath}/HeadCoachData.json";
+        private static string JsonPath
+        {
+            get
+            {
+                // return Application.persistentDataPath + "/HeadCoachData.json";
+                return Path.Combine(Application.persistentDataPath, "HeadCoachData.json");
+            }
+        }
 
         public void UpdateHeadCoachSaveData()
         {

@@ -34,6 +34,13 @@ public class DashBoardManager : MonoBehaviour
     public void TransfersButton()
     {
         SetScreenActive(3);
+
+        if (GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)") != null) 
+            return;
+        
+        var transferListWindow = GameObjectFinder.FindSingleObjectByName("TransferListWindow");
+        var transferListWindowComponent = transferListWindow.GetComponent<TransferListWindow>();
+        transferListWindowComponent.InstantiateTransferTeamSheet();
     }
 
     public void DashboardButton()

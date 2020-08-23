@@ -14,7 +14,7 @@ namespace DefaultNamespace
         public static GameObject FindSingleObjectByName(string objectName)
         {
             var objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == objectName).ToArray();
-            return objects[0];
+            return objects.Length == 0 ? null : objects[0];
         }
     }
 }

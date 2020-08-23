@@ -46,7 +46,8 @@ namespace Dashboard
             {
                 Debug.LogError("Valid player, insert player into team...");
                 InsertPlayerUpdateTeamSheetUi(teamDatabase, athleteStats);
-                TransferListWindow.DestroyTransferList_LoadTransferTeamSheet();
+                TransferListWindow.DestroyTransferList();
+                InstantiateTransferTeamSheet(teamDatabase);
             }
             else
             {
@@ -59,9 +60,19 @@ namespace Dashboard
         {
             teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);
             var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
-            Debug.LogError("teamsheetsavedata: " + teamSheetSaveData);
             teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "TransferTeamSheet");
             teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
+        }
+
+        public void InstantiateTransferTeamSheet(TeamSheetDatabase teamDatabase)
+        {
+            var transferTeamSheetObj = Resources.Load<GameObject>("TransferTeamSheet");
+            var transferPage = GameObjectFinder.FindSingleObjectByName("TransfersPage");
+            var newTransferTeamSheet = Instantiate(transferTeamSheetObj, transferPage.transform);
+            var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
+            teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
+            newTransferTeamSheet.SetActive(true);
+            Debug.LogError(newTransferTeamSheet.activeInHierarchy);
         }
 
         private string GetGameObjectChildText(GameObject obj, int childIndex)

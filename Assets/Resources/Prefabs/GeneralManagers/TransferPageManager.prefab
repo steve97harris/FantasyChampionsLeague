@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1072051059007556932}
   - component: {fileID: 1445672637703664615}
+  - component: {fileID: 5647340837875127768}
   m_Layer: 0
   m_Name: TransferPageManager
   m_TagString: Untagged
@@ -43,3 +44,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0306528574c413095d00714742d0851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5647340837875127768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5356148817553067514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69f81b9255ea438ab42754ccc1abd774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transferTeamSheetObj: {fileID: 6117673012810239751, guid: c34230f471d8c4f4491b06c70865a996,
+    type: 3}
