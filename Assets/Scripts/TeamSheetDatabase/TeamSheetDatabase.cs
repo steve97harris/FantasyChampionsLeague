@@ -96,7 +96,7 @@ namespace DefaultNamespace
             {
                 // convert TeamSheetSaveData to json string
                 var teamSheetSaveDataJson = JsonConvert.SerializeObject(teamSheetSaveData, Formatting.Indented);
-                Debug.Log("json String: " + teamSheetSaveDataJson);
+                Debug.Log("TeamSheetData (json String): " + teamSheetSaveDataJson);
                 
                 stream.Write(teamSheetSaveDataJson);
             }

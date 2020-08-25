@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3872400962277877000
+--- !u!1 &7032747116807943082
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,53 +8,53 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7518389639479468340}
-  - component: {fileID: 3707460887941192052}
-  - component: {fileID: 7774416218112089962}
-  - component: {fileID: 6762043127790975725}
-  - component: {fileID: 5449352898494551725}
+  - component: {fileID: 5351985309576373576}
+  - component: {fileID: 3954484089256900121}
+  - component: {fileID: 4734392979125554128}
+  - component: {fileID: 8432895009004989260}
+  - component: {fileID: 7370028110968525251}
   m_Layer: 5
-  m_Name: PointsScreenButton
+  m_Name: TransferMarketButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &7518389639479468340
+--- !u!224 &5351985309576373576
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3872400962277877000}
+  m_GameObject: {fileID: 7032747116807943082}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8604023981949180181}
+  - {fileID: 2826414122942601300}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.04, y: -870.33}
+  m_AnchoredPosition: {x: 359.923, y: -870.33}
   m_SizeDelta: {x: 359.95007, y: 178.45502}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &3707460887941192052
+--- !u!222 &3954484089256900121
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3872400962277877000}
+  m_GameObject: {fileID: 7032747116807943082}
   m_CullTransparentMesh: 0
---- !u!114 &7774416218112089962
+--- !u!114 &4734392979125554128
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3872400962277877000}
+  m_GameObject: {fileID: 7032747116807943082}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -77,13 +77,13 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6762043127790975725
+--- !u!114 &8432895009004989260
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3872400962277877000}
+  m_GameObject: {fileID: 7032747116807943082}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -116,13 +116,13 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7774416218112089962}
+  m_TargetGraphic: {fileID: 4734392979125554128}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8558984798525923644, guid: 471a6e82bb22b544b89ecc579cdfb67a,
           type: 3}
-        m_MethodName: PointsButton
+        m_MethodName: TransfersButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -132,19 +132,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &5449352898494551725
+--- !u!114 &7370028110968525251
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3872400962277877000}
+  m_GameObject: {fileID: 7032747116807943082}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6c41f074a1642f78a1470a77fd27adb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &8661909398344565416
+--- !u!1 &8648390821432147749
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,9 +152,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8604023981949180181}
-  - component: {fileID: 240749002284974094}
-  - component: {fileID: 717691519175776135}
+  - component: {fileID: 2826414122942601300}
+  - component: {fileID: 4752509189856495870}
+  - component: {fileID: 2339501040823061552}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -162,18 +162,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &8604023981949180181
+--- !u!224 &2826414122942601300
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8661909398344565416}
+  m_GameObject: {fileID: 8648390821432147749}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 7518389639479468340}
+  m_Father: {fileID: 5351985309576373576}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -181,21 +181,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &240749002284974094
+--- !u!222 &4752509189856495870
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8661909398344565416}
+  m_GameObject: {fileID: 8648390821432147749}
   m_CullTransparentMesh: 0
---- !u!114 &717691519175776135
+--- !u!114 &2339501040823061552
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8661909398344565416}
+  m_GameObject: {fileID: 8648390821432147749}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -208,7 +208,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Points
+  m_text: Transfer Market
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d917b449b149c2044aee65d6c9150afd, type: 2}
   m_sharedMaterial: {fileID: -8095979782344895364, guid: d917b449b149c2044aee65d6c9150afd,
@@ -275,15 +275,15 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 30, y: 0, z: 30, w: 0}
   m_textInfo:
-    textComponent: {fileID: 717691519175776135}
-    characterCount: 6
+    textComponent: {fileID: 2339501040823061552}
+    characterCount: 15
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 1
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
-    lineCount: 1
+    lineCount: 2
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0

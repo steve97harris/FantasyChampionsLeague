@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PlayFab;
 using TMPro;
 using UnityEngine;
 using Unity.RemoteConfig;
@@ -10,9 +11,9 @@ namespace DefaultNamespace
 {
     public class RemoteConfigManager : MonoBehaviour
     {
-        public struct userAttributes {}
-        
-        public struct appAttributes {}
+        private struct UserAttributes {}
+
+        private struct AppAttributes {}
         
         public static readonly List<string> PlayerRemoteConfigKeysList = new List<string>();
 
@@ -25,13 +26,20 @@ namespace DefaultNamespace
         {
             ConfigManager.FetchCompleted += UpdatePlayerPoints;
             ConfigManager.FetchCompleted += UpdateGameweekTitle;
-            ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
+            ConfigManager.FetchCompleted += SetCoachUi;
+            ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
         }
         
         public void FetchFootballPlayerPoints()
         {
-            ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
-            PointsTeamSheetManager.SetCoachUi();
+            ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
+        }
+        
+        private void SetCoachUi(ConfigResponse obj)
+        {
+            var headCoachDataObj = GameObjectFinder.FindSingleObjectByName("HeadCoachData");
+            var headCoachData = headCoachDataObj.GetComponent<HeadCoachData>();
+            headCoachData.SetHeadCoachUi();
         }
 
         private void UpdateGameweekTitle(ConfigResponse obj)
@@ -76,6 +84,7 @@ namespace DefaultNamespace
         {
             ConfigManager.FetchCompleted -= UpdatePlayerPoints;
             ConfigManager.FetchCompleted -= UpdateGameweekTitle;
+            ConfigManager.FetchCompleted -= SetCoachUi;
         }
     }
 }

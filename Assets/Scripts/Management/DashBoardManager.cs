@@ -15,7 +15,7 @@ public class DashBoardManager : MonoBehaviour
         "DashBoard",
         "PointsPage",
         "TransfersPage",
-        "FixturesResults"
+        "Leaderboards"
     };
     
     void Start()
@@ -39,7 +39,7 @@ public class DashBoardManager : MonoBehaviour
         
         var transferListWindow = GameObjectFinder.FindSingleObjectByName("TransferListWindow");
         var transferListWindowComponent = transferListWindow.GetComponent<TransferListWindow>();
-        transferListWindowComponent.InstantiateTransferTeamSheet();
+        transferListWindowComponent.TransferListEntryInstantiateTransferTeamSheet();
     }
 
     public void DashboardButton()

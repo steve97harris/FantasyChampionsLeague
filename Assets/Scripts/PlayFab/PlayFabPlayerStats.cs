@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DefaultNamespace;
 using PlayFab.ClientModels;
 using UnityEngine;
@@ -7,10 +8,19 @@ namespace PlayFab
 {
     public class PlayFabPlayerStats : MonoBehaviour
     {
+        public static PlayFabPlayerStats PlayFabPlayerStatistics;
         public int coachTotalPoints;
         public int coachCurrentGwPoints;
 
         #region PlayerStats
+
+        public void Awake()
+        {
+            if (PlayFabPlayerStatistics == null)
+            {
+                PlayFabPlayerStatistics = this;
+            }
+        }
 
         public void SetStatistics()
         {

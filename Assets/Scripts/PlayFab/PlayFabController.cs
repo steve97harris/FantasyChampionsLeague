@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using DefaultNamespace;
 using PlayFab.ClientModels;
-using PlayFab.PfEditor.EditorModels;
 using UnityEngine;
 using LoginResult = PlayFab.ClientModels.LoginResult;
 
@@ -32,7 +31,7 @@ namespace PlayFab
                     Destroy(this.gameObject);
                 }
             }
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(this.gameObject.transform.parent.gameObject);
         }
 
         public void Start()
@@ -57,12 +56,12 @@ namespace PlayFab
             {
 #if UNITY_IOS
                 var requestIos = new LoginWithIOSDeviceIDRequest{ DeviceId = ReturnMobileId() , CreateAccount = true };
-                PlayFabClientAPI.LoginWithIOSDeviceID(requestIos, OnMobileLoginSuccess, OnIosLoginFailure);
+                PlayFabClientAPI.LoginWithIOSDeviceID(requestIos, OnMobileLoginSuccess, ErrorCallback);
 #endif
 #if UNITY_ANDROID
                 
                 var requestAndroid = new LoginWithAndroidDeviceIDRequest { AndroidDeviceId = ReturnMobileId() , CreateAccount = true };
-                PlayFabClientAPI.LoginWithAndroidDeviceID(requestAndroid, OnMobileLoginSuccess, OnIosLoginFailure);
+                PlayFabClientAPI.LoginWithAndroidDeviceID(requestAndroid, OnMobileLoginSuccess, ErrorCallback);
 #endif
             }
         }
@@ -97,31 +96,33 @@ namespace PlayFab
             PlayerPrefs.SetString("EMAIL", _userEmail);
             PlayerPrefs.SetString("PASSWORD", _userPassword);
             
+            PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = _userName}, OnDisplayName, ErrorCallback);
+            
             ActivateDashBoard();
             PlayFabPlayerStatsGetStats();
+        }
+
+        private void OnDisplayName(UpdateUserTitleDisplayNameResult result)
+        {
+            Debug.Log("username: " + result.DisplayName);
+        }
+
+        private void ErrorCallback(PlayFabError error)
+        {
+            Debug.LogError(error.GenerateErrorReport());
         }
 
         private void OnLoginFailure(PlayFabError error)
         {
             var registerRequest = new RegisterPlayFabUserRequest {Email = _userEmail, Password = _userPassword, Username = _userName};
-            PlayFabClientAPI.RegisterPlayFabUser(registerRequest, OnRegisterSuccess, OnRegisterFailure);
-        }
-        
-        private void OnIosLoginFailure(PlayFabError error)
-        {
-            Debug.LogError(error.GenerateErrorReport());
-        }
-
-        private void OnRegisterFailure(PlayFabError error)
-        {
-            Debug.LogError(error.GenerateErrorReport());
+            PlayFabClientAPI.RegisterPlayFabUser(registerRequest, OnRegisterSuccess, ErrorCallback);
         }
 
         private void ActivateDashBoard()
         {
-            _loginPanel.SetActive(false);
-            _addLoginPanel.SetActive(false);
-            _dashboard.SetActive(true);
+            _loginPanel.gameObject.SetActive(false);
+            _addLoginPanel.gameObject.SetActive(false);
+            _dashboard.gameObject.SetActive(true);
             DashBoardManager.SetScreenSelectorActive();
         }
 
@@ -161,7 +162,7 @@ namespace PlayFab
         public void OnClickAddLogin()
         {
             var addLoginRequest = new AddUsernamePasswordRequest() {Email = _userEmail, Password = _userPassword, Username = _userName};
-            PlayFabClientAPI.AddUsernamePassword(addLoginRequest, OnAddLoginSuccess, OnRegisterFailure);
+            PlayFabClientAPI.AddUsernamePassword(addLoginRequest, OnAddLoginSuccess, ErrorCallback);
         }
         
         private void OnAddLoginSuccess(AddUsernamePasswordResult result)
@@ -172,6 +173,7 @@ namespace PlayFab
             PlayerPrefs.SetString("PASSWORD", _userPassword);
             
             ActivateDashBoard();
+            PlayFabPlayerStatsGetStats();
         }
 
         private void PlayFabPlayerStatsGetStats()

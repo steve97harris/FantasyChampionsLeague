@@ -33,7 +33,7 @@ Transform:
   - {fileID: 2180144704914713365}
   - {fileID: 1672068033496004710}
   - {fileID: 288587889944816434}
-  - {fileID: 509362387960122210}
+  - {fileID: 354806063004397860}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -72,7 +72,7 @@ PrefabInstance:
     - target: {fileID: 83306096863444203, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: gameweekPoints
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 83306096863444203, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -359,7 +359,7 @@ PrefabInstance:
     - target: {fileID: 1208131572614406028, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: m_text
-      value: Gameweek 1
+      value: Gameweek 3
       objectReference: {fileID: 0}
     - target: {fileID: 1208131573109434539, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -474,7 +474,7 @@ PrefabInstance:
     - target: {fileID: 1208131573109434543, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1208131573112879175, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -484,6 +484,11 @@ PrefabInstance:
     - target: {fileID: 1208131573112879175, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1208131573817415000, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
+        type: 3}
+      propertyPath: m_text
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1303335740703774505, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
@@ -600,7 +605,7 @@ PrefabInstance:
     - target: {fileID: 1703709746666574502, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: m_text
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1703709746666574502, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -1821,7 +1826,7 @@ PrefabInstance:
     - target: {fileID: 7969578146540375167, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: gameweekPoints
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7969578146540375167, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -2031,7 +2036,7 @@ PrefabInstance:
     - target: {fileID: 8654402881367351858, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: m_text
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8734022054705987084, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -2602,7 +2607,7 @@ PrefabInstance:
     - target: {fileID: 973125095208038904, guid: 451a533c46e176c4da70094879af81dc,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 973125095208038908, guid: 451a533c46e176c4da70094879af81dc,
         type: 3}
@@ -3570,6 +3575,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362710834264766354, guid: 05931e37e96eee441a020988005e917f,
+        type: 3}
+      propertyPath: m_text
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 2362710834264766356, guid: 05931e37e96eee441a020988005e917f,
         type: 3}
@@ -4777,7 +4787,7 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 2651298380172468563}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &2792111328274661223
+--- !u!1001 &2684860254128260385
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -4892,45 +4902,15 @@ PrefabInstance:
     - target: {fileID: 5813072316450056196, guid: 1c7fdb901be8a4843b33e768dc12a798,
         type: 3}
       propertyPath: m_Name
-      value: FixturesResults
-      objectReference: {fileID: 0}
-    - target: {fileID: 5813072316450056196, guid: 1c7fdb901be8a4843b33e768dc12a798,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7490592251384091709, guid: 1c7fdb901be8a4843b33e768dc12a798,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7490592251384091709, guid: 1c7fdb901be8a4843b33e768dc12a798,
-        type: 3}
-      propertyPath: m_textInfo.spaceCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7490592251384091709, guid: 1c7fdb901be8a4843b33e768dc12a798,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7490592251384091709, guid: 1c7fdb901be8a4843b33e768dc12a798,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7490592251384091709, guid: 1c7fdb901be8a4843b33e768dc12a798,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
-      value: 0
+      value: Leaderboards
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c7fdb901be8a4843b33e768dc12a798, type: 3}
---- !u!224 &509362387960122210 stripped
+--- !u!224 &354806063004397860 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2426890516678931461, guid: 1c7fdb901be8a4843b33e768dc12a798,
     type: 3}
-  m_PrefabInstance: {fileID: 2792111328274661223}
+  m_PrefabInstance: {fileID: 2684860254128260385}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9080737403606979581
 PrefabInstance:

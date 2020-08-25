@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
@@ -66,7 +67,7 @@ namespace DefaultNamespace
             {
                 // convert TeamSheetSaveData to json string
                 var j = JsonConvert.SerializeObject(headCoachSaveData, Formatting.Indented);
-                Debug.LogError("json String: " + j);
+                Debug.Log("HeadCoachData (json String): " + j);
                 
                 stream.Write(j);
             }

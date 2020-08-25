@@ -148,10 +148,10 @@ namespace Dashboard
         public void BackButton_ToTransferTeamSheet()
         {
             DestroyTransferList();
-            InstantiateTransferTeamSheet();
+            TransferListEntryInstantiateTransferTeamSheet();
         }
 
-        public void InstantiateTransferTeamSheet()
+        public void TransferListEntryInstantiateTransferTeamSheet()
         {
             var transferListEntry = gameObject.GetComponent<TransferListEntry>();
             var teamSheetDatabaseObj = GameObjectFinder.FindSingleObjectByName("TeamSheetDatabase");

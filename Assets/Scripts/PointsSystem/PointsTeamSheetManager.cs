@@ -25,7 +25,6 @@ namespace DefaultNamespace
         { 
             GetPlayerMap(); 
             SetHeadCoachPoints();
-            SetCoachUi();
         }
 
         private void GetPlayerMap()
@@ -90,12 +89,12 @@ namespace DefaultNamespace
             headCoachData.UpdateHeadCoachSaveData();
         }
         
-        public static void SetCoachUi()
-        {
-            var headCoachDataObj = GameObjectFinder.FindSingleObjectByName("HeadCoachData");
-            var headCoachData = headCoachDataObj.GetComponent<HeadCoachData>();
-            headCoachData.SetHeadCoachUi();
-        }
+        // public static void SetCoachUi()
+        // {
+        //     var headCoachDataObj = GameObjectFinder.FindSingleObjectByName("HeadCoachData");
+        //     var headCoachData = headCoachDataObj.GetComponent<HeadCoachData>();
+        //     headCoachData.SetHeadCoachUi();
+        // }
         
         private List<GameObject> GetGrandChildren(GameObject canvas)
         {

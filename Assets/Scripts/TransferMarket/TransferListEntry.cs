@@ -65,7 +65,7 @@ namespace Dashboard
 
         public void InstantiateTransferTeamSheet(TeamSheetDatabase teamDatabase)
         {
-            var transferTeamSheetObj = Resources.Load<GameObject>("TransferTeamSheet");
+            var transferTeamSheetObj = Resources.Load<GameObject>("Prefabs/TransfersPage/TransferTeamSheet");
             var transferPage = GameObjectFinder.FindSingleObjectByName("TransfersPage");
             var newTransferTeamSheet = Instantiate(transferTeamSheetObj, transferPage.transform);
             var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
