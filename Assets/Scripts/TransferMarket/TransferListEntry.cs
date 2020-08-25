@@ -44,10 +44,10 @@ namespace Dashboard
 
             if (IsValidPlayerPosition(playerDetails.Position, playerTeamSheetEntryDetails.teamSheetPosition) && !PlayerAlreadyInTeam(teamDatabase, playerName) || playerName == "")
             {
-                Debug.LogError("Valid player, insert player into team...");
+                Debug.Log("Valid player, insert player into team...");
                 InsertPlayerUpdateTeamSheetUi(teamDatabase, athleteStats);
-                TransferListWindow.DestroyTransferList();
                 InstantiateTransferTeamSheet(teamDatabase);
+                TransferListWindow.DestroyTransferList();
             }
             else
             {
@@ -60,8 +60,7 @@ namespace Dashboard
         {
             teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);
             var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
-            teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "TransferTeamSheet");
-            teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
+            teamDatabase.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
         }
 
         public void InstantiateTransferTeamSheet(TeamSheetDatabase teamDatabase)
@@ -70,9 +69,8 @@ namespace Dashboard
             var transferPage = GameObjectFinder.FindSingleObjectByName("TransfersPage");
             var newTransferTeamSheet = Instantiate(transferTeamSheetObj, transferPage.transform);
             var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
-            teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
+            teamDatabase.SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
             newTransferTeamSheet.SetActive(true);
-            Debug.LogError(newTransferTeamSheet.activeInHierarchy);
         }
 
         private string GetGameObjectChildText(GameObject obj, int childIndex)

@@ -1,19 +1,46 @@
-﻿using DefaultNamespace;
+﻿using System;
+using System.Collections.Generic;
+using DefaultNamespace;
 using PlayFab.ClientModels;
+using PlayFab.PfEditor.EditorModels;
 using UnityEngine;
+using LoginResult = PlayFab.ClientModels.LoginResult;
 
 namespace PlayFab
 {
-    public class PlayFabLogin : MonoBehaviour
+    public class PlayFabController : MonoBehaviour
     {
+        public static PlayFabController PfController;
         private string _userEmail;
         private string _userPassword;
         private string _userName;
 
-        private GameObject addLoginPanel;
-        
+        private static GameObject _loginPanel;
+        private static GameObject _dashboard;
+        private static GameObject _addLoginPanel;
+
+        public void OnEnable()
+        {
+            if (PfController == null)
+            {
+                PfController = this;
+            }
+            else
+            {
+                if (PfController != this)
+                {
+                    Destroy(this.gameObject);
+                }
+            }
+            DontDestroyOnLoad(this.gameObject);
+        }
+
         public void Start()
         {
+            _loginPanel = GameObjectFinder.FindSingleObjectByName("LoginPanel");
+            _dashboard = GameObjectFinder.FindSingleObjectByName("DashBoard");
+            _addLoginPanel = GameObjectFinder.FindSingleObjectByName("AddLoginPanel");
+            
             if (string.IsNullOrEmpty(PlayFabSettings.TitleId))
             {
                 PlayFabSettings.TitleId = "90D7E";
@@ -30,11 +57,17 @@ namespace PlayFab
             {
 #if UNITY_IOS
                 var requestIos = new LoginWithIOSDeviceIDRequest{ DeviceId = ReturnMobileId() , CreateAccount = true };
-                PlayFabClientAPI.LoginWithIOSDeviceID(requestIos, OnIosLoginSuccess, OnIosLoginFailure);
+                PlayFabClientAPI.LoginWithIOSDeviceID(requestIos, OnMobileLoginSuccess, OnIosLoginFailure);
+#endif
+#if UNITY_ANDROID
+                
+                var requestAndroid = new LoginWithAndroidDeviceIDRequest { AndroidDeviceId = ReturnMobileId() , CreateAccount = true };
+                PlayFabClientAPI.LoginWithAndroidDeviceID(requestAndroid, OnMobileLoginSuccess, OnIosLoginFailure);
 #endif
             }
         }
 
+        #region Login
         private void OnLoginSuccess(LoginResult result)
         {
             Debug.Log("Boom!! Successful API Login.");
@@ -43,9 +76,10 @@ namespace PlayFab
             PlayerPrefs.SetString("PASSWORD", _userPassword);
             
             ActivateDashBoard();
+            PlayFabPlayerStatsGetStats();
         }
         
-        private void OnIosLoginSuccess(LoginResult result)
+        private void OnMobileLoginSuccess(LoginResult result)
         {
             Debug.Log("Boom!! Successful API Login.");
             
@@ -53,6 +87,7 @@ namespace PlayFab
             PlayerPrefs.SetString("PASSWORD", _userPassword);
             
             ActivateDashBoard();
+            PlayFabPlayerStatsGetStats();
         }
 
         private void OnRegisterSuccess(RegisterPlayFabUserResult result)
@@ -63,6 +98,7 @@ namespace PlayFab
             PlayerPrefs.SetString("PASSWORD", _userPassword);
             
             ActivateDashBoard();
+            PlayFabPlayerStatsGetStats();
         }
 
         private void OnLoginFailure(PlayFabError error)
@@ -73,8 +109,6 @@ namespace PlayFab
         
         private void OnIosLoginFailure(PlayFabError error)
         {
-            // var registerRequest = new RegisterPlayFabUserRequest {Email = _userEmail, Password = _userPassword, Username = _userName};
-            // PlayFabClientAPI.RegisterPlayFabUser(registerRequest, OnRegisterSuccess, OnRegisterFailure);
             Debug.LogError(error.GenerateErrorReport());
         }
 
@@ -85,12 +119,10 @@ namespace PlayFab
 
         private void ActivateDashBoard()
         {
-            var loginPanel = GameObjectFinder.FindSingleObjectByName("LoginPanel");
-            var dashboard = GameObjectFinder.FindSingleObjectByName("DashBoard");
-            var screenSelector = GameObjectFinder.FindSingleObjectByName("ScreenSelector");
-            loginPanel.SetActive(false);
-            dashboard.SetActive(true);
-            screenSelector.SetActive(true);
+            _loginPanel.SetActive(false);
+            _addLoginPanel.SetActive(false);
+            _dashboard.SetActive(true);
+            DashBoardManager.SetScreenSelectorActive();
         }
 
         public void GetUserEmail(string email)
@@ -122,7 +154,8 @@ namespace PlayFab
 
         public void OpenAddLogin()
         {
-            addLoginPanel.SetActive(true);
+            _addLoginPanel.SetActive(true);
+            _loginPanel.SetActive(false);
         }
 
         public void OnClickAddLogin()
@@ -140,5 +173,12 @@ namespace PlayFab
             
             ActivateDashBoard();
         }
+
+        private void PlayFabPlayerStatsGetStats()
+        {
+            var playFabPlayerStats = gameObject.GetComponent<PlayFabPlayerStats>();
+            playFabPlayerStats.GetStatistics();
+        }
+        #endregion
     }
 }

@@ -158,18 +158,14 @@ namespace Dashboard
             var teamDatabase = teamSheetDatabaseObj.GetComponent<TeamSheetDatabase>();
             transferListEntry.InstantiateTransferTeamSheet(teamDatabase);
             var teamSavedData = teamDatabase.GetSavedTeamSheet();
-            teamDatabase.UpdateTeamSheetUi(teamSavedData, "TransferTeamSheet(Clone)");
+            teamDatabase.SetTeamSheetUi(teamSavedData, "TransferTeamSheet(Clone)");
         }
 
         public static void DestroyTransferList()
         {
-            Debug.LogError("destroy list, load teamsheet");
             var list = GameObjectFinder.FindSingleObjectByName("TransferList(Clone)");
             var transferTeamSheet = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)");
-            Debug.LogError("transferTeamSheet: " + transferTeamSheet);
 
-            list.SetActive(false);
-            transferTeamSheet.SetActive(false);
             DestroyImmediate(list.gameObject,true);
             DestroyImmediate(transferTeamSheet.gameObject, true);
         }

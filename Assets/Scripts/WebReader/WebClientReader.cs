@@ -15,6 +15,5 @@ namespace WebReader
     {
         private const string Url =
             "https://www.bbc.co.uk/sport/football/scores-fixtures";
-        
     }
 }

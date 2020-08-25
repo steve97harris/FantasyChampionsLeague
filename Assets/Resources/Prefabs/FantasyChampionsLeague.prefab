@@ -356,6 +356,11 @@ PrefabInstance:
       propertyPath: m_textInfo.wordCount
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1208131572614406028, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
+        type: 3}
+      propertyPath: m_text
+      value: Gameweek 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1208131573109434539, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -469,7 +474,7 @@ PrefabInstance:
     - target: {fileID: 1208131573109434543, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1208131573112879175, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -595,7 +600,7 @@ PrefabInstance:
     - target: {fileID: 1703709746666574502, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: m_text
-      value: 11
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1703709746666574502, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -759,12 +764,12 @@ PrefabInstance:
     - target: {fileID: 2496961141201960970, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: playerName
-      value: Phil Foden
+      value: Coutinho
       objectReference: {fileID: 0}
     - target: {fileID: 2496961141201960970, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: team
-      value: ManCity
+      value: BayernMunich
       objectReference: {fileID: 0}
     - target: {fileID: 2496961141201960970, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -789,7 +794,7 @@ PrefabInstance:
     - target: {fileID: 2496961141201960970, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: remoteConfigKey
-      value: 10120
+      value: 10014
       objectReference: {fileID: 0}
     - target: {fileID: 2634521093948301198, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -1051,7 +1056,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2f9e073d2a6ce524095ed5fb1a0ccb08,
+      objectReference: {fileID: 21300000, guid: e55978f31916bb84888e0a9dda8eed5c,
         type: 3}
     - target: {fileID: 3929243190512221476, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -1499,7 +1504,7 @@ PrefabInstance:
     - target: {fileID: 6419490579785902595, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: m_text
-      value: Phil Foden
+      value: Coutinho
       objectReference: {fileID: 0}
     - target: {fileID: 6419490579785902595, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -1816,7 +1821,7 @@ PrefabInstance:
     - target: {fileID: 7969578146540375167, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
       propertyPath: gameweekPoints
-      value: 11
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7969578146540375167, guid: 9a4621a1f5a1d6e41ab1724abb61203f,
         type: 3}
@@ -3689,7 +3694,7 @@ PrefabInstance:
     - target: {fileID: 2362710834898815589, guid: 05931e37e96eee441a020988005e917f,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2362710834902260365, guid: 05931e37e96eee441a020988005e917f,
         type: 3}

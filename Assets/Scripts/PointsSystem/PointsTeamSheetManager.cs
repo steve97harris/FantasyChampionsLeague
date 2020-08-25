@@ -5,6 +5,7 @@ using CSV;
 using Dashboard;
 using GoogleSheetsLevelSynchronizer;
 using TMPro;
+using Unity.RemoteConfig;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -12,49 +13,21 @@ namespace DefaultNamespace
 {
     public class PointsTeamSheetManager : MonoBehaviour
     {
-        private int _currentGameweekIndex = 0;
-        private static int _noOfGameweeks = 0;
+        private static int _noOfGameweeks = 35;
         
         /// <summary> PointsTeamSheetPlayerMap - map of player prefabs 
         /// <typeparam name="Key">Football Player Name</typeparam>
         /// <typeparam name="Value">Football Player Prefab</typeparam>
         /// </summary>
         private static readonly Dictionary<string, GameObject> PointsTeamSheetPlayerMap = new Dictionary<string, GameObject>();
-        
-        /// <summary> GameweekAllPlayerPointsMap - map of all player points over each gameweek
-        /// <typeparam name="Key">Football Player Name</typeparam>
-        /// <typeparam name="Value">Football Player Points per gameweek</typeparam>
-        /// E.g:
-        /// Value[0] = individual player points at gameweek 0.
-        /// Value[1] = individual player points at gameweek 1.
-        /// </summary>
-        private static readonly Dictionary<string,string[]> GameweekAllPlayerPointsMap = new Dictionary<string, string[]>();
-
-        /// <summary> _gameweekTeamSheetPointsMap - array of dictionaries containing teamsheet player points.
-        /// E.g: 
-        /// _gameweekTeamSheetPointsMap[0] = teamsheet player points for gameweek 0.
-        /// _gameweekTeamSheetPointsMap[1] = teamsheet player points for gameweek 1.
-        /// <typeparam name="Key">Football Player Name</typeparam>
-        /// <typeparam name="Value">Football Player Points</typeparam>
-        /// </summary>
-        private static Dictionary<string, int>[] _gameweekTeamSheetPointsArray; 
 
         public void Start()
         { 
             GetPlayerMap(); 
-            GetGameweekPoints();
-            
-            // _gameweekTeamSheetPointsArray = new Dictionary<string, int>[_noOfGameweeks];
-            //
-            // for (int i = 0; i < _noOfGameweeks; i++)
-            // {
-            //     SetGwTeamSheetPointsArray(i);
-            // }
-            // SetHeadCoachPoints();
-            //
-            // SetPlayerPointsUi(0);
+            SetHeadCoachPoints();
+            SetCoachUi();
         }
-        
+
         private void GetPlayerMap()
         {
             var pointsTeamSheet = GameObjectFinder.FindSingleObjectByName("PointsTeamSheet");
@@ -72,57 +45,89 @@ namespace DefaultNamespace
                     PointsTeamSheetPlayerMap.Add(playerName, playerObj);
             }
         }
-        
-        private void GetGameweekPoints()
-        {
-            
-        }
-        
-        private void SetGwTeamSheetPointsArray(int currentGwIndex)
-        {
-            var currentGwTeamSheetPointsMap = new Dictionary<string,int>();
-            foreach (var pair1 in PointsTeamSheetPlayerMap)
-            {
-                var playerTeamEntryCanvas = pair1.Value;
-                var footballPlayerDetails = playerTeamEntryCanvas.GetComponent<FootballPlayerDetails>();
-
-                foreach (var pair2 in GameweekAllPlayerPointsMap.Where(pair2 => pair2.Key == footballPlayerDetails.playerName))
-                {
-                    var playerGameweekPoints = pair2.Value[currentGwIndex];
-                    if (!currentGwTeamSheetPointsMap.ContainsKey(footballPlayerDetails.playerName))
-                    {
-                        int.TryParse(playerGameweekPoints, out var gwPoints);
-                        currentGwTeamSheetPointsMap.Add(footballPlayerDetails.playerName, gwPoints);
-                    }
-                    else
-                        Debug.LogError("currentGwTeamSheetPointsMap already contains " + footballPlayerDetails.playerName);
-                }
-            }
-
-            _gameweekTeamSheetPointsArray[currentGwIndex] = currentGwTeamSheetPointsMap;
-        }
 
         private void SetHeadCoachPoints()
         {
             var headCoachDataObj = GameObjectFinder.FindSingleObjectByName("HeadCoachData");
             var headCoachData = headCoachDataObj.GetComponent<HeadCoachData>();
             
-            headCoachData.coachPointsPerGw = new int[_noOfGameweeks];
-            for (int i = 0; i < _noOfGameweeks; i++)
-            {
-                var totalGwPoints = 0;
-                foreach (var pair in _gameweekTeamSheetPointsArray[i])
-                {
-                    totalGwPoints += pair.Value;        // need to account for subs bench!!
-                }
+            var currentGameweek = ConfigManager.appConfig.GetString("CURRENT_GAMEWEEK");
 
-                headCoachData.coachTotalPoints += totalGwPoints;
-                headCoachData.coachPointsPerGw[i] = totalGwPoints;
+            var headCoachSaveData = headCoachData.GetSavedHeadCoachData();
+            if (headCoachSaveData.CoachPointsPerGw.Length == 0)
+            {
+                headCoachSaveData.CoachPointsPerGw = new int[_noOfGameweeks];
             }
             
+            headCoachData.coachPointsPerGw = new int[_noOfGameweeks];
+            for (int i = 0; i < headCoachData.coachPointsPerGw.Length; i++)
+            {
+                if (currentGameweek == (i + 1).ToString())
+                {
+                    // get all player gw points 
+                    var totalGwPoints = 0;
+                    foreach (var pair in PointsTeamSheetPlayerMap)
+                    {
+                        var gwPointsString = pair.Value.GetComponent<FootballPlayerDetails>().gameweekPoints;
+                        int.TryParse(gwPointsString, out var gwPoints);
+                        totalGwPoints += gwPoints;                            // need to account for subs bench!!
+                    }
+
+                    headCoachData.coachPointsPerGw[i] = totalGwPoints;
+                    headCoachData.coachCurrentGwPoints = totalGwPoints;
+                }
+                else
+                {
+                    headCoachData.coachPointsPerGw[i] = headCoachSaveData.CoachPointsPerGw[i];
+                }
+            }
+
+            for (int i = 0; i < headCoachData.coachPointsPerGw.Length; i++)
+            {
+                headCoachData.coachTotalPoints += headCoachData.coachPointsPerGw[i];
+            }
+
             headCoachData.UpdateHeadCoachSaveData();
         }
         
+        public static void SetCoachUi()
+        {
+            var headCoachDataObj = GameObjectFinder.FindSingleObjectByName("HeadCoachData");
+            var headCoachData = headCoachDataObj.GetComponent<HeadCoachData>();
+            headCoachData.SetHeadCoachUi();
+        }
+        
+        private List<GameObject> GetGrandChildren(GameObject canvas)
+        {
+            var grandchildren = new List<GameObject>();
+            var panel = canvas.transform.GetChild(0);
+
+            for (int i = 0; i < panel.childCount; i++)
+            {
+                var playerObj = panel.GetChild(i).gameObject;
+                grandchildren.Add(playerObj);
+            }
+
+            return grandchildren;
+        }
+
+        private List<GameObject> GetGreatGrandChildren(GameObject canvas)
+        {
+            var grandchildren = new List<GameObject>();
+            var panel = canvas.transform.GetChild(0).GetChild(0);
+
+            for (int i = 0; i < panel.childCount; i++)
+            {
+                var playerObj = panel.GetChild(i).gameObject;
+                grandchildren.Add(playerObj);
+            }
+
+            return grandchildren;
+        }
+
+        #region Unfinished Coach Points Per Gameweek Functions
+
+        /*
         private void SetPlayerPointsUi(int currentGwIndex)
         {
             foreach (var pair1 in PointsTeamSheetPlayerMap)
@@ -183,33 +188,9 @@ namespace DefaultNamespace
             index = arrayCount - 1;
             return index;
         }
+            */
+
+        #endregion
         
-        private List<GameObject> GetGrandChildren(GameObject canvas)
-        {
-            var grandchildren = new List<GameObject>();
-            var panel = canvas.transform.GetChild(0);
-
-            for (int i = 0; i < panel.childCount; i++)
-            {
-                var playerObj = panel.GetChild(i).gameObject;
-                grandchildren.Add(playerObj);
-            }
-
-            return grandchildren;
-        }
-
-        private List<GameObject> GetGreatGrandChildren(GameObject canvas)
-        {
-            var grandchildren = new List<GameObject>();
-            var panel = canvas.transform.GetChild(0).GetChild(0);
-
-            for (int i = 0; i < panel.childCount; i++)
-            {
-                var playerObj = panel.GetChild(i).gameObject;
-                grandchildren.Add(playerObj);
-            }
-
-            return grandchildren;
-        }
     }
 }

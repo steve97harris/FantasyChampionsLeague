@@ -15,7 +15,12 @@ namespace DefaultNamespace
         public struct appAttributes {}
         
         public static readonly List<string> PlayerRemoteConfigKeysList = new List<string>();
-        
+
+        private void Start()
+        {
+            FetchFootballPlayerPoints();
+        }
+
         public void Awake()
         {
             ConfigManager.FetchCompleted += UpdatePlayerPoints;
@@ -25,8 +30,8 @@ namespace DefaultNamespace
         
         public void FetchFootballPlayerPoints()
         {
-            Debug.LogError("fetch");
             ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
+            PointsTeamSheetManager.SetCoachUi();
         }
 
         private void UpdateGameweekTitle(ConfigResponse obj)
@@ -55,7 +60,6 @@ namespace DefaultNamespace
                 foreach (var pair2 in footballPlayerGwPointsMap.Where(pair2 => pair2.Key == pair.Value.RemoteConfigKey))
                 {
                     pair.Value.TotalPoints = pair2.Value.ToString();
-                    Debug.LogError(pair2.Key + ", " + pair2.Value.ToString());
                 }
             }
             
@@ -64,7 +68,8 @@ namespace DefaultNamespace
                 teamSheetData = teamSheetDataMap
             };
             
-            teamDatabase.UpdateTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
+            teamDatabase.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
+            teamDatabase.SaveTeamSheet(teamSheetSaveData);
         }
 
         private void OnDestroy()

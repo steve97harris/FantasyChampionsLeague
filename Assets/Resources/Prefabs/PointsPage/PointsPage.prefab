@@ -1707,20 +1707,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1208131573109434539}
     m_Modifications:
+    - target: {fileID: 1032219304971442635, guid: 64c321cef20fd9240be4fb06e6d28092,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3226608559427478303, guid: 64c321cef20fd9240be4fb06e6d28092,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 17
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3226608559427478303, guid: 64c321cef20fd9240be4fb06e6d28092,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3226608559427478303, guid: 64c321cef20fd9240be4fb06e6d28092,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3226608560638495050, guid: 64c321cef20fd9240be4fb06e6d28092,
         type: 3}
@@ -1831,6 +1836,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PointsPageHeader
+      objectReference: {fileID: 0}
+    - target: {fileID: 7386461400773690355, guid: 64c321cef20fd9240be4fb06e6d28092,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8581299416297968650, guid: 64c321cef20fd9240be4fb06e6d28092,
         type: 3}

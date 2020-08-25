@@ -6,6 +6,7 @@
         public string CoachName;
         public string ClubName;
         public int CoachTotalPoints;
+        public int CoachCurrentGwPoints;
         public int[] CoachPointsPerGw;
     }
 }

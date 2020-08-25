@@ -20,8 +20,7 @@ public class DashBoardManager : MonoBehaviour
     
     void Start()
     {
-        SetScreenActive(1);
-        SetScreenSelectorActive();
+        SetScreenActive(0);
 
         InitiateTransferList();
     }
@@ -69,7 +68,7 @@ public class DashBoardManager : MonoBehaviour
         }
     }
 
-    private void SetScreenSelectorActive()
+    public static void SetScreenSelectorActive()
     {
         var screenSelector = GameObjectFinder.FindSingleObjectByName("ScreenSelector");
         screenSelector.SetActive(true);

@@ -1,10 +1,13 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace DefaultNamespace
 {
     public class GameObjectFinder : MonoBehaviour
     {
+        public static Dictionary<string,GameObject> GameObjects = new Dictionary<string, GameObject>();
+        
         public static GameObject[] FindMultipleObjectsByName(string objectName)
         {
             var objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == objectName).ToArray();
