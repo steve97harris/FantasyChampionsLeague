@@ -49,6 +49,8 @@ namespace PlayFab
             {
                 _userEmail = PlayerPrefs.GetString("EMAIL");
                 _userPassword = PlayerPrefs.GetString("PASSWORD");
+                _userName = PlayerPrefs.GetString("USERNAME");
+                
                 var request = new LoginWithEmailAddressRequest { Email = _userEmail, Password = _userPassword };
                 PlayFabClientAPI.LoginWithEmailAddress(request, OnLoginSuccess, OnLoginFailure);
             }
@@ -73,18 +75,18 @@ namespace PlayFab
             
             PlayerPrefs.SetString("EMAIL", _userEmail);
             PlayerPrefs.SetString("PASSWORD", _userPassword);
-            
+
             ActivateDashBoard();
             PlayFabPlayerStatsGetStats();
         }
-        
+
         private void OnMobileLoginSuccess(LoginResult result)
         {
             Debug.Log("Boom!! Successful API Login.");
             
             PlayerPrefs.SetString("EMAIL", _userEmail);
             PlayerPrefs.SetString("PASSWORD", _userPassword);
-            
+
             ActivateDashBoard();
             PlayFabPlayerStatsGetStats();
         }
@@ -95,7 +97,7 @@ namespace PlayFab
             
             PlayerPrefs.SetString("EMAIL", _userEmail);
             PlayerPrefs.SetString("PASSWORD", _userPassword);
-            
+
             PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = _userName}, OnDisplayName, ErrorCallback);
             
             ActivateDashBoard();
@@ -171,7 +173,7 @@ namespace PlayFab
             
             PlayerPrefs.SetString("EMAIL", _userEmail);
             PlayerPrefs.SetString("PASSWORD", _userPassword);
-            
+
             ActivateDashBoard();
             PlayFabPlayerStatsGetStats();
         }

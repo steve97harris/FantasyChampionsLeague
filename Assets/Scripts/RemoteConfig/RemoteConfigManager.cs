@@ -26,16 +26,17 @@ namespace DefaultNamespace
         {
             ConfigManager.FetchCompleted += UpdatePlayerPoints;
             ConfigManager.FetchCompleted += UpdateGameweekTitle;
-            ConfigManager.FetchCompleted += SetCoachUi;
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
         }
         
         public void FetchFootballPlayerPoints()
         {
+            PointsTeamSheetManager.SetHeadCoachPoints();
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
+            SetCoachUi();
         }
         
-        private void SetCoachUi(ConfigResponse obj)
+        private void SetCoachUi()
         {
             var headCoachDataObj = GameObjectFinder.FindSingleObjectByName("HeadCoachData");
             var headCoachData = headCoachDataObj.GetComponent<HeadCoachData>();
@@ -84,7 +85,6 @@ namespace DefaultNamespace
         {
             ConfigManager.FetchCompleted -= UpdatePlayerPoints;
             ConfigManager.FetchCompleted -= UpdateGameweekTitle;
-            ConfigManager.FetchCompleted -= SetCoachUi;
         }
     }
 }

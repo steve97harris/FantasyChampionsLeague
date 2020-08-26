@@ -4,6 +4,7 @@ using System.Globalization;
 using DefaultNamespace;
 using Unity.RemoteConfig;
 using TMPro;
+using UnityEditor.iOS;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -93,7 +94,7 @@ namespace Dashboard
         {
             // locate gameObjects
             var transferListContent = GameObjectFinder.FindSingleObjectByName("TransferListContent").transform;
-            var playerTransferEntry = GameObjectFinder.FindSingleObjectByName("PlayerTransferEntry");
+            var playerTransferEntry = Resources.Load<GameObject>("Prefabs/TransfersPage/PlayerTransferEntry");
             
             var teamLogosObject = GameObjectFinder.FindSingleObjectByName("TeamLogos");
             var teamLogos = teamLogosObject.GetComponent<TeamLogos>().teamLogos;
@@ -135,12 +136,12 @@ namespace Dashboard
                 if (playersTeamLogo != null)
                     playerTeamImageObj.GetComponent<Image>().sprite = playersTeamLogo;
 
-                entryObject.GetComponent<Canvas>().enabled = true;
-                entryObject.GetComponent<CanvasScaler>().enabled = true;
-                entryObject.GetComponent<GraphicRaycaster>().enabled = true;
-                entryButton.GetComponent<Image>().enabled = true;
-                entryButton.GetComponent<Button>().enabled = true;
-                entryObject.SetActive(true);
+                // entryObject.GetComponent<Canvas>().enabled = true;
+                // entryObject.GetComponent<CanvasScaler>().enabled = true;
+                // entryObject.GetComponent<GraphicRaycaster>().enabled = true;
+                // entryButton.GetComponent<Image>().enabled = true;
+                // entryButton.GetComponent<Button>().enabled = true;
+                // entryObject.SetActive(true);
             }
             
         }

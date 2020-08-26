@@ -39,13 +39,17 @@ namespace DefaultNamespace
 
             totalCoachPoints.GetComponent<TMP_Text>().text = coachTotalPoints.ToString();
             currentGwPoints.GetComponent<TMP_Text>().text = coachCurrentGwPoints.ToString();
+            
+            Debug.LogError("Coach Data:");
+            Debug.LogError("total points: " + coachTotalPoints);
+            Debug.LogError("gw points: " + coachCurrentGwPoints);
         }
         
         public HeadCoachSaveData GetSavedHeadCoachData()
         {
             if (!File.Exists(JsonPath))
             {
-                Debug.LogError("TeamSheetData.json does not exist - creating new one");
+                Debug.LogError("HeadCoachData.json does not exist - creating new one");
                 
                 // create json file
                 File.Create(JsonPath).Dispose();
@@ -56,8 +60,8 @@ namespace DefaultNamespace
             {
                 // convert json string to TeamSheetSaveData
                 var json = stream.ReadToEnd();
-                var teamSheetSaveData = JsonConvert.DeserializeObject<HeadCoachSaveData>(json);
-                return teamSheetSaveData;
+                var headCoachSaveData = JsonConvert.DeserializeObject<HeadCoachSaveData>(json);
+                return headCoachSaveData;
             }
         }
 

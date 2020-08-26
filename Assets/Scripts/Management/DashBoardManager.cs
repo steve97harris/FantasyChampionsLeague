@@ -6,6 +6,7 @@ using DefaultNamespace;
 using GoogleSheetsLevelSynchronizer;
 using UnityEngine;
 using Newtonsoft.Json;
+using PlayFab;
 
 public class DashBoardManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class DashBoardManager : MonoBehaviour
         "DashBoard",
         "PointsPage",
         "TransfersPage",
-        "Leaderboards"
+        "LeagueLeaderboards"
     };
     
     void Start()
@@ -47,15 +48,14 @@ public class DashBoardManager : MonoBehaviour
         SetScreenActive(1);
     }
 
-    public void FixturesResultsButton()
+    public void LeaguesButton()
     {
         SetScreenActive(4);
+        PlayFabLeaderboard.Instance.GetLeaderboard();
     }
 
     private void InitiateTransferList()
     {
-        // var sheet = GoogleSheetReader.Reader("1iufkvofC9UcmJS5ld3R72RJZHz2kFd97BYR-1kL8XeM", "A3:E173");
-
         var footballPlayerDatabase = CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/FootballPlayerDatabase.csv");
         TransferListWindow.GetPlayerTransferList(footballPlayerDatabase);
     }
