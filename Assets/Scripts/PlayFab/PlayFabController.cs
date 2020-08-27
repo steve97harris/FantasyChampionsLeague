@@ -9,7 +9,7 @@ namespace PlayFab
 {
     public class PlayFabController : MonoBehaviour
     {
-        public static PlayFabController PfController;
+        public static PlayFabController Instance;
         private string _userEmail;
         private string _userPassword;
         private string _userName;
@@ -20,13 +20,13 @@ namespace PlayFab
 
         public void OnEnable()
         {
-            if (PfController == null)
+            if (Instance == null)
             {
-                PfController = this;
+                Instance = this;
             }
             else
             {
-                if (PfController != this)
+                if (Instance != this)
                 {
                     Destroy(this.gameObject);
                 }
@@ -58,29 +58,18 @@ namespace PlayFab
             {
 #if UNITY_IOS
                 var requestIos = new LoginWithIOSDeviceIDRequest{ DeviceId = ReturnMobileId() , CreateAccount = true };
-                PlayFabClientAPI.LoginWithIOSDeviceID(requestIos, OnMobileLoginSuccess, ErrorCallback);
+                PlayFabClientAPI.LoginWithIOSDeviceID(requestIos, OnLoginSuccess, ErrorCallback);
 #endif
 #if UNITY_ANDROID
                 
                 var requestAndroid = new LoginWithAndroidDeviceIDRequest { AndroidDeviceId = ReturnMobileId() , CreateAccount = true };
-                PlayFabClientAPI.LoginWithAndroidDeviceID(requestAndroid, OnMobileLoginSuccess, ErrorCallback);
+                PlayFabClientAPI.LoginWithAndroidDeviceID(requestAndroid, OnLoginSuccess, ErrorCallback);
 #endif
             }
         }
 
         #region Login
         private void OnLoginSuccess(LoginResult result)
-        {
-            Debug.Log("Boom!! Successful API Login.");
-            
-            PlayerPrefs.SetString("EMAIL", _userEmail);
-            PlayerPrefs.SetString("PASSWORD", _userPassword);
-
-            ActivateDashBoard();
-            PlayFabPlayerStatsGetStats();
-        }
-
-        private void OnMobileLoginSuccess(LoginResult result)
         {
             Debug.Log("Boom!! Successful API Login.");
             
@@ -109,7 +98,7 @@ namespace PlayFab
             Debug.Log("username: " + result.DisplayName);
         }
 
-        private void ErrorCallback(PlayFabError error)
+        public void ErrorCallback(PlayFabError error)
         {
             Debug.LogError(error.GenerateErrorReport());
         }

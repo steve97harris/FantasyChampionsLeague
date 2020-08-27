@@ -18,13 +18,6 @@ namespace PlayFab
             {
                 Instance = this;
             }
-            else
-            {
-                if (Instance != this)
-                {
-                    Destroy(this.gameObject);
-                }
-            }
         }
 
         public void GetLeaderboard()
@@ -42,12 +35,7 @@ namespace PlayFab
 
         private void OnGetLeaderboard(GetLeaderboardResult result)
         {
-            SetLeaderboardUi(result);
-            
-            // foreach (var player in result.Leaderboard)
-            // {
-            //     Debug.Log(player.Position + " " + player.DisplayName + ", " + player.StatValue);
-            // }
+            SetLeaderboardUi(result, "LeaderboardPanelViewport");
         }
 
         private void OnLeaderboardError(PlayFabError error)
@@ -55,9 +43,9 @@ namespace PlayFab
             Debug.LogError(error.GenerateErrorReport());
         }
 
-        private void SetLeaderboardUi(GetLeaderboardResult result)
+        public void SetLeaderboardUi(GetLeaderboardResult result, string leaderboardViewportName)
         {
-            var leaderboardPanelViewport = GameObjectFinder.FindSingleObjectByName("LeaderboardPanelViewport");
+            var leaderboardPanelViewport = GameObjectFinder.FindSingleObjectByName(leaderboardViewportName);
             var leaderboardEntry = Resources.Load<GameObject>("Prefabs/Leaderboards/LeaderboardEntry");
             
             foreach (Transform child in leaderboardPanelViewport.transform)

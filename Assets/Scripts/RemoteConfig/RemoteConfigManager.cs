@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PlayFab;
@@ -17,23 +18,27 @@ namespace DefaultNamespace
         
         public static readonly List<string> PlayerRemoteConfigKeysList = new List<string>();
 
-        private void Start()
-        {
-            FetchFootballPlayerPoints();
-        }
-
         public void Awake()
         {
+            StartCoroutine(WaitForLogin());
+        }
+
+        private IEnumerator WaitForLogin()
+        {
+            yield return new WaitForSeconds(0.5f);
+            FetchConfigs();
+        }
+
+        private void FetchConfigs()
+        {
+            ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
             ConfigManager.FetchCompleted += UpdatePlayerPoints;
             ConfigManager.FetchCompleted += UpdateGameweekTitle;
-            ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
         }
         
         public void FetchFootballPlayerPoints()
         {
-            PointsTeamSheetManager.SetHeadCoachPoints();
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
-            SetCoachUi();
         }
         
         private void SetCoachUi()
@@ -79,6 +84,9 @@ namespace DefaultNamespace
             
             teamDatabase.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
             teamDatabase.SaveTeamSheet(teamSheetSaveData);
+            
+            PointsTeamSheetManager.SetHeadCoachPoints();
+            SetCoachUi();
         }
 
         private void OnDestroy()

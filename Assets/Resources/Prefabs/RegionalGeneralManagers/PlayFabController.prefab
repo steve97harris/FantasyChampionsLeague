@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8057358562929676087}
   - component: {fileID: 6938896278630913503}
   - component: {fileID: 3292120432365233821}
+  - component: {fileID: 2967524869703381197}
+  - component: {fileID: 2082757809520955647}
   m_Layer: 0
   m_Name: PlayFabController
   m_TagString: Untagged
@@ -69,5 +71,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e94cf3dd154246f18dcf89af6d47220d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2967524869703381197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8057358562929676086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67c77332265347ada6e586c15c1f3a9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2082757809520955647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8057358562929676086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd2c941768f428dbda154006d17c80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

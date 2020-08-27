@@ -4,7 +4,6 @@ using System.Globalization;
 using DefaultNamespace;
 using Unity.RemoteConfig;
 using TMPro;
-using UnityEditor.iOS;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -135,13 +134,6 @@ namespace Dashboard
                 var playersTeamLogo = teamLogos.Find(x => x.name == pair.Value[0]);
                 if (playersTeamLogo != null)
                     playerTeamImageObj.GetComponent<Image>().sprite = playersTeamLogo;
-
-                // entryObject.GetComponent<Canvas>().enabled = true;
-                // entryObject.GetComponent<CanvasScaler>().enabled = true;
-                // entryObject.GetComponent<GraphicRaycaster>().enabled = true;
-                // entryButton.GetComponent<Image>().enabled = true;
-                // entryButton.GetComponent<Button>().enabled = true;
-                // entryObject.SetActive(true);
             }
             
         }

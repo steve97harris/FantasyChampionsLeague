@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 3642502934455330372}
   - component: {fileID: 1018330909952255722}
   m_Layer: 5
-  m_Name: LeaderboardPanel
+  m_Name: WorldLeaderboardPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -16,7 +16,8 @@ public class DashBoardManager : MonoBehaviour
         "DashBoard",
         "PointsPage",
         "TransfersPage",
-        "LeagueLeaderboards"
+        "LeagueLeaderboards",
+        "ProfileCanvas"
     };
     
     void Start()
@@ -38,9 +39,7 @@ public class DashBoardManager : MonoBehaviour
         if (GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)") != null) 
             return;
         
-        var transferListWindow = GameObjectFinder.FindSingleObjectByName("TransferListWindow");
-        var transferListWindowComponent = transferListWindow.GetComponent<TransferListWindow>();
-        transferListWindowComponent.TransferListEntryInstantiateTransferTeamSheet();
+        InstantiateTransferTeamSheet();
     }
 
     public void DashboardButton()
@@ -48,16 +47,37 @@ public class DashBoardManager : MonoBehaviour
         SetScreenActive(1);
     }
 
-    public void LeaguesButton()
+    public void WorldPlayerLeagueButton()
     {
         SetScreenActive(4);
         PlayFabLeaderboard.Instance.GetLeaderboard();
+        SetLeaderboardPanel("world");
+    }
+    
+    public void FriendPlayerLeagueButton()
+    {
+        SetScreenActive(4);
+        PlayFabFriends.Instance.GetFriendLeaderboard();
+        SetLeaderboardPanel("friend");
+    }
+
+    public void PlayerProfileButton()
+    {
+        SetScreenActive(5);
+        PlayFabAccountInformation.Instance.GetAccountInfo();
     }
 
     private void InitiateTransferList()
     {
         var footballPlayerDatabase = CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/FootballPlayerDatabase.csv");
         TransferListWindow.GetPlayerTransferList(footballPlayerDatabase);
+    }
+
+    private void InstantiateTransferTeamSheet()
+    {
+        var transferListWindow = GameObjectFinder.FindSingleObjectByName("TransferListWindow");
+        var transferListWindowComponent = transferListWindow.GetComponent<TransferListWindow>();
+        transferListWindowComponent.TransferListEntryInstantiateTransferTeamSheet();
     }
 
     private void SetScreenActive(int index)
@@ -72,5 +92,23 @@ public class DashBoardManager : MonoBehaviour
     {
         var screenSelector = GameObjectFinder.FindSingleObjectByName("ScreenSelector");
         screenSelector.SetActive(true);
+    }
+
+    private void SetLeaderboardPanel(string leaderboardName)
+    {
+        var worldLeaderboard = GameObjectFinder.FindSingleObjectByName("WorldLeaderboardPanel");
+        var friendLeaderboard = GameObjectFinder.FindSingleObjectByName("FriendsPanel");
+
+        switch (leaderboardName)
+        {
+            case "world":
+                worldLeaderboard.SetActive(true);
+                friendLeaderboard.SetActive(false);
+                break;
+            case "friend":
+                worldLeaderboard.SetActive(false);
+                friendLeaderboard.SetActive(true);
+                break;
+        }
     }
 }

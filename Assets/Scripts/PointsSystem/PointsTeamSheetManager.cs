@@ -4,6 +4,7 @@ using System.Linq;
 using CSV;
 using Dashboard;
 using GoogleSheetsLevelSynchronizer;
+using PlayFab;
 using TMPro;
 using Unity.RemoteConfig;
 using UnityEngine;
@@ -88,6 +89,7 @@ namespace DefaultNamespace
             }
 
             headCoachData.UpdateHeadCoachSaveData();
+            //PlayFabPlayerStats.PlayFabPlayerStatistics.SetStatistics();
         }
         
         private List<GameObject> GetGrandChildren(GameObject canvas)

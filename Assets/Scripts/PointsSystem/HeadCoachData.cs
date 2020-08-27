@@ -15,7 +15,7 @@ namespace DefaultNamespace
         public int coachCurrentGwPoints;
         public int[] coachPointsPerGw;
 
-        private static string JsonPath => Path.Combine(Application.persistentDataPath, "HeadCoachData.json");
+        private string JsonPath => Path.Combine(Application.persistentDataPath, "HeadCoachData.json");
 
         public void UpdateHeadCoachSaveData()
         {
@@ -40,9 +40,7 @@ namespace DefaultNamespace
             totalCoachPoints.GetComponent<TMP_Text>().text = coachTotalPoints.ToString();
             currentGwPoints.GetComponent<TMP_Text>().text = coachCurrentGwPoints.ToString();
             
-            Debug.LogError("Coach Data:");
-            Debug.LogError("total points: " + coachTotalPoints);
-            Debug.LogError("gw points: " + coachCurrentGwPoints);
+            Debug.LogError("Coach Ui Data: { totalPoints: " + coachTotalPoints + " gwPoints: " + coachCurrentGwPoints + "}");
         }
         
         public HeadCoachSaveData GetSavedHeadCoachData()
@@ -69,6 +67,7 @@ namespace DefaultNamespace
         {
             using (StreamWriter stream = new StreamWriter(JsonPath))
             {
+                Debug.LogError("hello");
                 // convert TeamSheetSaveData to json string
                 var j = JsonConvert.SerializeObject(headCoachSaveData, Formatting.Indented);
                 Debug.Log("HeadCoachData (json String): " + j);
