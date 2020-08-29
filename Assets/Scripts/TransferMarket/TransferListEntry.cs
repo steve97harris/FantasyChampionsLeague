@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Linq;
 using DefaultNamespace;
+using PlayFab;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -42,11 +43,20 @@ namespace Dashboard
                 RemoteConfigKey = playerDetails.RemoteConfigKey
             };
 
-            if (IsValidPlayerPosition(playerDetails.Position, playerTeamSheetEntryDetails.teamSheetPosition) && !PlayerAlreadyInTeam(teamDatabase, playerName) || playerName == "")
+            if (IsValidPlayerPosition(playerDetails.Position, playerTeamSheetEntryDetails.teamSheetPosition) && !PlayerAlreadyInTeam(playerName) || playerName == "")
             {
                 Debug.Log("Valid player, insert player into team...");
-                InsertPlayerUpdateTeamSheetUi(teamDatabase, athleteStats);
+                
+                teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);                
+                
                 InstantiateTransferTeamSheet(teamDatabase);
+                
+                var teamSheetSaveData =  PlayFabEntityFileManager.Instance.GetTeamSheetData();
+                teamDatabase.SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
+                teamDatabase.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
+
+                var transferTeamSheetObj = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)");
+                transferTeamSheetObj.SetActive(true);
                 TransferListWindow.DestroyTransferList();
             }
             else
@@ -56,21 +66,21 @@ namespace Dashboard
             }
         }
 
-        private void InsertPlayerUpdateTeamSheetUi(TeamSheetDatabase teamDatabase, AthleteStats athleteStats)
-        {
-            teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);
-            var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
-            teamDatabase.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
-        }
-
-        public void InstantiateTransferTeamSheet(TeamSheetDatabase teamDatabase)
+        public void InstantiateTransferTeamSheet(TeamSheetDatabase teamSheetDatabase)
         {
             var transferTeamSheetObj = Resources.Load<GameObject>("Prefabs/TransfersPage/TransferTeamSheet");
             var transferPage = GameObjectFinder.FindSingleObjectByName("TransfersPage");
+
             var newTransferTeamSheet = Instantiate(transferTeamSheetObj, transferPage.transform);
-            var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
-            teamDatabase.SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
             newTransferTeamSheet.SetActive(true);
+        }
+        
+        public void InstantiatePointsTeamSheet(TeamSheetDatabase teamDatabase)
+        {
+            var teamSheetObj = Resources.Load<GameObject>("Prefabs/PointsPage/PointsTeamSheet");
+            var teamSheetParent = GameObjectFinder.FindSingleObjectByName("PointsPage");
+            var newTeamSheet = Instantiate(teamSheetObj, teamSheetParent.transform);
+            newTeamSheet.SetActive(true);
         }
 
         private string GetGameObjectChildText(GameObject obj, int childIndex)
@@ -107,9 +117,9 @@ namespace Dashboard
             return false;
         }
 
-        private bool PlayerAlreadyInTeam(TeamSheetDatabase teamSheetDatabase, string playerName)
+        private bool PlayerAlreadyInTeam(string playerName)
         {
-            var teamSheet = teamSheetDatabase.GetSavedTeamSheet();
+            var teamSheet =  PlayFabEntityFileManager.Instance.GetTeamSheetData();
             
             if (teamSheet == null)
                 return false;

@@ -14,6 +14,7 @@ namespace DefaultNamespace
 {
     public class PointsTeamSheetManager : MonoBehaviour
     {
+        public static PointsTeamSheetManager Instance;
         private static int _noOfGameweeks = 35;
         
         /// <summary> PointsTeamSheetPlayerMap - map of player prefabs 
@@ -22,10 +23,10 @@ namespace DefaultNamespace
         /// </summary>
         private static readonly Dictionary<string, GameObject> PointsTeamSheetPlayerMap = new Dictionary<string, GameObject>();
 
-        public void Start()
-        { 
-            GetPlayerMap(); 
-            
+        private void Awake()
+        {
+            if (Instance == null)
+                Instance = this;
         }
 
         private void GetPlayerMap()
@@ -46,21 +47,28 @@ namespace DefaultNamespace
             }
         }
 
-        public static void SetHeadCoachPoints()
+        public void SetHeadCoachPoints()
         {
-            var headCoachDataObj = GameObjectFinder.FindSingleObjectByName("HeadCoachData");
-            var headCoachData = headCoachDataObj.GetComponent<HeadCoachData>();
+            GetPlayerMap();
             
             var currentGameweek = ConfigManager.appConfig.GetString("CURRENT_GAMEWEEK");
 
-            var headCoachSaveData = headCoachData.GetSavedHeadCoachData();
-            if (headCoachSaveData.CoachPointsPerGw.Length == 0)
+            var headCoachSaveData = PlayFabEntityFileManager.Instance.GetHeadCoachData();
+            
+            if (headCoachSaveData.CoachName == null)
+            {
+                headCoachSaveData.CoachName = "";
+            }
+            if (headCoachSaveData.ClubName == null)
+            {
+                headCoachSaveData.ClubName = "";
+            }
+            if (headCoachSaveData.CoachPointsPerGw == null)
             {
                 headCoachSaveData.CoachPointsPerGw = new int[_noOfGameweeks];
             }
             
-            headCoachData.coachPointsPerGw = new int[_noOfGameweeks];
-            for (int i = 0; i < headCoachData.coachPointsPerGw.Length; i++)
+            for (int i = 0; i < headCoachSaveData.CoachPointsPerGw.Length; i++)
             {
                 if (currentGameweek == (i + 1).ToString())
                 {
@@ -73,25 +81,23 @@ namespace DefaultNamespace
                         totalGwPoints += gwPoints;                            // need to account for subs bench!!
                     }
 
-                    headCoachData.coachPointsPerGw[i] = totalGwPoints;
-                    headCoachData.coachCurrentGwPoints = totalGwPoints;
-                }
-                else
-                {
-                    headCoachData.coachPointsPerGw[i] = headCoachSaveData.CoachPointsPerGw[i];
+                    headCoachSaveData.CoachPointsPerGw[i] = totalGwPoints;
+                    headCoachSaveData.CoachCurrentGwPoints = totalGwPoints;
                 }
             }
 
-            headCoachData.coachTotalPoints = 0;
-            for (int i = 0; i < headCoachData.coachPointsPerGw.Length; i++)
+            headCoachSaveData.CoachTotalPoints = 0;
+            for (int i = 0; i < headCoachSaveData.CoachPointsPerGw.Length; i++)
             {
-                headCoachData.coachTotalPoints += headCoachData.coachPointsPerGw[i];
+                headCoachSaveData.CoachTotalPoints += headCoachSaveData.CoachPointsPerGw[i];
             }
 
-            headCoachData.UpdateHeadCoachSaveData();
-            //PlayFabPlayerStats.PlayFabPlayerStatistics.SetStatistics();
+            PlayFabEntityFileManager.Instance.SavePlayFabHeadCoachSaveData(headCoachSaveData);
+            
+            
+            PlayFabPlayerStats.Instance.SetStatistics();
         }
-        
+
         private List<GameObject> GetGrandChildren(GameObject canvas)
         {
             var grandchildren = new List<GameObject>();
@@ -122,7 +128,7 @@ namespace DefaultNamespace
 
         #region Unfinished Coach Points Per Gameweek Functions
 
-        /*
+        /*        
         private void SetPlayerPointsUi(int currentGwIndex)
         {
             foreach (var pair1 in PointsTeamSheetPlayerMap)
@@ -186,6 +192,5 @@ namespace DefaultNamespace
             */
 
         #endregion
-        
     }
 }

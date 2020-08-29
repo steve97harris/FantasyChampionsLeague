@@ -1,34 +1,65 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using Dashboard;
 using DefaultNamespace;
 using Newtonsoft.Json;
+using PlayFab;
+using PlayFab.AuthenticationModels;
+using PlayFab.ClientModels;
+using PlayFab.DataModels;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using EntityKey = PlayFab.DataModels.EntityKey;
 
 namespace DefaultNamespace
 {
     public class TeamSheetDatabase : MonoBehaviour
     {
+        public static TeamSheetDatabase Instance;
+
+        private static Dictionary<string, ObjectResult> _playFabTeamSheetSaveDataMap;
+        
         private static int maxNumberOfEntries = 15;
-        private static string JsonPath => Path.Combine(Application.persistentDataPath,"TeamSheetData.json");
+        public static string JsonPath => Path.Combine(Application.persistentDataPath,"TeamSheetData.json");
 
         #region Event Functions
 
-        private void Start()
+        private void Awake()
         {
-            UpdateTeamSheetUiSaveTeamSheet();
+            if (Instance == null)
+                Instance = this;
+            
+            StartCoroutine(WaitForPlayFabLogin());
+        }
+        
+        private IEnumerator WaitForPlayFabLogin()
+        {
+            yield return new WaitForSeconds(1f);
+            LoadPlayFabFiles_SetTeamSheetUi();
         }
 
-        private void UpdateTeamSheetUiSaveTeamSheet()
+        private void LoadPlayFabFiles_SetTeamSheetUi()
         {
-            var savedTeamSheetEntries = GetSavedTeamSheet();
-            SetTeamSheetUi(savedTeamSheetEntries, "TransferTeamSheet");
-            SetTeamSheetUi(savedTeamSheetEntries, "PointsTeamSheet");
-            SaveTeamSheet(savedTeamSheetEntries);
+            StartCoroutine(WaitForFiles());
+        }
+
+        private IEnumerator WaitForFiles()
+        {
+            PlayFabEntityFileManager.Instance.LoadPlayFabPlayerFiles();
+            
+            yield return new WaitForSeconds(3f);
+            
+            var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
+            
+            Debug.LogError(teamSheetSaveData.teamSheetData.Count);
+            SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet");
+            
+            RemoteConfigManager.Instance.FetchConfigs();
         }
 
         #endregion
@@ -40,78 +71,86 @@ namespace DefaultNamespace
             Debug.LogError("Inserting player into json file..");
             
             // get TeamSheetSaveData from json
-            var savedTeamSheetEntries = GetSavedTeamSheet() ?? new TeamSheetSaveData();
-            Debug.LogError("savedTeamsheetEntries: " + savedTeamSheetEntries);
+            var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
+            
+            if (teamSheetSaveData == null)
+            {
+                teamSheetSaveData = new TeamSheetSaveData();
+            }
+
+            Debug.LogError("savedTeamsheetEntries: " + teamSheetSaveData);
             
             // add or replace selected player
-            if (savedTeamSheetEntries.teamSheetData.Count < maxNumberOfEntries)
+            if (teamSheetSaveData.teamSheetData.Count < maxNumberOfEntries)
             {
                 // don't really need maxNumber of entries ?
-                if (!savedTeamSheetEntries.teamSheetData.ContainsKey(teamSheetPlayerPosition))
+                if (!teamSheetSaveData.teamSheetData.ContainsKey(teamSheetPlayerPosition))
                 {
-                    savedTeamSheetEntries.teamSheetData.Add(teamSheetPlayerPosition, playerEntry);
+                    teamSheetSaveData.teamSheetData.Add(teamSheetPlayerPosition, playerEntry);
                 }
                 else
                 {
-                    savedTeamSheetEntries.teamSheetData[teamSheetPlayerPosition] = playerEntry;
+                    teamSheetSaveData.teamSheetData[teamSheetPlayerPosition] = playerEntry;
                 }
             }
 
-            if (savedTeamSheetEntries.teamSheetData.Count >= maxNumberOfEntries)
+            if (teamSheetSaveData.teamSheetData.Count >= maxNumberOfEntries)
             {
-                savedTeamSheetEntries.teamSheetData[teamSheetPlayerPosition] = playerEntry;
+                teamSheetSaveData.teamSheetData[teamSheetPlayerPosition] = playerEntry;
             }
 
-            SaveTeamSheet(savedTeamSheetEntries);
+            PlayFabEntityFileManager.Instance.SavePlayFabTeamSheetData(teamSheetSaveData);
         }
         
         #endregion
 
         #region Private Methods
 
-        public TeamSheetSaveData GetSavedTeamSheet()
-        {
-            if (!File.Exists(JsonPath))
-            {
-                Debug.LogError("TeamSheetData.json does not exist - creating new one");
-                
-                // create json file
-                File.Create(JsonPath).Dispose();
-                return new TeamSheetSaveData();
-            }
-            
-            using (StreamReader stream = new StreamReader(JsonPath))
-            {
-                // convert json string to TeamSheetSaveData
-                var json = stream.ReadToEnd();
-                var teamSheetSaveData = JsonConvert.DeserializeObject<TeamSheetSaveData>(json);
-                
-                return teamSheetSaveData;
-            }
-        }
+        // public TeamSheetSaveData GetDeviceSavedTeamSheet()        // needs converting to playfab entity files
+        // {
+        //     if (!File.Exists(JsonPath))
+        //     {
+        //         Debug.LogError("TeamSheetData.json does not exist - creating new one");
+        //         
+        //         // create json file
+        //         File.Create(JsonPath).Dispose();
+        //         return new TeamSheetSaveData();
+        //     }
+        //     
+        //     using (StreamReader stream = new StreamReader(JsonPath))
+        //     {
+        //         // convert json string to TeamSheetSaveData
+        //         var json = stream.ReadToEnd();
+        //         var teamSheetSaveData = JsonConvert.DeserializeObject<TeamSheetSaveData>(json);
+        //         
+        //         return teamSheetSaveData;
+        //     }
+        // }    
 
-        public void SaveTeamSheet(TeamSheetSaveData teamSheetSaveData)
-        {
-            using (StreamWriter stream = new StreamWriter(JsonPath))
-            {
-                // convert TeamSheetSaveData to json string
-                var teamSheetSaveDataJson = JsonConvert.SerializeObject(teamSheetSaveData, Formatting.Indented);
-                // Debug.Log("TeamSheetData (json String): " + teamSheetSaveDataJson);
-                
-                stream.Write(teamSheetSaveDataJson);
-            }
-        }
+        // public void SaveDeviceTeamSheet(TeamSheetSaveData teamSheetSaveData)         // needs converting to playfab entity files
+        // {
+        //     using (StreamWriter stream = new StreamWriter(JsonPath))
+        //     {
+        //         // convert TeamSheetSaveData to json string
+        //         var teamSheetSaveDataJson = JsonConvert.SerializeObject(teamSheetSaveData, Formatting.Indented);
+        //         // Debug.Log("TeamSheetData (json String): " + teamSheetSaveDataJson);
+        //         
+        //         stream.Write(teamSheetSaveDataJson);
+        //     }
+        // }
 
         public void SetTeamSheetUi(TeamSheetSaveData teamSheetSaveData, string teamSheetObjName)
         {
             if (teamSheetSaveData == null)
             {
-                Debug.LogError("teamSheetSaveData returned NULL");
+                Debug.LogError("SetTeamSheetUi: teamSheetSaveData returned NULL");
                 return;
             }
             
             var teamSheetDataMap = teamSheetSaveData.teamSheetData;
             
+            Debug.LogError(teamSheetObjName);
+
             // set TeamSheetUi
             var transferTeamSheet = GameObjectFinder.FindSingleObjectByName(teamSheetObjName);
             var panel = transferTeamSheet.transform.GetChild(0).GetChild(0);

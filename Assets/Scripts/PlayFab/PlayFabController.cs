@@ -18,6 +18,9 @@ namespace PlayFab
         private static GameObject _dashboard;
         private static GameObject _addLoginPanel;
 
+        public static string EntityId;
+        public static string EntityType;
+
         public void OnEnable()
         {
             if (Instance == null)
@@ -76,8 +79,11 @@ namespace PlayFab
             PlayerPrefs.SetString("EMAIL", _userEmail);
             PlayerPrefs.SetString("PASSWORD", _userPassword);
 
+            EntityId = result.EntityToken.Entity.Id;
+            EntityType = result.EntityToken.Entity.Type;
+
             ActivateDashBoard();
-            PlayFabPlayerStatsGetStats();
+            // PlayFabPlayerStatsGetStats();
         }
 
         private void OnRegisterSuccess(RegisterPlayFabUserResult result)
@@ -90,7 +96,7 @@ namespace PlayFab
             PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = _userName}, OnDisplayName, ErrorCallback);
             
             ActivateDashBoard();
-            PlayFabPlayerStatsGetStats();
+            // PlayFabPlayerStatsGetStats();
         }
 
         private void OnDisplayName(UpdateUserTitleDisplayNameResult result)
@@ -164,14 +170,14 @@ namespace PlayFab
             PlayerPrefs.SetString("PASSWORD", _userPassword);
 
             ActivateDashBoard();
-            PlayFabPlayerStatsGetStats();
+            // PlayFabPlayerStatsGetStats();
         }
 
-        private void PlayFabPlayerStatsGetStats()
-        {
-            var playFabPlayerStats = gameObject.GetComponent<PlayFabPlayerStats>();
-            playFabPlayerStats.GetStatistics();
-        }
+        // private void PlayFabPlayerStatsGetStats()
+        // {
+        //     var playFabPlayerStats = gameObject.GetComponent<PlayFabPlayerStats>();
+        //     playFabPlayerStats.GetStatistics();
+        // }
         #endregion
     }
 }

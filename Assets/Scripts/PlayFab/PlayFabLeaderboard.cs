@@ -22,7 +22,7 @@ namespace PlayFab
 
         public void GetLeaderboard()
         {
-            PlayFabPlayerStats.PlayFabPlayerStatistics.SetStatistics();
+            PlayFabPlayerStats.Instance.SetStatistics();
             
             var requestLeaderboard = new GetLeaderboardRequest
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using DefaultNamespace;
+using PlayFab;
 using Unity.RemoteConfig;
 using TMPro;
 using UnityEngine;
@@ -141,26 +142,37 @@ namespace Dashboard
         public void BackButton_ToTransferTeamSheet()
         {
             DestroyTransferList();
-            TransferListEntryInstantiateTransferTeamSheet();
+
+            var transferTeamSheetObj = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)");
+            if (transferTeamSheetObj == null)
+                TransferListEntryInstantiateTransferTeamSheet("Transfer");
+            else
+                transferTeamSheetObj.SetActive(true);
         }
 
-        public void TransferListEntryInstantiateTransferTeamSheet()
+        public void TransferListEntryInstantiateTransferTeamSheet(string teamSheetName)
         {
+            var teamSavedData =  PlayFabEntityFileManager.Instance.GetTeamSheetData();
             var transferListEntry = gameObject.GetComponent<TransferListEntry>();
             var teamSheetDatabaseObj = GameObjectFinder.FindSingleObjectByName("TeamSheetDatabase");
             var teamDatabase = teamSheetDatabaseObj.GetComponent<TeamSheetDatabase>();
-            transferListEntry.InstantiateTransferTeamSheet(teamDatabase);
-            var teamSavedData = teamDatabase.GetSavedTeamSheet();
-            teamDatabase.SetTeamSheetUi(teamSavedData, "TransferTeamSheet(Clone)");
+
+            switch (teamSheetName)
+            {
+                case "Transfer":
+                    transferListEntry.InstantiateTransferTeamSheet(teamDatabase);
+                    break;
+                case "Points":
+                    transferListEntry.InstantiatePointsTeamSheet(teamDatabase);
+                    break;
+            }
+            teamDatabase.SetTeamSheetUi(teamSavedData, teamSheetName + "TeamSheet(Clone)");
         }
 
         public static void DestroyTransferList()
         {
             var list = GameObjectFinder.FindSingleObjectByName("TransferList(Clone)");
-            var transferTeamSheet = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)");
-
             DestroyImmediate(list.gameObject,true);
-            DestroyImmediate(transferTeamSheet.gameObject, true);
         }
     }
 }

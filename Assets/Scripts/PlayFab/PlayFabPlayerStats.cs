@@ -8,7 +8,7 @@ namespace PlayFab
 {
     public class PlayFabPlayerStats : MonoBehaviour
     {
-        public static PlayFabPlayerStats PlayFabPlayerStatistics;
+        public static PlayFabPlayerStats Instance;
         public int coachTotalPoints;
         public int coachCurrentGwPoints;
 
@@ -16,17 +16,17 @@ namespace PlayFab
 
         public void Awake()
         {
-            if (PlayFabPlayerStatistics == null)
+            if (Instance == null)
             {
-                PlayFabPlayerStatistics = this;
+                Instance = this;
             }
         }
 
         public void SetStatistics()
         {
-            var headCoachData = GameObjectFinder.FindSingleObjectByName("HeadCoachData");
-            coachTotalPoints = headCoachData.GetComponent<HeadCoachData>().coachTotalPoints;
-            coachCurrentGwPoints = headCoachData.GetComponent<HeadCoachData>().coachCurrentGwPoints;
+            var headCoachSaveData = PlayFabEntityFileManager.Instance.GetHeadCoachData();
+            coachTotalPoints = headCoachSaveData.CoachTotalPoints;
+            coachCurrentGwPoints = headCoachSaveData.CoachCurrentGwPoints;
             
             PlayFabClientAPI.UpdatePlayerStatistics( new UpdatePlayerStatisticsRequest {
                     // request.Statistics is a list, so multiple StatisticUpdate objects can be defined if required.
@@ -35,7 +35,11 @@ namespace PlayFab
                         new StatisticUpdate { StatisticName = "CurrentGwPoints", Value = coachCurrentGwPoints }
                     }
                 },
-                result => { Debug.Log("User statistics updated"); },
+                result =>
+                {
+                    Debug.Log("User statistics updated");
+                    GetStatistics();
+                },
                 error => { Debug.LogError(error.GenerateErrorReport()); });
         }
 

@@ -12,6 +12,7 @@ namespace DefaultNamespace
 {
     public class RemoteConfigManager : MonoBehaviour
     {
+        public static RemoteConfigManager Instance;
         private struct UserAttributes {}
 
         private struct AppAttributes {}
@@ -20,16 +21,11 @@ namespace DefaultNamespace
 
         public void Awake()
         {
-            StartCoroutine(WaitForLogin());
+            if (Instance == null)
+                Instance = this;
         }
 
-        private IEnumerator WaitForLogin()
-        {
-            yield return new WaitForSeconds(0.5f);
-            FetchConfigs();
-        }
-
-        private void FetchConfigs()
+        public void FetchConfigs()
         {
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
             ConfigManager.FetchCompleted += UpdatePlayerPoints;
@@ -40,21 +36,20 @@ namespace DefaultNamespace
         {
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
         }
-        
-        private void SetCoachUi()
-        {
-            var headCoachDataObj = GameObjectFinder.FindSingleObjectByName("HeadCoachData");
-            var headCoachData = headCoachDataObj.GetComponent<HeadCoachData>();
-            headCoachData.SetHeadCoachUi();
-        }
 
-        private void UpdateGameweekTitle(ConfigResponse obj)
-        {
-            var currentGameweek = ConfigManager.appConfig.GetString("CURRENT_GAMEWEEK");
-            var gameweekTitleObj = GameObjectFinder.FindSingleObjectByName("TotalGameweekPointsTitle");
-            gameweekTitleObj.GetComponent<TMP_Text>().text = "Gameweek " + currentGameweek;
-        }
-
+        /* Currently only updating player points on refresh button.
+         * Changes to make:
+         * {
+         *  - Update Football Player Points with respect to config data :)
+         *  - Save new TeamSheetSaveData to device and playfab :)
+         *  - Set Points TeamSheet Ui with new TeamSheetSaveData :)
+         *  - Add up new coach points
+         *  - Create new HeadCoachSaveData
+         *  - Save new HeadCoachSaveData to device
+         *  - Save coach points to playfab player statistics
+         *  - Set HeadCoachUi with new HeadCoachSaveData
+         * }
+         */
         private void UpdatePlayerPoints(ConfigResponse obj)
         {
             var footballPlayerGwPointsMap = new Dictionary<string,int>();
@@ -64,9 +59,12 @@ namespace DefaultNamespace
                 footballPlayerGwPointsMap.Add(PlayerRemoteConfigKeysList[i],gwPoints);
             }
             
-            var teamSheetDatabaseObj = GameObjectFinder.FindSingleObjectByName("TeamSheetDatabase");
-            var teamDatabase = teamSheetDatabaseObj.GetComponent<TeamSheetDatabase>();
-            var teamSheetSaveData = teamDatabase.GetSavedTeamSheet();
+            var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
+            if (teamSheetSaveData.teamSheetData == null)
+            {
+                Debug.LogError("playfab teamsheet NULL");
+                return;
+            } 
 
             var teamSheetDataMap = teamSheetSaveData.teamSheetData;
             foreach (var pair in teamSheetDataMap)
@@ -82,11 +80,35 @@ namespace DefaultNamespace
                 teamSheetData = teamSheetDataMap
             };
             
-            teamDatabase.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
-            teamDatabase.SaveTeamSheet(teamSheetSaveData);
+            PlayFabEntityFileManager.Instance.SavePlayFabTeamSheetData(teamSheetSaveData);
             
-            PointsTeamSheetManager.SetHeadCoachPoints();
+            var teamSheetDatabaseObj = GameObjectFinder.FindSingleObjectByName("TeamSheetDatabase");
+            var teamDatabase = teamSheetDatabaseObj.GetComponent<TeamSheetDatabase>();
+            teamDatabase.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
+
+            PointsTeamSheetManager.Instance.SetHeadCoachPoints();
             SetCoachUi();
+        }
+        
+        private void SetCoachUi()
+        {
+            var totalCoachPoints = GameObjectFinder.FindSingleObjectByName("HeadCoachTotalPoints");
+            var currentGwPoints = GameObjectFinder.FindSingleObjectByName("CurrentGameweekPoints");
+
+            var coachTotalPoints = PlayFabPlayerStats.Instance.coachTotalPoints;
+            var coachCurrentGwPoints = PlayFabPlayerStats.Instance.coachCurrentGwPoints;
+            
+            totalCoachPoints.GetComponent<TMP_Text>().text = coachTotalPoints.ToString();
+            currentGwPoints.GetComponent<TMP_Text>().text = coachCurrentGwPoints.ToString();
+            
+            Debug.LogError("Coach Ui Data: { totalPoints: " + coachTotalPoints + " gwPoints: " + coachCurrentGwPoints + "}");
+        }
+
+        private void UpdateGameweekTitle(ConfigResponse obj)
+        {
+            var currentGameweek = ConfigManager.appConfig.GetString("CURRENT_GAMEWEEK");
+            var gameweekTitleObj = GameObjectFinder.FindSingleObjectByName("TotalGameweekPointsTitle");
+            gameweekTitleObj.GetComponent<TMP_Text>().text = "Gameweek " + currentGameweek;
         }
 
         private void OnDestroy()

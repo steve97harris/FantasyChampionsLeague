@@ -10,6 +10,8 @@ namespace PlayFab
     {
         public static PlayFabAccountInformation Instance;
 
+        public static string PlayFabIdentity;
+
         private void OnEnable()
         {
             if (Instance == null)
@@ -24,8 +26,9 @@ namespace PlayFab
             PlayFabClientAPI.GetAccountInfo(request, OnGetAccountInfoSuccess, PlayFabController.Instance.ErrorCallback);
         }
         
-        private void OnGetAccountInfoSuccess(GetAccountInfoResult result) 
+        private void OnGetAccountInfoSuccess(GetAccountInfoResult result)
         {
+            PlayFabIdentity = result.AccountInfo.PlayFabId;
             SetProfileCanvasUi(result.AccountInfo.PlayFabId, result.AccountInfo.Username);
         }
 

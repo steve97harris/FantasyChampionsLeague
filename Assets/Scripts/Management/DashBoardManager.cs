@@ -29,7 +29,7 @@ public class DashBoardManager : MonoBehaviour
 
     public void PointsButton()
     {
-        SetScreenActive(2); 
+        SetScreenActive(2);
     }
 
     public void TransfersButton()
@@ -39,7 +39,7 @@ public class DashBoardManager : MonoBehaviour
         if (GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)") != null) 
             return;
         
-        InstantiateTransferTeamSheet();
+        InstantiateTeamSheet("Transfer");
     }
 
     public void DashboardButton()
@@ -73,11 +73,11 @@ public class DashBoardManager : MonoBehaviour
         TransferListWindow.GetPlayerTransferList(footballPlayerDatabase);
     }
 
-    private void InstantiateTransferTeamSheet()
+    private void InstantiateTeamSheet(string teamSheetName)
     {
         var transferListWindow = GameObjectFinder.FindSingleObjectByName("TransferListWindow");
         var transferListWindowComponent = transferListWindow.GetComponent<TransferListWindow>();
-        transferListWindowComponent.TransferListEntryInstantiateTransferTeamSheet();
+        transferListWindowComponent.TransferListEntryInstantiateTransferTeamSheet(teamSheetName);
     }
 
     private void SetScreenActive(int index)

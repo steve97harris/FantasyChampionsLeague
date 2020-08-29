@@ -28,7 +28,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6173651214397356982}
-  - {fileID: 8020454844481357452}
+  - {fileID: 8598851237898847041}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1001 &4935576278441646328
+--- !u!1001 &6657886993317829941
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -309,31 +309,11 @@ PrefabInstance:
       propertyPath: m_TextStyleHashCode
       value: -1183493901
       objectReference: {fileID: 0}
-    - target: {fileID: 3112217511421320821, guid: 8eedc5525e39929438b8a4f273b0c815,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3112217511421320821, guid: 8eedc5525e39929438b8a4f273b0c815,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3112217511421320821, guid: 8eedc5525e39929438b8a4f273b0c815,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3112217511421320821, guid: 8eedc5525e39929438b8a4f273b0c815,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eedc5525e39929438b8a4f273b0c815, type: 3}
---- !u!224 &8020454844481357452 stripped
+--- !u!224 &8598851237898847041 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3112217511421320820, guid: 8eedc5525e39929438b8a4f273b0c815,
     type: 3}
-  m_PrefabInstance: {fileID: 4935576278441646328}
+  m_PrefabInstance: {fileID: 6657886993317829941}
   m_PrefabAsset: {fileID: 0}
