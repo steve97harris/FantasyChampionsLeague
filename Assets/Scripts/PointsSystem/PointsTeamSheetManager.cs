@@ -54,6 +54,8 @@ namespace DefaultNamespace
             var currentGameweek = ConfigManager.appConfig.GetString("CURRENT_GAMEWEEK");
 
             var headCoachSaveData = PlayFabEntityFileManager.Instance.GetHeadCoachData();
+
+            var previousTotalPoints = headCoachSaveData.CoachTotalPoints;
             
             if (headCoachSaveData.CoachName == null)
             {
@@ -92,9 +94,10 @@ namespace DefaultNamespace
                 headCoachSaveData.CoachTotalPoints += headCoachSaveData.CoachPointsPerGw[i];
             }
 
-            PlayFabEntityFileManager.Instance.SavePlayFabHeadCoachSaveData(headCoachSaveData);
+            if (previousTotalPoints == headCoachSaveData.CoachTotalPoints) 
+                return;
             
-            
+            PlayFabEntityFileManager.Instance.SavePlayFabHeadCoachData(headCoachSaveData);
             PlayFabPlayerStats.Instance.SetStatistics();
         }
 

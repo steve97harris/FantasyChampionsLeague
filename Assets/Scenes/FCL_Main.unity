@@ -492,6 +492,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: FantasyChampionsLeague
       objectReference: {fileID: 0}
+    - target: {fileID: 3242315717964381170, guid: 67cadb0bc5adfce4b88cb01ffecd5b04,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5060536697661810274, guid: 67cadb0bc5adfce4b88cb01ffecd5b04,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 84
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67cadb0bc5adfce4b88cb01ffecd5b04, type: 3}
 --- !u!1001 &383880244865164575

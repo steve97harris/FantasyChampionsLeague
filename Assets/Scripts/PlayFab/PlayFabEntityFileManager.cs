@@ -86,17 +86,17 @@ namespace PlayFab
                 result =>
                 {
                     _entityFileJson[fileData.FileName] = Encoding.UTF8.GetString(result);
-                    Debug.LogError("File Name: " + fileData.FileName);
+                    Debug.Log("File Name: " + fileData.FileName);
 
                     switch (fileData.FileName)
                     {
                         case "TeamSheetData.json":
                             _teamSheetSaveDataJsonString = _entityFileJson[fileData.FileName];
-                            Debug.LogError("PlayFab TeamSheetData: " + _teamSheetSaveDataJsonString);
+                            Debug.Log("PlayFab TeamSheetData: " + _teamSheetSaveDataJsonString);
                             break;
                         case "HeadCoachData.json":
                             _headCoachSaveDataJsonString = _entityFileJson[fileData.FileName];
-                            Debug.LogError("PlayFab HeadCoachData: " + _headCoachSaveDataJsonString);
+                            Debug.Log("PlayFab HeadCoachData: " + _headCoachSaveDataJsonString);
                             break;
                     }
 
@@ -122,7 +122,12 @@ namespace PlayFab
 
         public void SavePlayFabTeamSheetData(TeamSheetSaveData teamSheetSaveData)
         {
-            _teamSheetSaveDataJsonString = JsonConvert.SerializeObject(teamSheetSaveData, Formatting.Indented);
+            var newTeamSheetSaveDataJsonString = JsonConvert.SerializeObject(teamSheetSaveData, Formatting.Indented);
+
+            if (newTeamSheetSaveDataJsonString == _teamSheetSaveDataJsonString) 
+                return;
+            
+            _teamSheetSaveDataJsonString = newTeamSheetSaveDataJsonString;
             UploadFile("TeamSheetData.json");
         }
         
@@ -137,13 +142,13 @@ namespace PlayFab
             _headCoachSaveDataJsonString = JsonConvert.SerializeObject(headCoachSaveData, Formatting.Indented);
         }
 
-        public void SavePlayFabHeadCoachSaveData(HeadCoachSaveData headCoachSaveData)
+        public void SavePlayFabHeadCoachData(HeadCoachSaveData headCoachSaveData)
         {
             _headCoachSaveDataJsonString = JsonConvert.SerializeObject(headCoachSaveData, Formatting.Indented);
             UploadFile("HeadCoachData.json");
         }
         
-        public void UploadFile(string fileName)
+        private void UploadFile(string fileName)
         {
             if (globalFileLock != 0)
                 Debug.Log("This example overly restricts file operations for safety. Careful consideration must be made when doing multiple file operations in parallel to avoid conflict.");
@@ -182,27 +187,6 @@ namespace PlayFab
             );
             globalFileLock -= 1; // Finish InitiateFileUploads
         }
-
-        // private string GetTeamSheetDataJson()
-        // {
-        //     var jsonPath = TeamSheetDatabase.JsonPath;
-        //     if (!File.Exists(jsonPath))
-        //     {
-        //         Debug.LogError("TeamSheetData.json does not exist - creating new one");
-        //         
-        //         // create json file
-        //         File.Create(jsonPath).Dispose();
-        //         return "{}";
-        //     }
-        //     
-        //     using (StreamReader stream = new StreamReader(jsonPath))
-        //     {
-        //         var json = stream.ReadToEnd();
-        //         var teamSheetSaveData = JsonConvert.DeserializeObject<TeamSheetSaveData>(json);
-        //
-        //         return json;
-        //     }
-        // }
         
         private void OnInitFailed(PlayFabError error)
         {

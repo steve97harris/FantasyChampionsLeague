@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using CSV;
 using Dashboard;
@@ -10,21 +11,30 @@ using PlayFab;
 
 public class DashBoardManager : MonoBehaviour
 {
+    public static DashBoardManager Instance;
+    
     private readonly List<string> _fclScreenNames = new List<string>()
     {
         "LoginPanel",
         "DashBoard",
         "PointsPage",
-        "TransfersPage",
+        "TransferPage",
         "LeagueLeaderboards",
-        "ProfileCanvas"
+        "ProfileCanvas",
+        "LoadingPanel"
     };
-    
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
+
     void Start()
     {
-        SetScreenActive(0);
-
-        InitiateTransferList();
+        SetScreenActive(6);
+        SetScreenSelectorActive(false);
+        LoadTransferList();
     }
 
     public void PointsButton()
@@ -67,7 +77,7 @@ public class DashBoardManager : MonoBehaviour
         PlayFabAccountInformation.Instance.GetAccountInfo();
     }
 
-    private void InitiateTransferList()
+    private void LoadTransferList()
     {
         var footballPlayerDatabase = CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/FootballPlayerDatabase.csv");
         TransferListWindow.GetPlayerTransferList(footballPlayerDatabase);
@@ -80,7 +90,7 @@ public class DashBoardManager : MonoBehaviour
         transferListWindowComponent.TransferListEntryInstantiateTransferTeamSheet(teamSheetName);
     }
 
-    private void SetScreenActive(int index)
+    public void SetScreenActive(int index)
     {
         for (int i = 0; i < _fclScreenNames.Count; i++)
         {
@@ -88,10 +98,10 @@ public class DashBoardManager : MonoBehaviour
         }
     }
 
-    public static void SetScreenSelectorActive()
+    public void SetScreenSelectorActive(bool active)
     {
         var screenSelector = GameObjectFinder.FindSingleObjectByName("ScreenSelector");
-        screenSelector.SetActive(true);
+        screenSelector.SetActive(active);
     }
 
     private void SetLeaderboardPanel(string leaderboardName)

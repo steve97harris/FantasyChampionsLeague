@@ -81,9 +81,6 @@ namespace PlayFab
 
             EntityId = result.EntityToken.Entity.Id;
             EntityType = result.EntityToken.Entity.Type;
-
-            ActivateDashBoard();
-            // PlayFabPlayerStatsGetStats();
         }
 
         private void OnRegisterSuccess(RegisterPlayFabUserResult result)
@@ -94,9 +91,6 @@ namespace PlayFab
             PlayerPrefs.SetString("PASSWORD", _userPassword);
 
             PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = _userName}, OnDisplayName, ErrorCallback);
-            
-            ActivateDashBoard();
-            // PlayFabPlayerStatsGetStats();
         }
 
         private void OnDisplayName(UpdateUserTitleDisplayNameResult result)
@@ -113,14 +107,6 @@ namespace PlayFab
         {
             var registerRequest = new RegisterPlayFabUserRequest {Email = _userEmail, Password = _userPassword, Username = _userName};
             PlayFabClientAPI.RegisterPlayFabUser(registerRequest, OnRegisterSuccess, ErrorCallback);
-        }
-
-        private void ActivateDashBoard()
-        {
-            _loginPanel.gameObject.SetActive(false);
-            _addLoginPanel.gameObject.SetActive(false);
-            _dashboard.gameObject.SetActive(true);
-            DashBoardManager.SetScreenSelectorActive();
         }
 
         public void GetUserEmail(string email)
@@ -168,16 +154,7 @@ namespace PlayFab
             
             PlayerPrefs.SetString("EMAIL", _userEmail);
             PlayerPrefs.SetString("PASSWORD", _userPassword);
-
-            ActivateDashBoard();
-            // PlayFabPlayerStatsGetStats();
         }
-
-        // private void PlayFabPlayerStatsGetStats()
-        // {
-        //     var playFabPlayerStats = gameObject.GetComponent<PlayFabPlayerStats>();
-        //     playFabPlayerStats.GetStatistics();
-        // }
         #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using PlayFab;
 using TMPro;
@@ -30,8 +31,9 @@ namespace DefaultNamespace
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
             ConfigManager.FetchCompleted += UpdatePlayerPoints;
             ConfigManager.FetchCompleted += UpdateGameweekTitle;
+            ConfigManager.FetchCompleted += InitialLoadingComplete;
         }
-        
+
         public void FetchFootballPlayerPoints()
         {
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
@@ -101,7 +103,7 @@ namespace DefaultNamespace
             totalCoachPoints.GetComponent<TMP_Text>().text = coachTotalPoints.ToString();
             currentGwPoints.GetComponent<TMP_Text>().text = coachCurrentGwPoints.ToString();
             
-            Debug.LogError("Coach Ui Data: { totalPoints: " + coachTotalPoints + " gwPoints: " + coachCurrentGwPoints + "}");
+            Debug.Log("Coach Ui Data set: { totalPoints: " + coachTotalPoints + " gwPoints: " + coachCurrentGwPoints + "}");
         }
 
         private void UpdateGameweekTitle(ConfigResponse obj)
@@ -110,11 +112,27 @@ namespace DefaultNamespace
             var gameweekTitleObj = GameObjectFinder.FindSingleObjectByName("TotalGameweekPointsTitle");
             gameweekTitleObj.GetComponent<TMP_Text>().text = "Gameweek " + currentGameweek;
         }
+        
+        private void InitialLoadingComplete(ConfigResponse obj)
+        {
+            /* Only effective if FetchConfigs is last function in TeamSheetDatabase Coroutines.
+             * RemoteConfigManager.Instance.FetchConfigs();    (TeamSheetDatabase line 64) */
+
+            ActivateDashBoard();
+            Debug.Log("LOAD COMPLETE");
+        }
+        
+        private void ActivateDashBoard()
+        {
+            DashBoardManager.Instance.SetScreenActive(1);
+            DashBoardManager.Instance.SetScreenSelectorActive(true);
+        }
 
         private void OnDestroy()
         {
             ConfigManager.FetchCompleted -= UpdatePlayerPoints;
             ConfigManager.FetchCompleted -= UpdateGameweekTitle;
+            ConfigManager.FetchCompleted -= InitialLoadingComplete;
         }
     }
 }

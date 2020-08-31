@@ -10,7 +10,8 @@ namespace PlayFab
     {
         public static PlayFabAccountInformation Instance;
 
-        public static string PlayFabIdentity;
+        private static string _playFabIdentity;
+        private static string _playerDisplayName;
 
         private void OnEnable()
         {
@@ -22,14 +23,19 @@ namespace PlayFab
 
         public void GetAccountInfo() 
         {
-            var request = new GetAccountInfoRequest();
-            PlayFabClientAPI.GetAccountInfo(request, OnGetAccountInfoSuccess, PlayFabController.Instance.ErrorCallback);
+            PlayFabClientAPI.GetAccountInfo(new GetAccountInfoRequest(), OnGetAccountInfoSuccess, PlayFabController.Instance.ErrorCallback);
+            PlayFabClientAPI.GetPlayerProfile(new GetPlayerProfileRequest(), OnGetProfile, PlayFabController.Instance.ErrorCallback);
+            SetProfileCanvasUi(_playFabIdentity, _playerDisplayName);
+        }
+
+        private void OnGetProfile(GetPlayerProfileResult result)
+        {
+            _playerDisplayName = result.PlayerProfile.DisplayName;
         }
         
         private void OnGetAccountInfoSuccess(GetAccountInfoResult result)
         {
-            PlayFabIdentity = result.AccountInfo.PlayFabId;
-            SetProfileCanvasUi(result.AccountInfo.PlayFabId, result.AccountInfo.Username);
+            _playFabIdentity = result.AccountInfo.PlayFabId;
         }
 
         private void SetProfileCanvasUi(string playFabId, string playFabUsername)
@@ -38,6 +44,11 @@ namespace PlayFab
             var playFabUsernameObj = GameObjectFinder.FindSingleObjectByName("PlayFabUsername");
             playFabIdObj.GetComponent<TMP_Text>().text = "PlayFab ID: " + playFabId;
             playFabUsernameObj.GetComponent<TMP_Text>().text = "Username: " + playFabUsername;
+        }
+
+        public void GetNewDisplayName(string newDisplayName)
+        {
+            
         }
     }
 }

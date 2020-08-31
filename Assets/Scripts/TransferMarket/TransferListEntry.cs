@@ -49,7 +49,7 @@ namespace Dashboard
                 
                 teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);                
                 
-                InstantiateTransferTeamSheet(teamDatabase);
+                InstantiateTeamSheet("Transfer");
                 
                 var teamSheetSaveData =  PlayFabEntityFileManager.Instance.GetTeamSheetData();
                 teamDatabase.SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
@@ -65,20 +65,13 @@ namespace Dashboard
                 StartCoroutine(DisplayInvalidPlayerPosition());
             }
         }
-
-        public void InstantiateTransferTeamSheet(TeamSheetDatabase teamSheetDatabase)
-        {
-            var transferTeamSheetObj = Resources.Load<GameObject>("Prefabs/TransfersPage/TransferTeamSheet");
-            var transferPage = GameObjectFinder.FindSingleObjectByName("TransfersPage");
-
-            var newTransferTeamSheet = Instantiate(transferTeamSheetObj, transferPage.transform);
-            newTransferTeamSheet.SetActive(true);
-        }
         
-        public void InstantiatePointsTeamSheet(TeamSheetDatabase teamDatabase)
+        public void InstantiateTeamSheet(string teamSheetName)
         {
-            var teamSheetObj = Resources.Load<GameObject>("Prefabs/PointsPage/PointsTeamSheet");
-            var teamSheetParent = GameObjectFinder.FindSingleObjectByName("PointsPage");
+            var teamSheetObj = Resources.Load<GameObject>("Prefabs/" + teamSheetName + "Page/" + teamSheetName + "TeamSheet");
+            var teamSheetParent = GameObjectFinder.FindSingleObjectByName(teamSheetName + "Page");
+            
+            
             var newTeamSheet = Instantiate(teamSheetObj, teamSheetParent.transform);
             newTeamSheet.SetActive(true);
         }

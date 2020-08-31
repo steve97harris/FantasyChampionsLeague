@@ -94,7 +94,7 @@ namespace Dashboard
         {
             // locate gameObjects
             var transferListContent = GameObjectFinder.FindSingleObjectByName("TransferListContent").transform;
-            var playerTransferEntry = Resources.Load<GameObject>("Prefabs/TransfersPage/PlayerTransferEntry");
+            var playerTransferEntry = Resources.Load<GameObject>("Prefabs/TransferPage/PlayerTransferEntry");
             
             var teamLogosObject = GameObjectFinder.FindSingleObjectByName("TeamLogos");
             var teamLogos = teamLogosObject.GetComponent<TeamLogos>().teamLogos;
@@ -160,10 +160,10 @@ namespace Dashboard
             switch (teamSheetName)
             {
                 case "Transfer":
-                    transferListEntry.InstantiateTransferTeamSheet(teamDatabase);
+                    transferListEntry.InstantiateTeamSheet(teamSheetName);
                     break;
                 case "Points":
-                    transferListEntry.InstantiatePointsTeamSheet(teamDatabase);
+                    transferListEntry.InstantiateTeamSheet(teamSheetName);
                     break;
             }
             teamDatabase.SetTeamSheetUi(teamSavedData, teamSheetName + "TeamSheet(Clone)");

@@ -11,7 +11,7 @@ namespace DefaultNamespace
         public static GameObject PlayerTeamEntryClickedObj;
         public void TeamSheetPlayerButton()
         {
-            var transfersPage = GameObjectFinder.FindSingleObjectByName("TransfersPage");
+            var transfersPage = GameObjectFinder.FindSingleObjectByName("TransferPage");
             var pointsPage = GameObjectFinder.FindSingleObjectByName("PointsPage");
 
             if (transfersPage.activeInHierarchy)

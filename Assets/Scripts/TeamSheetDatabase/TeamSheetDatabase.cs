@@ -25,7 +25,7 @@ namespace DefaultNamespace
         private static Dictionary<string, ObjectResult> _playFabTeamSheetSaveDataMap;
         
         private static int maxNumberOfEntries = 15;
-        public static string JsonPath => Path.Combine(Application.persistentDataPath,"TeamSheetData.json");
+        // public static string JsonPath => Path.Combine(Application.persistentDataPath,"TeamSheetData.json");
 
         #region Event Functions
 
@@ -55,8 +55,8 @@ namespace DefaultNamespace
             yield return new WaitForSeconds(3f);
             
             var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
-            
-            Debug.LogError(teamSheetSaveData.teamSheetData.Count);
+            Debug.Log(teamSheetSaveData.teamSheetData.Count);
+
             SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet");
             
             RemoteConfigManager.Instance.FetchConfigs();
@@ -68,7 +68,7 @@ namespace DefaultNamespace
 
         public void InsertPlayerEntry(AthleteStats playerEntry, string teamSheetPlayerPosition)
         {
-            Debug.LogError("Inserting player into json file..");
+            Debug.Log("Inserting player into json file..");
             
             // get TeamSheetSaveData from json
             var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
@@ -78,7 +78,7 @@ namespace DefaultNamespace
                 teamSheetSaveData = new TeamSheetSaveData();
             }
 
-            Debug.LogError("savedTeamsheetEntries: " + teamSheetSaveData);
+            Debug.Log("savedTeamsheetEntries: " + teamSheetSaveData);
             
             // add or replace selected player
             if (teamSheetSaveData.teamSheetData.Count < maxNumberOfEntries)
@@ -106,50 +106,17 @@ namespace DefaultNamespace
 
         #region Private Methods
 
-        // public TeamSheetSaveData GetDeviceSavedTeamSheet()        // needs converting to playfab entity files
-        // {
-        //     if (!File.Exists(JsonPath))
-        //     {
-        //         Debug.LogError("TeamSheetData.json does not exist - creating new one");
-        //         
-        //         // create json file
-        //         File.Create(JsonPath).Dispose();
-        //         return new TeamSheetSaveData();
-        //     }
-        //     
-        //     using (StreamReader stream = new StreamReader(JsonPath))
-        //     {
-        //         // convert json string to TeamSheetSaveData
-        //         var json = stream.ReadToEnd();
-        //         var teamSheetSaveData = JsonConvert.DeserializeObject<TeamSheetSaveData>(json);
-        //         
-        //         return teamSheetSaveData;
-        //     }
-        // }    
-
-        // public void SaveDeviceTeamSheet(TeamSheetSaveData teamSheetSaveData)         // needs converting to playfab entity files
-        // {
-        //     using (StreamWriter stream = new StreamWriter(JsonPath))
-        //     {
-        //         // convert TeamSheetSaveData to json string
-        //         var teamSheetSaveDataJson = JsonConvert.SerializeObject(teamSheetSaveData, Formatting.Indented);
-        //         // Debug.Log("TeamSheetData (json String): " + teamSheetSaveDataJson);
-        //         
-        //         stream.Write(teamSheetSaveDataJson);
-        //     }
-        // }
-
         public void SetTeamSheetUi(TeamSheetSaveData teamSheetSaveData, string teamSheetObjName)
         {
             if (teamSheetSaveData == null)
             {
-                Debug.LogError("SetTeamSheetUi: teamSheetSaveData returned NULL");
+                Debug.LogError("teamSheetSaveData returned NULL");
                 return;
             }
             
             var teamSheetDataMap = teamSheetSaveData.teamSheetData;
             
-            Debug.LogError(teamSheetObjName);
+            Debug.Log("Setting TeamSheetUi: " + teamSheetObjName);
 
             // set TeamSheetUi
             var transferTeamSheet = GameObjectFinder.FindSingleObjectByName(teamSheetObjName);
