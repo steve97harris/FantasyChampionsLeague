@@ -11,27 +11,21 @@ namespace DefaultNamespace
         public static GameObject PlayerTeamEntryClickedObj;
         public void TeamSheetPlayerButton()
         {
-            var transfersPage = GameObjectFinder.FindSingleObjectByName("TransferPage");
-            var pointsPage = GameObjectFinder.FindSingleObjectByName("PointsPage");
+            var transfersPage = GameObjectFinder.FindSingleObjectByName("TransferPanel");
 
-            if (transfersPage.activeInHierarchy)
-            {
-                var transferList = Instantiate(transferListObj, transfersPage.transform);
-                transferList.SetActive(true);
+            if (!transfersPage.activeInHierarchy) 
+                return;
             
-                TransferListWindow.InitializePlayerList(TransferListWindow.PlayerPricesMap);
+            var transferList = Instantiate(transferListObj, transfersPage.transform);
+            transferList.SetActive(true);
             
-                transferTeamSheetObj.SetActive(false);
+            TransferListWindow.InitializePlayerList(TransferListWindow.PlayerPricesMap);
             
-                var thisButtonObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-                var panel = thisButtonObj.transform.parent.gameObject;
-                PlayerTeamEntryClickedObj = panel.transform.parent.gameObject;
-            }
-
-            if (pointsPage.activeInHierarchy)
-            {
-                // show player details 
-            }
+            transferTeamSheetObj.SetActive(false);
+            
+            var thisButtonObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+            var panel = thisButtonObj.transform.parent.gameObject;
+            PlayerTeamEntryClickedObj = panel.transform.parent.gameObject;
         }
     }
 }

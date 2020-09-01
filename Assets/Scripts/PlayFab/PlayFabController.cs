@@ -93,7 +93,7 @@ namespace PlayFab
             PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = _userName}, OnDisplayName, ErrorCallback);
         }
 
-        private void OnDisplayName(UpdateUserTitleDisplayNameResult result)
+        public void OnDisplayName(UpdateUserTitleDisplayNameResult result)
         {
             Debug.Log("username: " + result.DisplayName);
         }

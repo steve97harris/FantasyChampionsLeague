@@ -68,8 +68,8 @@ namespace Dashboard
         
         public void InstantiateTeamSheet(string teamSheetName)
         {
-            var teamSheetObj = Resources.Load<GameObject>("Prefabs/" + teamSheetName + "Page/" + teamSheetName + "TeamSheet");
-            var teamSheetParent = GameObjectFinder.FindSingleObjectByName(teamSheetName + "Page");
+            var teamSheetObj = Resources.Load<GameObject>("Prefabs/" + teamSheetName + "Panel/" + teamSheetName + "TeamSheet");
+            var teamSheetParent = GameObjectFinder.FindSingleObjectByName(teamSheetName + "Panel");
             
             
             var newTeamSheet = Instantiate(teamSheetObj, teamSheetParent.transform);

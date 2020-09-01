@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using DefaultNamespace;
 using PlayFab.ClientModels;
 using TMPro;
@@ -11,8 +12,8 @@ namespace PlayFab
         public static PlayFabAccountInformation Instance;
 
         private static string _playFabIdentity;
-        private static string _playerDisplayName;
-
+        private static string _playFabDisplayName;
+        
         private void OnEnable()
         {
             if (Instance == null)
@@ -21,16 +22,22 @@ namespace PlayFab
             }
         }
 
-        public void GetAccountInfo() 
+        public void GetAccountInfo()
+        {
+            StartCoroutine(WaitForPlayerInfo());
+        }
+
+        private IEnumerator WaitForPlayerInfo()
         {
             PlayFabClientAPI.GetAccountInfo(new GetAccountInfoRequest(), OnGetAccountInfoSuccess, PlayFabController.Instance.ErrorCallback);
             PlayFabClientAPI.GetPlayerProfile(new GetPlayerProfileRequest(), OnGetProfile, PlayFabController.Instance.ErrorCallback);
-            SetProfileCanvasUi(_playFabIdentity, _playerDisplayName);
+            yield return new WaitForSeconds(0.5f);
+            SetProfileCanvasUi(_playFabIdentity, _playFabDisplayName);
         }
 
         private void OnGetProfile(GetPlayerProfileResult result)
         {
-            _playerDisplayName = result.PlayerProfile.DisplayName;
+            _playFabDisplayName = result.PlayerProfile.DisplayName;
         }
         
         private void OnGetAccountInfoSuccess(GetAccountInfoResult result)
@@ -48,7 +55,29 @@ namespace PlayFab
 
         public void GetNewDisplayName(string newDisplayName)
         {
-            
+            _playFabDisplayName = newDisplayName;
+        }
+
+        public void ChangePlayerDisplayName()
+        {
+            PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = _playFabDisplayName}, PlayFabController.Instance.OnDisplayName, PlayFabController.Instance.ErrorCallback);
+            SetProfileCanvasUi(_playFabIdentity, _playFabDisplayName);
+        }
+
+        public void OpenChangeUsernamePanel()
+        {
+            SetChangeUsernamePanelActive(true);
+        }
+
+        public void CloseChangeUsernamePanel()
+        {
+            SetChangeUsernamePanelActive(false);
+        }
+
+        private void SetChangeUsernamePanelActive(bool active)
+        {
+            var changeUsernamePanel = GameObjectFinder.FindSingleObjectByName("UpdateUsernamePanel");
+            changeUsernamePanel.SetActive(active);
         }
     }
 }

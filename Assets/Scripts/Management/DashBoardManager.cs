@@ -16,12 +16,13 @@ public class DashBoardManager : MonoBehaviour
     private readonly List<string> _fclScreenNames = new List<string>()
     {
         "LoginPanel",
-        "DashBoard",
-        "PointsPage",
-        "TransferPage",
-        "LeagueLeaderboards",
-        "ProfileCanvas",
-        "LoadingPanel"
+        "DashBoardPanel",
+        "PointsPanel",
+        "TransferPanel",
+        "LeagueLeaderboardsPanel",
+        "PlayerProfilePanel",
+        "LoadingPanel",
+        "AddLoginPanel"
     };
 
     private void Awake()

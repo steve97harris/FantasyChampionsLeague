@@ -60,41 +60,11 @@ namespace Dashboard
             }
         }
 
-        public static string AnalyzePlayerNameData(string nameData)
-        {
-            for (int i = 0; i < nameData.Length; i++)
-            {
-                if (int.TryParse(nameData[i].ToString(), out var res))
-                {
-                    nameData = nameData.Remove(i, nameData.Length - i);
-                }
-            }
-            var playerName = nameData;
-
-            return playerName;
-        }
-
-        public static string AnalyzePlayerPositionData(string positionData)
-        {
-            // needs adjusting
-            var playerPosition = "";
-            if (positionData.Contains("FW") && positionData.Contains("AM") || positionData.Contains("FW"))
-                playerPosition = "F";
-            else if (positionData.Contains("D"))
-                playerPosition = "D";
-            else if (positionData.Contains("GK"))
-                playerPosition = "Gk";
-            else if (positionData.Contains("M") || positionData.Contains("AM"))
-                playerPosition = "M";
-
-            return playerPosition;
-        }
-
         public static void InitializePlayerList(Dictionary<string, string[]> playerPricesMap)
         {
             // locate gameObjects
             var transferListContent = GameObjectFinder.FindSingleObjectByName("TransferListContent").transform;
-            var playerTransferEntry = Resources.Load<GameObject>("Prefabs/TransferPage/PlayerTransferEntry");
+            var playerTransferEntry = Resources.Load<GameObject>("Prefabs/TransferPanel/PlayerTransferEntry");
             
             var teamLogosObject = GameObjectFinder.FindSingleObjectByName("TeamLogos");
             var teamLogos = teamLogosObject.GetComponent<TeamLogos>().teamLogos;
@@ -136,7 +106,8 @@ namespace Dashboard
                 if (playersTeamLogo != null)
                     playerTeamImageObj.GetComponent<Image>().sprite = playersTeamLogo;
             }
-            
+
+            DashBoardManager.Instance.SetScreenSelectorActive(false);
         }
 
         public void BackButton_ToTransferTeamSheet()
@@ -148,6 +119,8 @@ namespace Dashboard
                 TransferListEntryInstantiateTransferTeamSheet("Transfer");
             else
                 transferTeamSheetObj.SetActive(true);
+
+            DashBoardManager.Instance.SetScreenSelectorActive(true);
         }
 
         public void TransferListEntryInstantiateTransferTeamSheet(string teamSheetName)

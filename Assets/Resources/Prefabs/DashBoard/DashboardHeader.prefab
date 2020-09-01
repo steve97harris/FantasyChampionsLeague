@@ -71,8 +71,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1114}
-  m_SizeDelta: {x: 1242, y: 89.60724}
+  m_AnchoredPosition: {x: 0.000030518, y: 147.94}
+  m_SizeDelta: {x: 406.8064, y: 122.280334}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6173651214397356980
 CanvasRenderer:
@@ -130,8 +130,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 84
-  m_fontSizeBase: 68
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -242,22 +242,22 @@ PrefabInstance:
     - target: {fileID: 3112217511421320820, guid: 8eedc5525e39929438b8a4f273b0c815,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000022888
+      value: 0.00000041723
       objectReference: {fileID: 0}
     - target: {fileID: 3112217511421320820, guid: 8eedc5525e39929438b8a4f273b0c815,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 841
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: 3112217511421320820, guid: 8eedc5525e39929438b8a4f273b0c815,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 669.31055
+      value: 406.8064
       objectReference: {fileID: 0}
     - target: {fileID: 3112217511421320820, guid: 8eedc5525e39929438b8a4f273b0c815,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 331.61542
+      value: 155.88812
       objectReference: {fileID: 0}
     - target: {fileID: 3112217511421320820, guid: 8eedc5525e39929438b8a4f273b0c815,
         type: 3}
@@ -308,6 +308,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TextStyleHashCode
       value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 3112217511421320821, guid: 8eedc5525e39929438b8a4f273b0c815,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3112217511421320821, guid: 8eedc5525e39929438b8a4f273b0c815,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eedc5525e39929438b8a4f273b0c815, type: 3}
