@@ -13,6 +13,16 @@ public class DashBoardManager : MonoBehaviour
 {
     public static DashBoardManager Instance;
     
+    /*  ObjectName - Index 
+     * "LoginPanel" - 0
+     * "DashBoardPanel" - 1
+     * "PointsPanel" - 2
+     * "TransferPanel" - 3
+     * "LeagueLeaderboardsPanel" - 4
+     * "PlayerProfilePanel" - 5
+     * "LoadingPanel" - 6
+     * "AddLoginPanel" - 7
+     */
     private readonly List<string> _fclScreenNames = new List<string>()
     {
         "LoginPanel",
@@ -34,7 +44,7 @@ public class DashBoardManager : MonoBehaviour
     void Start()
     {
         SetScreenActive(6);
-        SetScreenSelectorActive(false);
+        SetGameObjectActive(false, "ScreenSelector");
         LoadTransferList();
     }
 
@@ -99,26 +109,29 @@ public class DashBoardManager : MonoBehaviour
         }
     }
 
-    public void SetScreenSelectorActive(bool active)
+    public void SetGameObjectActive(bool active, string objectName)
     {
-        var screenSelector = GameObjectFinder.FindSingleObjectByName("ScreenSelector");
-        screenSelector.SetActive(active);
+        var obj = GameObjectFinder.FindSingleObjectByName(objectName);
+        
+        if (obj == null)
+        {
+            Debug.LogError(objectName + " returned null");
+            return;
+        }
+        obj.SetActive(active);
     }
 
     private void SetLeaderboardPanel(string leaderboardName)
     {
-        var worldLeaderboard = GameObjectFinder.FindSingleObjectByName("WorldLeaderboardPanel");
-        var friendLeaderboard = GameObjectFinder.FindSingleObjectByName("FriendsPanel");
-
         switch (leaderboardName)
         {
             case "world":
-                worldLeaderboard.SetActive(true);
-                friendLeaderboard.SetActive(false);
+                SetGameObjectActive(true, "WorldLeaderboardPanel");
+                SetGameObjectActive(false, "FriendsPanel");
                 break;
             case "friend":
-                worldLeaderboard.SetActive(false);
-                friendLeaderboard.SetActive(true);
+                SetGameObjectActive(false, "WorldLeaderboardPanel");
+                SetGameObjectActive(true, "FriendsPanel");
                 break;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
 using PlayFab;
@@ -43,20 +44,20 @@ namespace Dashboard
                 RemoteConfigKey = playerDetails.RemoteConfigKey
             };
 
-            if (IsValidPlayerPosition(playerDetails.Position, playerTeamSheetEntryDetails.teamSheetPosition) && !PlayerAlreadyInTeam(playerName) || playerName == "")
+            if (IsValidPlayerPosition(playerDetails.Position, playerTeamSheetEntryDetails.teamSheetPosition) && !PlayerAlreadyInTeam(playerName) && !ToManyPlayersFromSameClub(playerDetails.Team) &&playerName != "")
             {
                 Debug.Log("Valid player, insert player into team...");
-                
-                teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);                
-                
+               
+                teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);
+
                 InstantiateTeamSheet("Transfer");
                 
-                var teamSheetSaveData =  PlayFabEntityFileManager.Instance.GetTeamSheetData();
+                var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
                 teamDatabase.SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
                 teamDatabase.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
-
-                var transferTeamSheetObj = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)");
-                transferTeamSheetObj.SetActive(true);
+                
+                DashBoardManager.Instance.SetGameObjectActive(true, "TransferTeamSheet(Clone)");
+                DashBoardManager.Instance.SetGameObjectActive(true, "ScreenSelector");
                 TransferListWindow.DestroyTransferList();
             }
             else
@@ -123,6 +124,22 @@ namespace Dashboard
             }
 
             return false;
+        }
+
+        private bool ToManyPlayersFromSameClub(string newPlayerClub)
+        {
+            var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
+            
+            var clubCountMap = new Dictionary<string, int>();
+            foreach (var athleteTeam in teamSheetSaveData.teamSheetData.Select(pair => pair.Value.Team))
+            {
+                if (clubCountMap.ContainsKey(athleteTeam))
+                    clubCountMap[athleteTeam]++;
+                else 
+                    clubCountMap.Add(athleteTeam, 1);
+            }
+
+            return clubCountMap.Where(pair => pair.Key == newPlayerClub).Any(pair => pair.Value == 3);
         }
 
         private IEnumerator DisplayInvalidPlayerPosition()

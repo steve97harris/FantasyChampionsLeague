@@ -107,7 +107,7 @@ namespace Dashboard
                     playerTeamImageObj.GetComponent<Image>().sprite = playersTeamLogo;
             }
 
-            DashBoardManager.Instance.SetScreenSelectorActive(false);
+            DashBoardManager.Instance.SetGameObjectActive(false, "ScreenSelector");
         }
 
         public void BackButton_ToTransferTeamSheet()
@@ -120,7 +120,7 @@ namespace Dashboard
             else
                 transferTeamSheetObj.SetActive(true);
 
-            DashBoardManager.Instance.SetScreenSelectorActive(true);
+            DashBoardManager.Instance.SetGameObjectActive(true, "ScreenSelector");
         }
 
         public void TransferListEntryInstantiateTransferTeamSheet(string teamSheetName)

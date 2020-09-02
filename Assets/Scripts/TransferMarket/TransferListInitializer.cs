@@ -6,7 +6,6 @@ namespace DefaultNamespace
     public class TransferListInitializer : MonoBehaviour
     {
         [SerializeField] private GameObject transferListObj;
-        [SerializeField] private GameObject transferTeamSheetObj;
 
         public static GameObject PlayerTeamEntryClickedObj;
         public void TeamSheetPlayerButton()
@@ -21,7 +20,7 @@ namespace DefaultNamespace
             
             TransferListWindow.InitializePlayerList(TransferListWindow.PlayerPricesMap);
             
-            transferTeamSheetObj.SetActive(false);
+            DashBoardManager.Instance.SetGameObjectActive(false, "TransferTeamSheet(Clone)");
             
             var thisButtonObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
             var panel = thisButtonObj.transform.parent.gameObject;

@@ -66,18 +66,12 @@ namespace PlayFab
 
         public void OpenChangeUsernamePanel()
         {
-            SetChangeUsernamePanelActive(true);
+            DashBoardManager.Instance.SetGameObjectActive(true, "UpdateUsernamePanel");
         }
 
         public void CloseChangeUsernamePanel()
         {
-            SetChangeUsernamePanelActive(false);
-        }
-
-        private void SetChangeUsernamePanelActive(bool active)
-        {
-            var changeUsernamePanel = GameObjectFinder.FindSingleObjectByName("UpdateUsernamePanel");
-            changeUsernamePanel.SetActive(active);
+            DashBoardManager.Instance.SetGameObjectActive(false, "UpdateUsernamePanel");
         }
     }
 }

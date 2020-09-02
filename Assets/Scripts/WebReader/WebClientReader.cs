@@ -15,5 +15,25 @@ namespace WebReader
     {
         private const string Url =
             "https://www.bbc.co.uk/sport/football/scores-fixtures";
+
+        private void Start()
+        {
+            
+        }
+
+        private IEnumerator GetWebText()
+        {
+            var www = UnityWebRequest.Get(Url);
+            yield return www.SendWebRequest();
+            
+            if (www.isNetworkError || www.isHttpError)
+                Debug.LogError(www.error);
+            else
+            {
+                Debug.LogError(www.downloadHandler.text);
+
+                var res = www.downloadHandler.text;
+            }
+        }
     }
 }

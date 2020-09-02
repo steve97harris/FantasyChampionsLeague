@@ -125,7 +125,7 @@ namespace DefaultNamespace
         private void ActivateDashBoard()
         {
             DashBoardManager.Instance.SetScreenActive(1);
-            DashBoardManager.Instance.SetScreenSelectorActive(true);
+            DashBoardManager.Instance.SetGameObjectActive(true, "ScreenSelector");
         }
 
         private void OnDestroy()

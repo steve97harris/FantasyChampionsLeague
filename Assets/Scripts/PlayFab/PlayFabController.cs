@@ -14,10 +14,6 @@ namespace PlayFab
         private string _userPassword;
         private string _userName;
 
-        private static GameObject _loginPanel;
-        private static GameObject _dashboard;
-        private static GameObject _addLoginPanel;
-
         public static string EntityId;
         public static string EntityType;
 
@@ -39,10 +35,6 @@ namespace PlayFab
 
         public void Start()
         {
-            _loginPanel = GameObjectFinder.FindSingleObjectByName("LoginPanel");
-            _dashboard = GameObjectFinder.FindSingleObjectByName("DashBoard");
-            _addLoginPanel = GameObjectFinder.FindSingleObjectByName("AddLoginPanel");
-            
             if (string.IsNullOrEmpty(PlayFabSettings.TitleId))
             {
                 PlayFabSettings.TitleId = "90D7E";
@@ -138,8 +130,7 @@ namespace PlayFab
 
         public void OpenAddLogin()
         {
-            _addLoginPanel.SetActive(true);
-            _loginPanel.SetActive(false);
+            DashBoardManager.Instance.SetScreenActive(7);
         }
 
         public void OnClickAddLogin()
@@ -155,6 +146,23 @@ namespace PlayFab
             PlayerPrefs.SetString("EMAIL", _userEmail);
             PlayerPrefs.SetString("PASSWORD", _userPassword);
         }
+
+        public void ChangeAccountButton()
+        {
+            DashBoardManager.Instance.SetGameObjectActive(true, "ChangeAccountConfirmationPanel");
+        }
+
+        public void ChangeAccountYes()
+        {
+            DashBoardManager.Instance.SetScreenActive(0);
+            DashBoardManager.Instance.SetGameObjectActive(false, "ScreenSelector");
+        }
+
+        public void ChangeAccountNo()
+        {
+            DashBoardManager.Instance.SetGameObjectActive(false, "ChangeAccountConfirmationPanel");
+        }
+
         #endregion
     }
 }
