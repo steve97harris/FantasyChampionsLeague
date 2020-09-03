@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
@@ -11,6 +12,14 @@ namespace Dashboard
 {
     public class TransferListEntry : MonoBehaviour
     {
+        public static TransferListEntry Instance;
+
+        private void Awake()
+        {
+            if (Instance == null)
+                Instance = this;
+        }
+
         public void TransferListEntryButton()
         {
             var thisButtonObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;

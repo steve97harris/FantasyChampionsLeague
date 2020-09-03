@@ -57,7 +57,7 @@ namespace DefaultNamespace
             var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
             Debug.Log(teamSheetSaveData.teamSheetData.Count);
 
-            SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet");
+            SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
             
             RemoteConfigManager.Instance.FetchConfigs();
         }

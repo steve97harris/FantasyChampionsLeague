@@ -45,6 +45,7 @@ public class DashBoardManager : MonoBehaviour
     {
         SetScreenActive(6);
         SetGameObjectActive(false, "ScreenSelector");
+        TransferListEntry.Instance.InstantiateTeamSheet("Transfer");
         LoadTransferList();
     }
 
@@ -60,7 +61,7 @@ public class DashBoardManager : MonoBehaviour
         if (GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)") != null) 
             return;
         
-        InstantiateTeamSheet("Transfer");
+        TransferListEntry.Instance.InstantiateTeamSheet("Transfer");
     }
 
     public void DashboardButton()
@@ -94,12 +95,12 @@ public class DashBoardManager : MonoBehaviour
         TransferListWindow.GetPlayerTransferList(footballPlayerDatabase);
     }
 
-    private void InstantiateTeamSheet(string teamSheetName)
-    {
-        var transferListWindow = GameObjectFinder.FindSingleObjectByName("TransferListWindow");
-        var transferListWindowComponent = transferListWindow.GetComponent<TransferListWindow>();
-        transferListWindowComponent.TransferListEntryInstantiateTransferTeamSheet(teamSheetName);
-    }
+    // private void InstantiateTeamSheet(string teamSheetName)
+    // {
+    //     var transferListWindow = GameObjectFinder.FindSingleObjectByName("TransferListWindow");
+    //     var transferListWindowComponent = transferListWindow.GetComponent<TransferListWindow>();
+    //     transferListWindowComponent.TransferListEntryInstantiateTransferTeamSheet(teamSheetName);
+    // }
 
     public void SetScreenActive(int index)
     {

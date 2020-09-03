@@ -2,9 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using DefaultNamespace;
+using HtmlAgilityPack;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -14,25 +17,46 @@ namespace WebReader
     public class WebClientReader : MonoBehaviour
     {
         private const string Url =
-            "https://www.bbc.co.uk/sport/football/scores-fixtures";
+            "https://www.footballcritic.com/live-scores";
+        
+        #region Html Node Paths (footballcritic.com/live-scores)
+        
+        private const string MatchInfoList = "//ul[@class='info-list']";
+        private const string MatchInfoStats = MatchInfoList + "/li[@class='matchInfoStats']";
+        private const string TeamInfo = MatchInfoList + "/li[@class]";
+        
+        #endregion
 
         private void Start()
         {
-            
+            GetWebText();
         }
 
-        private IEnumerator GetWebText()
+        private void GetWebText()
         {
-            var www = UnityWebRequest.Get(Url);
-            yield return www.SendWebRequest();
+            var web = new HtmlWeb();
+            var doc = web.Load(Url);
+            //Debug.LogError(doc.Text);
+            var nodes = doc.DocumentNode.SelectNodes(TeamInfo);
             
-            if (www.isNetworkError || www.isHttpError)
-                Debug.LogError(www.error);
-            else
+            // var splitMap = new Dictionary<>();
+            var nodeList = new List<string>();
+            foreach (var node in nodes)
             {
-                Debug.LogError(www.downloadHandler.text);
+                var nodeString = node.InnerText;
+                // var split = Regex.Split(nodeString,Environment.NewLine).Select(x => x.Trim()).ToArray();
+                var split = Regex.Replace(nodeString, @"\s+", ",");
+                
+                nodeList.Add(split);
+            }
 
-                var res = www.downloadHandler.text;
+            for (int i = 0; i < nodeList.Count; i++)
+            {
+                Debug.LogError(nodeList[i]);
+                // for (int j = 0; j < nodeList[i].Length; j++)
+                // {
+                //     Debug.LogError(nodeList[i][j]);
+                // }
             }
         }
     }
