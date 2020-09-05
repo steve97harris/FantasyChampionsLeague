@@ -33,12 +33,11 @@ namespace DefaultNamespace
         {
             if (Instance == null)
                 Instance = this;
-            
-            StartCoroutine(WaitForPlayFabLogin());
         }
         
-        private IEnumerator WaitForPlayFabLogin()
+        public IEnumerator WaitForPlayFabLogin()
         {
+            // Wait for playfab controller to log in player
             yield return new WaitForSeconds(1f);
             LoadPlayFabFiles_SetTeamSheetUi();
         }

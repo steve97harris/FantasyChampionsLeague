@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Dashboard;
 using DefaultNamespace;
 using PlayFab.ClientModels;
 using UnityEngine;
+using UnityEngine.Serialization;
 using LoginResult = PlayFab.ClientModels.LoginResult;
 
 namespace PlayFab
@@ -16,7 +18,7 @@ namespace PlayFab
 
         public static string EntityId;
         public static string EntityType;
-
+        
         public void OnEnable()
         {
             if (Instance == null)
@@ -35,11 +37,13 @@ namespace PlayFab
 
         public void Start()
         {
+            DashBoardManager.Instance.SetScreenActive(6);        // activate loading panel
+            
             if (string.IsNullOrEmpty(PlayFabSettings.TitleId))
             {
                 PlayFabSettings.TitleId = "90D7E";
             }
-
+            
             if (PlayerPrefs.HasKey("EMAIL"))
             {
                 _userEmail = PlayerPrefs.GetString("EMAIL");
@@ -60,7 +64,14 @@ namespace PlayFab
                 var requestAndroid = new LoginWithAndroidDeviceIDRequest { AndroidDeviceId = ReturnMobileId() , CreateAccount = true };
                 PlayFabClientAPI.LoginWithAndroidDeviceID(requestAndroid, OnLoginSuccess, ErrorCallback);
 #endif
+                
+                // if automatic login fails, activate login panel
+                DashBoardManager.Instance.SetScreenActive(0);        
             }
+
+            DashBoardManager.Instance.SetGameObjectActive(false, "ScreenSelector");
+            TransferListEntry.Instance.InstantiateTeamSheet("Transfer");
+            DashBoardManager.Instance.LoadTransferList();
         }
 
         #region Login
@@ -73,6 +84,8 @@ namespace PlayFab
 
             EntityId = result.EntityToken.Entity.Id;
             EntityType = result.EntityToken.Entity.Type;
+            
+            StartCoroutine(TeamSheetDatabase.Instance.WaitForPlayFabLogin());    // wait for playfab player login and load player data
         }
 
         private void OnRegisterSuccess(RegisterPlayFabUserResult result)

@@ -41,14 +41,6 @@ public class DashBoardManager : MonoBehaviour
             Instance = this;
     }
 
-    void Start()
-    {
-        SetScreenActive(6);
-        SetGameObjectActive(false, "ScreenSelector");
-        TransferListEntry.Instance.InstantiateTeamSheet("Transfer");
-        LoadTransferList();
-    }
-
     public void PointsButton()
     {
         SetScreenActive(2);
@@ -89,18 +81,11 @@ public class DashBoardManager : MonoBehaviour
         PlayFabAccountInformation.Instance.GetAccountInfo();
     }
 
-    private void LoadTransferList()
+    public void LoadTransferList()
     {
         var footballPlayerDatabase = CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/FootballPlayerDatabase.csv");
         TransferListWindow.GetPlayerTransferList(footballPlayerDatabase);
     }
-
-    // private void InstantiateTeamSheet(string teamSheetName)
-    // {
-    //     var transferListWindow = GameObjectFinder.FindSingleObjectByName("TransferListWindow");
-    //     var transferListWindowComponent = transferListWindow.GetComponent<TransferListWindow>();
-    //     transferListWindowComponent.TransferListEntryInstantiateTransferTeamSheet(teamSheetName);
-    // }
 
     public void SetScreenActive(int index)
     {

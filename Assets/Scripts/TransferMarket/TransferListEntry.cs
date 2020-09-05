@@ -24,7 +24,7 @@ namespace Dashboard
         {
             var thisButtonObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
             
-            // footballer data of player clicked 
+            // get footballer data of player clicked 
             var playerName = GetGameObjectChildText(thisButtonObj, 0);
 
             var playerDetails = new AthleteStats();
