@@ -9,6 +9,8 @@ namespace DefaultNamespace
 {
     public class HeadCoachData : MonoBehaviour
     {
+        /* Unused */
+        
         // private string JsonPath => Path.Combine(Application.persistentDataPath, "HeadCoachData.json");
 
         // public void UpdateHeadCoachSaveData()

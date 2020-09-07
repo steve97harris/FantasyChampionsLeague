@@ -27,6 +27,11 @@ namespace PlayFab
             StartCoroutine(WaitForPlayerInfo());
         }
 
+        /// <summary>
+        /// Retrieves players Account Information and Profile from PlayFab
+        /// Sets players PlayFabID and DisplayName
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator WaitForPlayerInfo()
         {
             PlayFabClientAPI.GetAccountInfo(new GetAccountInfoRequest(), OnGetAccountInfoSuccess, PlayFabController.Instance.ErrorCallback);
@@ -58,6 +63,9 @@ namespace PlayFab
             _playFabDisplayName = newDisplayName;
         }
 
+        /// <summary>
+        /// Updates players display name and resets player profile panel Ui
+        /// </summary>
         public void ChangePlayerDisplayName()
         {
             PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = _playFabDisplayName}, PlayFabController.Instance.OnDisplayName, PlayFabController.Instance.ErrorCallback);

@@ -22,6 +22,10 @@ namespace PlayFab
             }
         }
 
+        /// <summary>
+        /// Updates the values of the specified title-specific statistics for the user. By default, clients are not permitted to update statistics.
+        /// Developers may override this setting in the Game Manager > Settings > API Features.
+        /// </summary>
         public void SetStatistics()
         {
             var headCoachSaveData = PlayFabEntityFileManager.Instance.GetHeadCoachData();
@@ -43,7 +47,10 @@ namespace PlayFab
                 error => { Debug.LogError(error.GenerateErrorReport()); });
         }
 
-        public void GetStatistics()
+        /// <summary>
+        /// Retrieves the indicated statistics (current version and values for all statistics, if none are specified), for the local player.
+        /// </summary>
+        private void GetStatistics()
         {
             PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest(), OnGetStatistics, error => Debug.LogError(error.GenerateErrorReport()));
         }

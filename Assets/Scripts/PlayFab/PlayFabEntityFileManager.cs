@@ -18,6 +18,10 @@ namespace PlayFab
 
         private static string _teamSheetSaveDataJsonString;
         private static string _headCoachSaveDataJsonString;
+        
+        /// <summary>
+        /// Map of file names and content as a string
+        /// </summary>
         private readonly Dictionary<string, string> _entityFileJson = new Dictionary<string, string>();
         public string activeUploadFileName;
         // GlobalFileLock provides a simplistic way to avoid file collisions, specifically designed for this example.
@@ -29,6 +33,9 @@ namespace PlayFab
                 Instance = this;
         }
 
+        /// <summary>
+        /// Retrieves file metadata from an entity's profile.
+        /// </summary>
         public void LoadPlayFabPlayerFiles()
         {
             if (globalFileLock != 0)
@@ -41,6 +48,11 @@ namespace PlayFab
             PlayFabDataAPI.GetFiles(request, OnGetFileMeta, PlayFabController.Instance.ErrorCallback);
         }
         
+        /// <summary>
+        /// Loads player files, if 2 files exist then get file.
+        /// If any files are missing then create new ones
+        /// </summary>
+        /// <param name="result"></param>
         private void OnGetFileMeta(PlayFab.DataModels.GetFilesResponse result)
         {
             Debug.Log("Loading " + result.Metadata.Count + " files");
@@ -79,6 +91,10 @@ namespace PlayFab
             globalFileLock -= 1; // Finish GetFiles
         }
 
+        /// <summary>
+        /// Gets file contents as string 
+        /// </summary>
+        /// <param name="fileData"></param>
         private void GetActualFile(PlayFab.DataModels.GetFileMetadata fileData)
         {
             globalFileLock += 1; // Start Each SimpleGetCall
@@ -107,11 +123,18 @@ namespace PlayFab
             );
         }
         
+        /// <summary>
+        /// Deserializes Json string and returns TeamSheetSaveData
+        /// </summary>
+        /// <returns></returns>
         public TeamSheetSaveData GetTeamSheetData()
         {
             return JsonConvert.DeserializeObject<TeamSheetSaveData>(_teamSheetSaveDataJsonString);
         }
         
+        /// <summary>
+        /// Creates new TeamSheetData and Sets TeamSheetUi
+        /// </summary>
         private void CreateNewTeamSheetData()
         {
             var teamSheetSaveData = new TeamSheetSaveData();
@@ -120,6 +143,10 @@ namespace PlayFab
             TeamSheetDatabase.Instance.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
         }
 
+        /// <summary>
+        /// Uploads TeamSheetData file to PlayFab entity
+        /// </summary>
+        /// <param name="teamSheetSaveData"></param>
         public void SavePlayFabTeamSheetData(TeamSheetSaveData teamSheetSaveData)
         {
             var newTeamSheetSaveDataJsonString = JsonConvert.SerializeObject(teamSheetSaveData, Formatting.Indented);
@@ -148,6 +175,10 @@ namespace PlayFab
             UploadFile("HeadCoachData.json");
         }
         
+        /// <summary>
+        /// Initiates file uploads to an entity's profile
+        /// </summary>
+        /// <param name="fileName"></param>
         private void UploadFile(string fileName)
         {
             if (globalFileLock != 0)
@@ -217,6 +248,7 @@ namespace PlayFab
             PlayFabDataAPI.FinalizeFileUploads(request, OnUploadSuccess, PlayFabController.Instance.ErrorCallback);
             globalFileLock -= 1; // Finish SimplePutCall
         }
+        
         private void OnUploadSuccess(PlayFab.DataModels.FinalizeFileUploadsResponse result)
         {
             Debug.Log("File upload success: " + activeUploadFileName);

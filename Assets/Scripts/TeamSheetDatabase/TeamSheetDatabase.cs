@@ -51,7 +51,7 @@ namespace DefaultNamespace
         {
             PlayFabEntityFileManager.Instance.LoadPlayFabPlayerFiles();
             
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2);
             
             var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
             Debug.Log(teamSheetSaveData.teamSheetData.Count);

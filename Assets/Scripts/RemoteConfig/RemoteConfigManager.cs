@@ -30,7 +30,6 @@ namespace DefaultNamespace
         {
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
             ConfigManager.FetchCompleted += UpdatePlayerPoints;
-            ConfigManager.FetchCompleted += UpdateGameweekTitle;
             ConfigManager.FetchCompleted += InitialLoadingComplete;
         }
 
@@ -39,19 +38,16 @@ namespace DefaultNamespace
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
         }
 
-        /* Currently only updating player points on refresh button.
-         * Changes to make:
-         * {
-         *  - Update Football Player Points with respect to config data :)
-         *  - Save new TeamSheetSaveData to device and playfab :)
-         *  - Set Points TeamSheet Ui with new TeamSheetSaveData :)
-         *  - Add up new coach points
-         *  - Create new HeadCoachSaveData
-         *  - Save new HeadCoachSaveData to device
-         *  - Save coach points to playfab player statistics
-         *  - Set HeadCoachUi with new HeadCoachSaveData
-         * }
-         */
+        /// <summary>
+        /// Retrieves all footballers current gameweek points.
+        /// Updates TeamSheetSaveData with current points.
+        /// Saves TeamSheetSaveData to entity's playfab profile.
+        /// Sets TeamSheetUi.
+        /// Updates and Saves HeadCoachSaveData.
+        /// Sets HeadCoachUi.
+        /// Sets Gameweek Title.
+        /// </summary>
+        /// <param name="obj"></param>
         private void UpdatePlayerPoints(ConfigResponse obj)
         {
             var footballPlayerGwPointsMap = new Dictionary<string,int>();
@@ -64,7 +60,7 @@ namespace DefaultNamespace
             var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
             if (teamSheetSaveData.teamSheetData == null)
             {
-                Debug.LogError("playfab teamsheet NULL");
+                Debug.LogError("teamSheetData returned null");
                 return;
             } 
 
@@ -84,54 +80,29 @@ namespace DefaultNamespace
             
             PlayFabEntityFileManager.Instance.SavePlayFabTeamSheetData(teamSheetSaveData);
             
-            var teamSheetDatabaseObj = GameObjectFinder.FindSingleObjectByName("TeamSheetDatabase");
-            var teamDatabase = teamSheetDatabaseObj.GetComponent<TeamSheetDatabase>();
-            teamDatabase.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
+            TeamSheetDatabase.Instance.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
 
             PointsTeamSheetManager.Instance.SetHeadCoachPoints();
-            SetCoachUi();
-        }
-        
-        private void SetCoachUi()
-        {
-            var totalCoachPoints = GameObjectFinder.FindSingleObjectByName("HeadCoachTotalPoints");
-            var currentGwPoints = GameObjectFinder.FindSingleObjectByName("CurrentGameweekPoints");
-
-            var coachTotalPoints = PlayFabPlayerStats.Instance.coachTotalPoints;
-            var coachCurrentGwPoints = PlayFabPlayerStats.Instance.coachCurrentGwPoints;
-            
-            totalCoachPoints.GetComponent<TMP_Text>().text = coachTotalPoints.ToString();
-            currentGwPoints.GetComponent<TMP_Text>().text = coachCurrentGwPoints.ToString();
-            
-            Debug.Log("Coach Ui Data set: { totalPoints: " + coachTotalPoints + " gwPoints: " + coachCurrentGwPoints + "}");
+            PointsTeamSheetManager.Instance.SetHeadCoachUi();
+            PointsTeamSheetManager.Instance.UpdateGameweekTitle();
         }
 
-        private void UpdateGameweekTitle(ConfigResponse obj)
-        {
-            var currentGameweek = ConfigManager.appConfig.GetString("CURRENT_GAMEWEEK");
-            var gameweekTitleObj = GameObjectFinder.FindSingleObjectByName("TotalGameweekPointsTitle");
-            gameweekTitleObj.GetComponent<TMP_Text>().text = "Gameweek " + currentGameweek;
-        }
-        
+        /// <summary>
+        /// Function to activate dashboard once all configs have been fetched.
+        /// (Need better way of setting the loading screen?)
+        /// </summary>
+        /// <param name="obj"></param>
         private void InitialLoadingComplete(ConfigResponse obj)
         {
             /* Only effective if FetchConfigs is last function in TeamSheetDatabase Coroutines.
              * RemoteConfigManager.Instance.FetchConfigs();    (TeamSheetDatabase line 64) */
 
-            ActivateDashBoard();
-            Debug.Log("LOAD COMPLETE");
-        }
-        
-        private void ActivateDashBoard()
-        {
-            DashBoardManager.Instance.SetScreenActive(1);
-            DashBoardManager.Instance.SetGameObjectActive(true, "ScreenSelector");
+            PlayFabController.LoadingInProgress = false;
         }
 
         private void OnDestroy()
         {
             ConfigManager.FetchCompleted -= UpdatePlayerPoints;
-            ConfigManager.FetchCompleted -= UpdateGameweekTitle;
             ConfigManager.FetchCompleted -= InitialLoadingComplete;
         }
     }

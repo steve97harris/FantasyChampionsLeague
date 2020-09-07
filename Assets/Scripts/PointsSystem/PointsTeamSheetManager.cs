@@ -18,8 +18,8 @@ namespace DefaultNamespace
         private static int _noOfGameweeks = 35;
         
         /// <summary> PointsTeamSheetPlayerMap - map of player prefabs 
-        /// <typeparam name="Key">Football Player Name</typeparam>
-        /// <typeparam name="Value">Football Player Prefab</typeparam>
+        /// <Key>Football Player Name</Key>
+        /// <Value>Football Player Prefab</Value>
         /// </summary>
         private static readonly Dictionary<string, GameObject> PointsTeamSheetPlayerMap = new Dictionary<string, GameObject>();
 
@@ -29,6 +29,9 @@ namespace DefaultNamespace
                 Instance = this;
         }
 
+        /// <summary>
+        /// Retrieves the Points Team Sheet game objects and stores them in the PointsTeamSheetPlayerMap
+        /// </summary>
         private void GetPlayerMap()
         {
             var pointsTeamSheet = GameObjectFinder.FindSingleObjectByName("PointsTeamSheet");
@@ -47,6 +50,9 @@ namespace DefaultNamespace
             }
         }
 
+        /// <summary>
+        /// Calculates Head Coach current gameweek points and total points. Then saves the data to the entity's PlayFab profile.
+        /// </summary>
         public void SetHeadCoachPoints()
         {
             GetPlayerMap();
@@ -99,6 +105,27 @@ namespace DefaultNamespace
             
             PlayFabEntityFileManager.Instance.SavePlayFabHeadCoachData(headCoachSaveData);
             PlayFabPlayerStats.Instance.SetStatistics();
+        }
+        
+        public void SetHeadCoachUi()
+        {
+            var totalCoachPoints = GameObjectFinder.FindSingleObjectByName("HeadCoachTotalPoints");
+            var currentGwPoints = GameObjectFinder.FindSingleObjectByName("CurrentGameweekPoints");
+
+            var coachTotalPoints = PlayFabPlayerStats.Instance.coachTotalPoints;
+            var coachCurrentGwPoints = PlayFabPlayerStats.Instance.coachCurrentGwPoints;
+            
+            totalCoachPoints.GetComponent<TMP_Text>().text = coachTotalPoints.ToString();
+            currentGwPoints.GetComponent<TMP_Text>().text = coachCurrentGwPoints.ToString();
+            
+            Debug.Log("Coach Ui Data set: { totalPoints: " + coachTotalPoints + " gwPoints: " + coachCurrentGwPoints + "}");
+        }
+        
+        public void UpdateGameweekTitle()
+        {
+            var currentGameweek = ConfigManager.appConfig.GetString("CURRENT_GAMEWEEK");
+            var gameweekTitleObj = GameObjectFinder.FindSingleObjectByName("TotalGameweekPointsTitle");
+            gameweekTitleObj.GetComponent<TMP_Text>().text = "Gameweek " + currentGameweek;
         }
 
         private List<GameObject> GetGrandChildren(GameObject canvas)

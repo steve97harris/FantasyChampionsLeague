@@ -52,7 +52,7 @@ namespace WebReader
 
             for (int i = 0; i < nodeList.Count; i++)
             {
-                Debug.LogError(nodeList[i]);
+                //Debug.LogError(nodeList[i]);
                 // for (int j = 0; j < nodeList[i].Length; j++)
                 // {
                 //     Debug.LogError(nodeList[i][j]);

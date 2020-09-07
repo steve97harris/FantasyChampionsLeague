@@ -6,14 +6,22 @@ namespace DefaultNamespace
 {
     public class GameObjectFinder : MonoBehaviour
     {
-        public static Dictionary<string,GameObject> GameObjects = new Dictionary<string, GameObject>();
-        
+        /// <summary>
+        /// Returns all objects with the given name
+        /// </summary>
+        /// <param name="objectName"></param>
+        /// <returns></returns>
         public static GameObject[] FindMultipleObjectsByName(string objectName)
         {
             var objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == objectName).ToArray();
             return objects;
         }
         
+        /// <summary>
+        /// Returns first game object found with the given name
+        /// </summary>
+        /// <param name="objectName"></param>
+        /// <returns></returns>
         public static GameObject FindSingleObjectByName(string objectName)
         {
             var objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == objectName).ToArray();

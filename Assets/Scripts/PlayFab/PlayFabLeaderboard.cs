@@ -20,6 +20,10 @@ namespace PlayFab
             }
         }
 
+        /// <summary>
+        /// Gets players most up to date statistics.
+        /// Retrieves a list of all ranked users for the given statistic, starting from the indicated point in the leaderboard
+        /// </summary>
         public void GetLeaderboard()
         {
             PlayFabPlayerStats.Instance.SetStatistics();
@@ -30,7 +34,7 @@ namespace PlayFab
                 StatisticName = "CoachTotalPoints", 
                 MaxResultsCount = 20
             };
-            PlayFabClientAPI.GetLeaderboard(requestLeaderboard, OnGetLeaderboard, OnLeaderboardError);
+            PlayFabClientAPI.GetLeaderboard(requestLeaderboard, OnGetLeaderboard, PlayFabController.Instance.ErrorCallback);
         }
 
         private void OnGetLeaderboard(GetLeaderboardResult result)
@@ -38,11 +42,11 @@ namespace PlayFab
             SetLeaderboardUi(result, "LeaderboardPanelViewport");
         }
 
-        private void OnLeaderboardError(PlayFabError error)
-        {
-            Debug.LogError(error.GenerateErrorReport());
-        }
-
+        /// <summary>
+        /// Instantiates the specified leaderboard
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="leaderboardViewportName"></param>
         public void SetLeaderboardUi(GetLeaderboardResult result, string leaderboardViewportName)
         {
             var leaderboardPanelViewport = GameObjectFinder.FindSingleObjectByName(leaderboardViewportName);

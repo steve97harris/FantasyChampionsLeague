@@ -13,6 +13,9 @@ public class DashBoardManager : MonoBehaviour
 {
     public static DashBoardManager Instance;
     
+    /// <summary>
+    /// List of all main panels
+    /// </summary>
     /*  ObjectName - Index 
      * "LoginPanel" - 0
      * "DashBoardPanel" - 1
@@ -20,19 +23,12 @@ public class DashBoardManager : MonoBehaviour
      * "TransferPanel" - 3
      * "LeagueLeaderboardsPanel" - 4
      * "PlayerProfilePanel" - 5
-     * "LoadingPanel" - 6
-     * "AddLoginPanel" - 7
+     * "AddLoginPanel" - 6
+     *  "LoadingPanel" - 7
      */
-    private readonly List<string> _fclScreenNames = new List<string>()
+    private readonly List<string> _mainPanelNames = new List<string>()
     {
-        "LoginPanel",
-        "DashBoardPanel",
-        "PointsPanel",
-        "TransferPanel",
-        "LeagueLeaderboardsPanel",
-        "PlayerProfilePanel",
-        "LoadingPanel",
-        "AddLoginPanel"
+        "LoginPanel", "DashBoardPanel", "PointsPanel", "TransferPanel", "LeagueLeaderboardsPanel", "PlayerProfilePanel", "AddLoginPanel", "LoadingPanel"
     };
 
     private void Awake()
@@ -40,6 +36,8 @@ public class DashBoardManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
     }
+
+    #region Dashboard Buttons
 
     public void PointsButton()
     {
@@ -49,11 +47,7 @@ public class DashBoardManager : MonoBehaviour
     public void TransfersButton()
     {
         SetScreenActive(3);
-
-        if (GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)") != null) 
-            return;
-        
-        TransferListEntry.Instance.InstantiateTeamSheet("Transfer");
+        SetTransferTeamSheet();
     }
 
     public void DashboardButton()
@@ -81,20 +75,34 @@ public class DashBoardManager : MonoBehaviour
         PlayFabAccountInformation.Instance.GetAccountInfo();
     }
 
+    #endregion
+
+    /// <summary>
+    /// Gets list of footballers in CSV, then analysis the footballers information
+    /// </summary>
     public void LoadTransferList()
     {
         var footballPlayerDatabase = CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/FootballPlayerDatabase.csv");
         TransferListWindow.GetPlayerTransferList(footballPlayerDatabase);
     }
 
+    /// <summary>
+    /// Sets screen active with respect to the index entered and sets all other screens inactive
+    /// </summary>
+    /// <param name="index"></param>
     public void SetScreenActive(int index)
     {
-        for (int i = 0; i < _fclScreenNames.Count; i++)
+        for (int i = 0; i < _mainPanelNames.Count; i++)
         {
-            GameObjectFinder.FindSingleObjectByName(_fclScreenNames[i]).SetActive(i == index);
+            GameObjectFinder.FindSingleObjectByName(_mainPanelNames[i]).SetActive(i == index);
         }
     }
 
+    /// <summary>
+    /// Sets specified game object active or inactive
+    /// </summary>
+    /// <param name="active"></param>
+    /// <param name="objectName"></param>
     public void SetGameObjectActive(bool active, string objectName)
     {
         var obj = GameObjectFinder.FindSingleObjectByName(objectName);
@@ -107,6 +115,10 @@ public class DashBoardManager : MonoBehaviour
         obj.SetActive(active);
     }
 
+    /// <summary>
+    /// Sets either friends or world leaderboard panel active
+    /// </summary>
+    /// <param name="leaderboardName"></param>
     private void SetLeaderboardPanel(string leaderboardName)
     {
         switch (leaderboardName)
@@ -120,5 +132,13 @@ public class DashBoardManager : MonoBehaviour
                 SetGameObjectActive(true, "FriendsPanel");
                 break;
         }
+    }
+
+    private void SetTransferTeamSheet()
+    {
+        if (GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)") != null) 
+            return;
+        
+        TransferListEntry.Instance.InstantiateTeamSheet("Transfer");
     }
 }
