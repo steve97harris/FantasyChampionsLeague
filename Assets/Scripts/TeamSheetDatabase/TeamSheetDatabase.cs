@@ -25,7 +25,6 @@ namespace DefaultNamespace
         private static Dictionary<string, ObjectResult> _playFabTeamSheetSaveDataMap;
         
         private static int maxNumberOfEntries = 15;
-        // public static string JsonPath => Path.Combine(Application.persistentDataPath,"TeamSheetData.json");
 
         #region Event Functions
 
@@ -35,29 +34,29 @@ namespace DefaultNamespace
                 Instance = this;
         }
         
+        /// <summary>
+        /// Coroutine to wait for PlayFab auto login
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator WaitForPlayFabLogin()
         {
             // Wait for playfab controller to log in player
             yield return new WaitForSeconds(1f);
-            LoadPlayFabFiles_SetTeamSheetUi();
-        }
-
-        private void LoadPlayFabFiles_SetTeamSheetUi()
-        {
+            
             StartCoroutine(WaitForFiles());
         }
 
+        /// <summary>
+        /// Coroutine to load player files, wait for files to be loaded.
+        /// Fetch Remote Configs.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator WaitForFiles()
         {
             PlayFabEntityFileManager.Instance.LoadPlayFabPlayerFiles();
             
             yield return new WaitForSeconds(2);
-            
-            var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
-            Debug.Log(teamSheetSaveData.teamSheetData.Count);
 
-            SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
-            
             RemoteConfigManager.Instance.FetchConfigs();
         }
 
@@ -65,6 +64,15 @@ namespace DefaultNamespace
         
         #region TeamSheet Entry Functions
 
+        /// <summary>
+        /// Inserts new player into TeamSheetSaveData json file.
+        /// Replaces current player in teamSheetPlayerPosition with new player entry.
+        /// Gets TeamSheetSaveData.
+        /// Inserts new playerEntry.
+        /// Saves TeamSheetSaveData to entity's profile.
+        /// </summary>
+        /// <param name="playerEntry"></param>
+        /// <param name="teamSheetPlayerPosition"></param>
         public void InsertPlayerEntry(AthleteStats playerEntry, string teamSheetPlayerPosition)
         {
             Debug.Log("Inserting player into json file..");
@@ -105,11 +113,16 @@ namespace DefaultNamespace
 
         #region Private Methods
 
+        /// <summary>
+        /// Sets either Transfer or Points TeamSheet with new teamSheetSaveData, depending on specified teamSheetObjName.
+        /// </summary>
+        /// <param name="teamSheetSaveData"></param>
+        /// <param name="teamSheetObjName"></param>
         public void SetTeamSheetUi(TeamSheetSaveData teamSheetSaveData, string teamSheetObjName)
         {
             if (teamSheetSaveData == null)
             {
-                Debug.LogError("teamSheetSaveData returned NULL");
+                Debug.LogError("teamSheetSaveData returned null");
                 return;
             }
             
@@ -146,10 +159,10 @@ namespace DefaultNamespace
                 
                 var athleteStats = teamSheetDataMap[playerTeamSheetPosition];
                 
-                SetFootballPlayerDetailsValues(playerTeamEntryCanvas, athleteStats);
+                SetFootballPlayerDetails(playerTeamEntryCanvas, athleteStats);
 
                 var obj = playerTeamEntryCanvas.transform.GetChild(0);
-                obj.transform.GetChild(4).GetComponent<TMP_Text>().text = athleteStats.PlayerName;
+                obj.transform.GetChild(4).GetComponent<TMP_Text>().text = athleteStats.Name;
                 
                 switch (teamSheetObjName)
                 {
@@ -177,11 +190,11 @@ namespace DefaultNamespace
             }
         }
 
-        public static void SetFootballPlayerDetailsValues(GameObject playerTeamEntryCanvas, AthleteStats athleteStats)
+        public void SetFootballPlayerDetails(GameObject playerTeamEntryCanvas, AthleteStats athleteStats)
         {
             var playerDetails = playerTeamEntryCanvas.GetComponent<FootballPlayerDetails>();
             
-            playerDetails.playerName = athleteStats.PlayerName;
+            playerDetails.playerName = athleteStats.Name;
             playerDetails.team = athleteStats.Team;
             playerDetails.price = athleteStats.Price;
             playerDetails.rating = athleteStats.Rating;

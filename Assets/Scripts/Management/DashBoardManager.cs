@@ -83,7 +83,7 @@ public class DashBoardManager : MonoBehaviour
     public void LoadTransferList()
     {
         var footballPlayerDatabase = CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/FootballPlayerDatabase.csv");
-        TransferListWindow.GetPlayerTransferList(footballPlayerDatabase);
+        TransferListWindow.Instance.GetPlayerTransferList(footballPlayerDatabase);
     }
 
     /// <summary>

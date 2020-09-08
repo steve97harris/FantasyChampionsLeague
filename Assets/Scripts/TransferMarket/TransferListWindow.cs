@@ -12,10 +12,26 @@ namespace Dashboard
 {
     public class TransferListWindow : MonoBehaviour
     {
+        public static TransferListWindow Instance;
+        
+        /// <summary>
+        /// Map storing all players and their information.
+        /// <Key> Footballers unique RemoteConfigKey </Key>
+        /// <Value> Footballers AthleteStats </Value>
+        /// </summary>
         public static readonly Dictionary<string, AthleteStats> PlayerRemoteKeyMap = new Dictionary<string, AthleteStats>();
-        public static readonly Dictionary<string, string[]> PlayerPricesMap = new Dictionary<string, string[]>();        // name, price
 
-        public static void GetPlayerTransferList(List<string> playerDatabaseCsv)
+        private void Awake()
+        {
+            if (Instance == null)
+                Instance = this;
+        }
+
+        /// <summary>
+        /// Reads all player information from list of strings and stores them in PlayerRemoteKeyMap.
+        /// </summary>
+        /// <param name="playerDatabaseCsv"></param>
+        public void GetPlayerTransferList(List<string> playerDatabaseCsv)
         {
             // span each line of playerList
             foreach (var line in playerDatabaseCsv)
@@ -31,36 +47,25 @@ namespace Dashboard
                 var playerRemoteConfigKey = playerInformation[6];
                 RemoteConfigManager.PlayerRemoteConfigKeysList.Add(playerRemoteConfigKey);
                 
-                PlayerRemoteKeyMap.Add(playerRemoteConfigKey, new AthleteStats() 
+                var athleteStats = new AthleteStats()
                 {
-                    PlayerName = playerName,
+                    Name = playerName,
                     Position = playerPosition,
                     Price = playerPrice,
                     Rating = playerRating,
                     RemoteConfigKey = playerRemoteConfigKey,
                     Team = playerTeam,
                     TotalPoints = playerFclPoints
-                });
-                
-
-                var playerDetails = new string[]
-                {
-                    playerTeam,
-                    playerRating,
-                    playerPosition,
-                    playerPrice,
-                    playerFclPoints,
-                    playerRemoteConfigKey
                 };
                 
-                if (!PlayerPricesMap.ContainsKey(playerName))
-                    PlayerPricesMap.Add(playerName, playerDetails);
-                else
-                    Debug.LogError("playerPricesMap already contains key: " + playerName);
+                PlayerRemoteKeyMap.Add(playerRemoteConfigKey, athleteStats);
             }
         }
 
-        public static void InitializePlayerList(Dictionary<string, string[]> playerPricesMap)
+        /// <summary>
+        /// Instantiates a button into the transfer list for each player registered in the player database.
+        /// </summary>
+        public void InitializePlayerList()
         {
             // locate gameObjects
             var transferListContent = GameObjectFinder.FindSingleObjectByName("TransferListContent").transform;
@@ -74,7 +79,7 @@ namespace Dashboard
                 Destroy(child.gameObject);
             }
 
-            foreach (var pair in playerPricesMap)        
+            foreach (var pair in PlayerRemoteKeyMap)        
             {
                 // instantiate new player transfer entry
                 var entryObject = Instantiate(playerTransferEntry, transferListContent);
@@ -84,25 +89,16 @@ namespace Dashboard
                 var playerTeamImageObj = entryButton.GetChild(2).gameObject;
                 var playerPositionObj = entryButton.GetChild(3).gameObject;
                 
-                // set football players details component
+                // set football player details component
                 entryObject.AddComponent<FootballPlayerDetails>();
-                TeamSheetDatabase.SetFootballPlayerDetailsValues(entryObject, new AthleteStats()
-                {
-                    PlayerName = pair.Key,
-                    Team = pair.Value[0],
-                    Rating = pair.Value[1], 
-                    Position = pair.Value[2],
-                    Price = pair.Value[3],
-                    TotalPoints = pair.Value[4],
-                    RemoteConfigKey = pair.Value[5]
-                });
+                TeamSheetDatabase.Instance.SetFootballPlayerDetails(entryObject, pair.Value);
                 
-                playerNameObj.GetComponent<TMP_Text>().text = pair.Key;
-                playerPriceObj.GetComponent<TMP_Text>().text = "$" + pair.Value[1];
-                playerPositionObj.GetComponent<TMP_Text>().text = pair.Value[2];
+                playerNameObj.GetComponent<TMP_Text>().text = pair.Value.Name;
+                playerPriceObj.GetComponent<TMP_Text>().text = "$" + pair.Value.Price;
+                playerPositionObj.GetComponent<TMP_Text>().text = pair.Value.Position;
 
                 // team logos!!!
-                var playersTeamLogo = teamLogos.Find(x => x.name == pair.Value[0]);
+                var playersTeamLogo = teamLogos.Find(x => x.name == pair.Value.Team);
                 if (playersTeamLogo != null)
                     playerTeamImageObj.GetComponent<Image>().sprite = playersTeamLogo;
             }
@@ -110,39 +106,30 @@ namespace Dashboard
             DashBoardManager.Instance.SetGameObjectActive(false, "ScreenSelector");
         }
 
+        /// <summary>
+        /// Transfer List back button leading to transfer team sheet
+        /// </summary>
         public void BackButton_ToTransferTeamSheet()
         {
             DestroyTransferList();
 
             var transferTeamSheetObj = GameObjectFinder.FindSingleObjectByName("TransferTeamSheet(Clone)");
             if (transferTeamSheetObj == null)
-                TransferListEntryInstantiateTransferTeamSheet("Transfer");
+            {
+                var teamSheetSaveData =  PlayFabEntityFileManager.Instance.GetTeamSheetData();
+                TransferListEntry.Instance.InstantiateTeamSheet("Transfer");
+                TeamSheetDatabase.Instance.SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
+            }
             else
                 transferTeamSheetObj.SetActive(true);
 
             DashBoardManager.Instance.SetGameObjectActive(true, "ScreenSelector");
         }
 
-        public void TransferListEntryInstantiateTransferTeamSheet(string teamSheetName)
-        {
-            var teamSavedData =  PlayFabEntityFileManager.Instance.GetTeamSheetData();
-            var transferListEntry = gameObject.GetComponent<TransferListEntry>();
-            var teamSheetDatabaseObj = GameObjectFinder.FindSingleObjectByName("TeamSheetDatabase");
-            var teamDatabase = teamSheetDatabaseObj.GetComponent<TeamSheetDatabase>();
-
-            switch (teamSheetName)
-            {
-                case "Transfer":
-                    transferListEntry.InstantiateTeamSheet(teamSheetName);
-                    break;
-                case "Points":
-                    transferListEntry.InstantiateTeamSheet(teamSheetName);
-                    break;
-            }
-            teamDatabase.SetTeamSheetUi(teamSavedData, teamSheetName + "TeamSheet(Clone)");
-        }
-
-        public static void DestroyTransferList()
+        /// <summary>
+        /// Destroys Transfer List obj 
+        /// </summary>
+        public void DestroyTransferList()
         {
             var list = GameObjectFinder.FindSingleObjectByName("TransferList(Clone)");
             DestroyImmediate(list.gameObject,true);

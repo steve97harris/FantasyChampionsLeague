@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Dashboard
+namespace DefaultNamespace
 {
     [Serializable]
     public class FootballPlayerDetails : MonoBehaviour

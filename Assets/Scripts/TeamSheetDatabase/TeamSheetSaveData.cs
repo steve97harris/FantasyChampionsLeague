@@ -16,12 +16,11 @@ namespace DefaultNamespace
     // created second football player details as MonoBehaviour methods cannot be serialized
     public class AthleteStats
     {
-        public string PlayerName;
+        public string Name;
         public string Team;
         public string Rating;
         public string Price;
         public string Position;
-        public string TeamSheetPosition;
         public string TotalPoints;
         public string RemoteConfigKey;
     }

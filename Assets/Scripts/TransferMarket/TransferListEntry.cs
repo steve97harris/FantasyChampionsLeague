@@ -20,54 +20,46 @@ namespace Dashboard
                 Instance = this;
         }
 
+        /// <summary>
+        /// Button to insert new footballer into a players team sheet from the transfer list.
+        /// </summary>
         public void TransferListEntryButton()
         {
             var thisButtonObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
             
-            // get footballer data of player clicked 
-            var playerName = GetGameObjectChildText(thisButtonObj, 0);
+            // Get unique remote config key of footballer selected
+            var playerRemoteConfigKey =
+                thisButtonObj.transform.parent.GetComponent<FootballPlayerDetails>().remoteConfigKey;
 
-            var playerDetails = new AthleteStats();
+            // Get athlete stats from player remote key map using players name
+            var athleteStats = new AthleteStats();
             var playerRemoteKeyMap = TransferListWindow.PlayerRemoteKeyMap;
-            foreach (var pair in playerRemoteKeyMap.Where(pair => pair.Value.PlayerName == playerName))
+            foreach (var pair in playerRemoteKeyMap.Where(pair => pair.Value.RemoteConfigKey == playerRemoteConfigKey))
             {
-                playerDetails = pair.Value;
+                athleteStats = pair.Value;
             }
             
-            // Save new player entry to json
-            var teamSheetDatabaseObj = GameObjectFinder.FindSingleObjectByName("TeamSheetDatabase");
-            var teamDatabase = teamSheetDatabaseObj.GetComponent<TeamSheetDatabase>();
-            
-            var playerTeamEntryClickedObj = TransferListInitializer.PlayerTeamEntryClickedObj;
+            // Get the team sheet player that was selected to be replaced with new player
+            var playerTeamEntryClickedObj = TransferListInitializer.PlayerTeamEntryObjClicked;
             var playerTeamSheetEntryDetails = playerTeamEntryClickedObj.GetComponent<FootballPlayerDetails>();
-
-            var athleteStats = new AthleteStats
-            {
-                PlayerName = playerName, 
-                Price = playerDetails.Price, 
-                Rating = playerDetails.Rating,
-                Position = playerDetails.Position, 
-                Team = playerDetails.Team,
-                TeamSheetPosition = playerTeamSheetEntryDetails.teamSheetPosition,
-                TotalPoints = playerDetails.TotalPoints,
-                RemoteConfigKey = playerDetails.RemoteConfigKey
-            };
-
-            if (IsValidPlayerPosition(playerDetails.Position, playerTeamSheetEntryDetails.teamSheetPosition) && !PlayerAlreadyInTeam(playerName) && !ToManyPlayersFromSameClub(playerDetails.Team) &&playerName != "")
+            
+            // If valid player entry, insert selected footballer into team
+            if (IsValidFootballerEntry(athleteStats, playerTeamSheetEntryDetails))
             {
                 Debug.Log("Valid player, insert player into team...");
                
-                teamDatabase.InsertPlayerEntry(athleteStats, athleteStats.TeamSheetPosition);
+                TeamSheetDatabase.Instance.InsertPlayerEntry(athleteStats, playerTeamSheetEntryDetails.teamSheetPosition);
 
                 InstantiateTeamSheet("Transfer");
                 
                 var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
-                teamDatabase.SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
-                teamDatabase.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
+                TeamSheetDatabase.Instance.SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
+                TeamSheetDatabase.Instance.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
                 
                 DashBoardManager.Instance.SetGameObjectActive(true, "TransferTeamSheet(Clone)");
                 DashBoardManager.Instance.SetGameObjectActive(true, "ScreenSelector");
-                TransferListWindow.DestroyTransferList();
+                
+                TransferListWindow.Instance.DestroyTransferList();
             }
             else
             {
@@ -75,22 +67,40 @@ namespace Dashboard
                 StartCoroutine(DisplayInvalidPlayerPosition());
             }
         }
+
+        /// <summary>
+        /// Checks whether the selected footballer is valid for the players team sheet
+        /// </summary>
+        /// <param name="athleteStats"></param>
+        /// <param name="playerTeamSheetEntryDetails"></param>
+        /// <returns></returns>
+        private bool IsValidFootballerEntry(AthleteStats athleteStats, FootballPlayerDetails playerTeamSheetEntryDetails)
+        {
+            var isValid = IsValidPlayerPosition(athleteStats.Position, playerTeamSheetEntryDetails.teamSheetPosition) &&
+                           !PlayerAlreadyInTeam(athleteStats.Name) && !ToManyPlayersFromSameClub(athleteStats.Team) && athleteStats.Name != "";
+            
+            return isValid;
+        }
         
+        /// <summary>
+        /// Instantiates either Transfer or Points TeamSheet 
+        /// </summary>
+        /// <param name="teamSheetName"></param>
         public void InstantiateTeamSheet(string teamSheetName)
         {
             var teamSheetObj = Resources.Load<GameObject>("Prefabs/" + teamSheetName + "Panel/" + teamSheetName + "TeamSheet");
             var teamSheetParent = GameObjectFinder.FindSingleObjectByName(teamSheetName + "Panel");
-            
-            
+
             var newTeamSheet = Instantiate(teamSheetObj, teamSheetParent.transform);
             newTeamSheet.SetActive(true);
         }
 
-        private string GetGameObjectChildText(GameObject obj, int childIndex)
-        {
-            return obj.transform.GetChild(childIndex).GetComponent<TMP_Text>().text;
-        }
-
+        /// <summary>
+        /// Checks whether chosen player can be entered into chosen team sheet position
+        /// </summary>
+        /// <param name="playerPosition"></param>
+        /// <param name="teamSheetPosition"></param>
+        /// <returns></returns>
         private bool IsValidPlayerPosition(string playerPosition, string teamSheetPosition)
         {
             switch (playerPosition)
@@ -120,6 +130,11 @@ namespace Dashboard
             return false;
         }
 
+        /// <summary>
+        /// Checks to see if player selected is already in the team sheet
+        /// </summary>
+        /// <param name="playerName"></param>
+        /// <returns></returns>
         private bool PlayerAlreadyInTeam(string playerName)
         {
             var teamSheet =  PlayFabEntityFileManager.Instance.GetTeamSheetData();
@@ -129,12 +144,18 @@ namespace Dashboard
             
             foreach (var pair in teamSheet.teamSheetData)
             {
-                if (pair.Value.PlayerName == playerName) return true;
+                if (pair.Value.Name == playerName) return true;
             }
 
             return false;
         }
 
+        /// <summary>
+        /// Check whether the limit of footballers from the same club is met.
+        /// Limit of 3 players from the same club.
+        /// </summary>
+        /// <param name="newPlayerClub"></param>
+        /// <returns></returns>
         private bool ToManyPlayersFromSameClub(string newPlayerClub)
         {
             var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
@@ -148,15 +169,27 @@ namespace Dashboard
                     clubCountMap.Add(athleteTeam, 1);
             }
 
-            return clubCountMap.Where(pair => pair.Key == newPlayerClub).Any(pair => pair.Value == 3);
+            foreach (var pair in clubCountMap)
+            {
+                if (pair.Key == newPlayerClub)
+                {
+                    if (pair.Value == 3) return true;
+                }
+            }
+
+            return false;
         }
 
+        /// <summary>
+        /// Display's Ui text when invalid player is selected.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator DisplayInvalidPlayerPosition()
         {
-            var invalidPlayerPosText = GameObjectFinder.FindSingleObjectByName("InvalidPlayerText");
-            invalidPlayerPosText.SetActive(true);
+            var invalidPlayerText = GameObjectFinder.FindSingleObjectByName("InvalidPlayerText");
+            invalidPlayerText.SetActive(true);
             yield return new WaitForSeconds(3);
-            invalidPlayerPosText.SetActive(false);
+            invalidPlayerText.SetActive(false);
         }
     }
 }

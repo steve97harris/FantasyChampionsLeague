@@ -29,6 +29,7 @@ namespace DefaultNamespace
         public void FetchConfigs()
         {
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
+            ConfigManager.FetchCompleted += UpdatePlayerTeamSheet;
             ConfigManager.FetchCompleted += UpdatePlayerPoints;
             ConfigManager.FetchCompleted += InitialLoadingComplete;
         }
@@ -36,6 +37,19 @@ namespace DefaultNamespace
         public void FetchFootballPlayerPoints()
         {
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
+        }
+
+        /// <summary>
+        /// Gets TeamSheetSaveData from entity's profile.
+        /// Sets TeamSheetUi with TeamSheetSaveData.
+        /// </summary>
+        /// <param name="obj"></param>
+        private void UpdatePlayerTeamSheet(ConfigResponse obj)
+        {
+            var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
+            Debug.Log(teamSheetSaveData.teamSheetData.Count);
+
+            TeamSheetDatabase.Instance.SetTeamSheetUi(teamSheetSaveData, "TransferTeamSheet(Clone)");
         }
 
         /// <summary>
@@ -102,6 +116,7 @@ namespace DefaultNamespace
 
         private void OnDestroy()
         {
+            ConfigManager.FetchCompleted -= UpdatePlayerTeamSheet;
             ConfigManager.FetchCompleted -= UpdatePlayerPoints;
             ConfigManager.FetchCompleted -= InitialLoadingComplete;
         }

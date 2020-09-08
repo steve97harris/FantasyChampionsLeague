@@ -43,7 +43,11 @@ namespace DefaultNamespace
 
                 if (playerObj.GetComponent<FootballPlayerDetails>() == null)
                     continue;
+                
                 var playerName = playerObj.GetComponent<FootballPlayerDetails>().playerName;
+                
+                if (playerName == null)
+                    continue;
                 
                 if (!PointsTeamSheetPlayerMap.ContainsKey(playerName))
                     PointsTeamSheetPlayerMap.Add(playerName, playerObj);
