@@ -12,11 +12,9 @@ using PlayFab;
 public class DashBoardManager : MonoBehaviour
 {
     public static DashBoardManager Instance;
-    
-    /// <summary>
-    /// List of all main panels
-    /// </summary>
-    /*  ObjectName - Index 
+
+    /*
+     *  ObjectName - Index 
      * "LoginPanel" - 0
      * "DashBoardPanel" - 1
      * "PointsPanel" - 2
@@ -24,11 +22,15 @@ public class DashBoardManager : MonoBehaviour
      * "LeagueLeaderboardsPanel" - 4
      * "PlayerProfilePanel" - 5
      * "AddLoginPanel" - 6
-     *  "LoadingPanel" - 7
+     * "LoadingPanel" - 7
+     * "FixturesPanel" - 8
      */
+    /// <summary>
+    /// List of all main panels
+    /// </summary>
     private readonly List<string> _mainPanelNames = new List<string>()
     {
-        "LoginPanel", "DashBoardPanel", "PointsPanel", "TransferPanel", "LeagueLeaderboardsPanel", "PlayerProfilePanel", "AddLoginPanel", "LoadingPanel"
+        "LoginPanel", "DashBoardPanel", "PointsPanel", "TransferPanel", "LeagueLeaderboardsPanel", "PlayerProfilePanel", "AddLoginPanel", "LoadingPanel", "FixturesPanel"
     };
 
     private void Awake()
@@ -73,6 +75,11 @@ public class DashBoardManager : MonoBehaviour
     {
         SetScreenActive(5);
         PlayFabAccountInformation.Instance.GetAccountInfo();
+    }
+
+    public void FixturesPanel()
+    {
+        SetScreenActive(8);
     }
 
     #endregion

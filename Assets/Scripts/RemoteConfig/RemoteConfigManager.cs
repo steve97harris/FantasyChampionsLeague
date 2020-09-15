@@ -29,8 +29,8 @@ namespace DefaultNamespace
         public void FetchConfigs()
         {
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
-            ConfigManager.FetchCompleted += UpdatePlayerTeamSheet;
-            ConfigManager.FetchCompleted += UpdatePlayerPoints;
+            ConfigManager.FetchCompleted += SetTeamSheet;
+            ConfigManager.FetchCompleted += SetPoints;
             ConfigManager.FetchCompleted += InitialLoadingComplete;
         }
 
@@ -44,7 +44,7 @@ namespace DefaultNamespace
         /// Sets TeamSheetUi with TeamSheetSaveData.
         /// </summary>
         /// <param name="obj"></param>
-        private void UpdatePlayerTeamSheet(ConfigResponse obj)
+        private void SetTeamSheet(ConfigResponse obj)
         {
             var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
             Debug.Log(teamSheetSaveData.teamSheetData.Count);
@@ -62,7 +62,7 @@ namespace DefaultNamespace
         /// Sets Gameweek Title.
         /// </summary>
         /// <param name="obj"></param>
-        private void UpdatePlayerPoints(ConfigResponse obj)
+        private void SetPoints(ConfigResponse obj)
         {
             var footballPlayerGwPointsMap = new Dictionary<string,int>();
             for (int i = 0; i < PlayerRemoteConfigKeysList.Count; i++)
@@ -116,8 +116,8 @@ namespace DefaultNamespace
 
         private void OnDestroy()
         {
-            ConfigManager.FetchCompleted -= UpdatePlayerTeamSheet;
-            ConfigManager.FetchCompleted -= UpdatePlayerPoints;
+            ConfigManager.FetchCompleted -= SetTeamSheet;
+            ConfigManager.FetchCompleted -= SetPoints;
             ConfigManager.FetchCompleted -= InitialLoadingComplete;
         }
     }

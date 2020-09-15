@@ -38,7 +38,7 @@ namespace WebReader
             var doc = web.Load(Url);
             var nodes = doc.DocumentNode.SelectNodes(TeamInfo);
             
-            var fullTimeScores = new List<string>();
+            var fixtures = new List<string>();
             var goalsList = new List<string>();
 
             for (int i = 0; i < nodes.Count - 1; i++)
@@ -46,14 +46,14 @@ namespace WebReader
                 var currNode = nodes[i].InnerText;
                 currNode = RemoveWhitespace(currNode);
 
-                if (currNode.StartsWith("ft"))
-                {
-                    fullTimeScores.Add(currNode);
-                }
-                
-                if (currNode.Contains("&nbsp;,"))
+                if (currNode.Contains("&nbsp;"))
                 {
                     goalsList.Add(currNode);
+                }
+                else
+                {
+                    currNode = currNode.Replace(",", " ");
+                    fixtures.Add(currNode);
                 }
             }
 
@@ -64,18 +64,58 @@ namespace WebReader
                 ExtractNames(goalsList[i], goalScorers, assists);
             }
             
-            foreach (var pair in goalScorers)
-            {
-                Debug.LogError(pair.Key + ", " + pair.Value);
-            }
             
-            Debug.LogError("----------");
-            foreach (var pair in assists)
+        }
+
+        private void ExtractNames(string goalInfo, IDictionary<string, int> goalScorers, IDictionary<string, int> assists) 
+        {
+            goalInfo = goalInfo.Replace(",", "");
+            var regex = new Regex(@"([a-zA-Z\w]+)");
+            var match = regex.Match(goalInfo);
+
+            GetAllMatches(match, goalScorers, assists);
+        }
+        
+        private void GetAllMatches(Match match, IDictionary<string, int> goalScorers, IDictionary<string, int> assists)
+        {
+            var str = match.Groups[1].Value;
+            
+            AddToGoalAssistMaps(str, goalScorers, assists);
+
+            var nextMatch = match.NextMatch();
+            if (nextMatch.Success)
             {
-                Debug.LogError(pair.Key + ", " + pair.Value);
+                GetAllMatches(nextMatch, goalScorers, assists);
             }
         }
 
+        private void AddToGoalAssistMaps(string playerName, IDictionary<string, int> goalScorers, IDictionary<string, int> assists)
+        {
+            var containDigit = playerName.Any(char.IsDigit);
+            if (containDigit)
+                return;
+            
+            if (playerName.Contains("nbsp"))
+                return;
+            
+            if (playerName.StartsWith("assistby"))
+            {
+                playerName = RemoveAssistText(playerName);
+                
+                if (!assists.ContainsKey(playerName))
+                    assists.Add(playerName, 1);
+                else
+                    assists[playerName]++;
+            }
+            else
+            {
+                if (!goalScorers.ContainsKey(playerName))
+                    goalScorers.Add(playerName, 1);
+                else
+                    goalScorers[playerName]++;
+            }
+        }
+        
         private string RemoveWhitespace(string str)
         {
             var res = Regex.Replace(str, @"\s+", ",");
@@ -85,68 +125,12 @@ namespace WebReader
 
             return res;
         }
-        
-        private void ExtractNames(string arg, IDictionary<string, int> goalScorers, IDictionary<string, int> assists) 
+
+        private string RemoveAssistText(string s)
         {
-            var regex = new Regex(@"([a-zA-Z\w]+)");
-            var match = regex.Match(arg);
-
-            arg = arg.Replace(",", "");
-            var currName = "";
-            GetGameInfo(currName, match, goalScorers, assists, arg);
-        }
-
-        // Needs changing to account for players with 3 names <- Needs testing
-        // Needs changing to account for disallowed goals
-        private void GetGameInfo(string currName, Match match, IDictionary<string, int> goalScorers, IDictionary<string, int> assists, string arg)
-        {
-            var temp = currName + match.Groups[1].Value;
-                
-            if (!temp.StartsWith("by"))
-            {
-                if (arg.Contains(temp))
-                {
-                    currName += match.Groups[1].Value;
-                    AddToGoalAssistMaps(currName, arg, goalScorers, assists);
-                }
-                    
-                if (!arg.Contains(temp))
-                {
-                    AddToGoalAssistMaps(currName, arg, goalScorers, assists);
-                    currName = "";
-                }
-            }
-            
-            var nextMatch = match.NextMatch();
-            
-            if (!nextMatch.Success) 
-                return;
-
-            GetGameInfo(currName, nextMatch, goalScorers, assists, arg);
-        }
-
-        private void AddToGoalAssistMaps(string fullName, string arg, IDictionary<string, int> goalScorers, IDictionary<string, int> assists)
-        {
-            var assistFullName = "by" + fullName;
-            
-            var containDigit = fullName.Any(char.IsDigit);
-            if (containDigit)
-                return;
-            
-            if (arg.Contains(assistFullName))
-            {
-                if (!assists.ContainsKey(fullName))
-                    assists.Add(fullName, 1);
-                else
-                    assists[fullName]++;
-            }
-            else
-            {
-                if (!goalScorers.ContainsKey(fullName))
-                    goalScorers.Add(fullName, 1);
-                else
-                    goalScorers[fullName]++;
-            }
+            var startIndexOfAssistBy = s.IndexOf("assistby", StringComparison.Ordinal);
+            s = s.Remove(startIndexOfAssistBy, "assistby".Length);
+            return s;
         }
     }
 }
