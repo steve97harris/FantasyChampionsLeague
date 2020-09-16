@@ -24,6 +24,7 @@ namespace WebReader
         private const string MatchInfoList = "//ul[@class='info-list']";
         private const string MatchInfoStats = MatchInfoList + "/li[@class='matchInfoStats']";
         private const string TeamInfo = MatchInfoList + "/li[@class]";
+        private const string Competitions = "//div[@class='heading-box']";
         
         #endregion
 
@@ -36,14 +37,15 @@ namespace WebReader
         {
             var web = new HtmlWeb();
             var doc = web.Load(Url);
-            var nodes = doc.DocumentNode.SelectNodes(TeamInfo);
+            var teamInfoNodes = doc.DocumentNode.SelectNodes(TeamInfo);
+            var competitionNodes = doc.DocumentNode.SelectNodes(Competitions);
             
             var fixtures = new List<string>();
             var goalsList = new List<string>();
 
-            for (int i = 0; i < nodes.Count - 1; i++)
+            for (int i = 0; i < teamInfoNodes.Count - 1; i++)
             {
-                var currNode = nodes[i].InnerText;
+                var currNode = teamInfoNodes[i].InnerText;
                 currNode = RemoveWhitespace(currNode);
 
                 if (currNode.Contains("&nbsp;"))
@@ -63,8 +65,29 @@ namespace WebReader
             {
                 ExtractNames(goalsList[i], goalScorers, assists);
             }
+
+            for (int i = 0; i < competitionNodes.Count; i++)
+            {
+                var compNode = competitionNodes[i].InnerText;
+                compNode = RemoveWhitespace(compNode);
+                compNode = compNode.Replace(",", " ");
+                
+                Debug.LogError(compNode);
+            }
             
-            
+            SetFixturesUi(fixtures);
+        }
+        
+        private void SetFixturesUi(List<string> fixtures)
+        {
+            var fixtureTextObj = GameObjectFinder.FindSingleObjectByName("FixturesText");
+            var fixtureMerge = "";
+            for (int i = 0; i < fixtures.Count; i++)
+            {
+                fixtureMerge += fixtures[i] + Environment.NewLine;
+            }
+
+            fixtureTextObj.GetComponent<TMP_Text>().text = fixtureMerge;
         }
 
         private void ExtractNames(string goalInfo, IDictionary<string, int> goalScorers, IDictionary<string, int> assists) 
