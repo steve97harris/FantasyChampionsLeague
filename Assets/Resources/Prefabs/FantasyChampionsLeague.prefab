@@ -635,6 +635,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DashBoardPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 973125095208038904, guid: 451a533c46e176c4da70094879af81dc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 973125095208038908, guid: 451a533c46e176c4da70094879af81dc,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -730,15 +735,65 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4266079682476407983}
     m_Modifications:
+    - target: {fileID: 4328194314212262825, guid: e4bca8bf74af11d4fa7106f342487b16,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4328194314212262825, guid: e4bca8bf74af11d4fa7106f342487b16,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4328194314212262825, guid: e4bca8bf74af11d4fa7106f342487b16,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6468607574464584132, guid: e4bca8bf74af11d4fa7106f342487b16,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6468607574464584132, guid: e4bca8bf74af11d4fa7106f342487b16,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6489656734424318290, guid: e4bca8bf74af11d4fa7106f342487b16,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6551514718685285099, guid: e4bca8bf74af11d4fa7106f342487b16,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6551514718685285099, guid: e4bca8bf74af11d4fa7106f342487b16,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6551514718685285099, guid: e4bca8bf74af11d4fa7106f342487b16,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6551514718685285099, guid: e4bca8bf74af11d4fa7106f342487b16,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6551514718685285099, guid: e4bca8bf74af11d4fa7106f342487b16,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7228258817737144832, guid: e4bca8bf74af11d4fa7106f342487b16,
         type: 3}
       propertyPath: m_Name
       value: FixturesPanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7228258817737144832, guid: e4bca8bf74af11d4fa7106f342487b16,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7228258817737144836, guid: e4bca8bf74af11d4fa7106f342487b16,
         type: 3}

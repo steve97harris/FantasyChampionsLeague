@@ -35,7 +35,6 @@ namespace WebReader
         private void Start()
         {
             GetWebText();
-            TeamsPlayingToday();
         }
 
         private void GetWebText()
@@ -62,7 +61,8 @@ namespace WebReader
                 infoList.Add(RemoveWhitespace(headerNode.InnerText));
                 for (int j = 0; j < matchInfoCollection.Count; j++)
                 {
-                    infoList.Add(RemoveWhitespace(matchInfoCollection[j].InnerText));
+                    var matchInfo = RemoveWhitespace(matchInfoCollection[j].InnerText);
+                    infoList.Add(matchInfo);
                 }
             }
 
@@ -100,14 +100,31 @@ namespace WebReader
             {
                 Destroy(child.gameObject);
             }
-            
+
+            var teams = GetTeamsPlayingToday();
+
             for (int i = 0; i < fixtures.Count; i++)
             {
                 fixtures[i] = fixtures[i].Replace(",", " ");
                 fixtures[i] = DiacriticsRemover.RemoveDiacritics(fixtures[i]);
                 
+                for (int j = 0; j < teams.Count; j++)
+                {
+                    if (fixtures[i].EndsWith(teams[j]))
+                    {
+                        fixtures[i] = fixtures[i].Replace(teams[j], "vs " + teams[j]);
+                    }
+                }
+
+                fixtures[i] = UpdateMatchTime(fixtures[i]);
+
                 var fixtureTemp = Instantiate(fixtureTemplate, fixtureContent.transform);
                 fixtureTemp.GetComponentInChildren<TMP_Text>().text = fixtures[i];
+                
+                if (fixtures[i].Contains('('))
+                {
+                    fixtureTemp.GetComponentInChildren<TMP_Text>().fontStyle = FontStyles.Underline;
+                }
             }
         }
 
@@ -118,6 +135,38 @@ namespace WebReader
             var match = regex.Match(goalInfo);
 
             GetAllMatches(match, goalScorers, assists);
+        }
+
+        private string UpdateMatchTime(string fixture)
+        {
+            var timeCheck = fixture.Substring(0, 5);
+            
+            DateTime.TryParse(timeCheck, out var result);
+            var time = result.ToString("HH:mm");
+            
+            if (time == "00:00")
+                return fixture;
+
+            int.TryParse(time.Substring(0, 2), out var hour);
+            var newHour = "";
+            if (hour == 24)
+            {
+                newHour = "00";
+            }
+            else
+            {
+                hour += 1;
+                
+                if (hour > 9)
+                    newHour = hour.ToString();
+                else
+                    newHour = "0" + hour;
+            }
+
+            fixture = fixture.Remove(0, 2);
+            fixture = fixture.Insert(0, newHour);
+
+            return fixture;
         }
         
         private void GetAllMatches(Match match, IDictionary<string, int> goalScorers, IDictionary<string, int> assists)
@@ -160,12 +209,13 @@ namespace WebReader
             }
         }
         
-        private void TeamsPlayingToday()
+        private List<string> GetTeamsPlayingToday()
         {
             var web = new HtmlWeb();
             var doc = web.Load(Url);
             var nodeCollection = doc.DocumentNode.SelectNodes("//span[@class='text']");
             
+            var teams = new List<string>();
             for (int i = 0; i < nodeCollection.Count; i++)
             {
                 var nodeString = nodeCollection[i].InnerText;
@@ -177,8 +227,13 @@ namespace WebReader
                 if (!IsTeamName(nodeString))
                     continue;
 
-                Debug.LogError(nodeString);
+                if (!teams.Contains(nodeString))
+                    teams.Add(nodeString);
+                else
+                    Debug.LogError("Teams list already contains team");
             }
+
+            return teams;
         }
         
         private string RemoveWhitespace(string str)
