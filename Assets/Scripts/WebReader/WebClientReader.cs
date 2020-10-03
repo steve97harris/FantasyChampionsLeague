@@ -65,29 +65,71 @@ namespace WebReader
                     infoList.Add(matchInfo);
                 }
             }
-
-            var gamesWithoutTime = 0;
+            
+            var teams = GetTeamsPlayingToday();
+            
+            var fixture = "";
             var fixtures = new List<string>();
-            var goalAssistList = new List<string>();
+            var goalScorers = new Dictionary<string, int>();
+            var assists = new Dictionary<string, int>();
+            var matchEventsMap = new Dictionary<string, Dictionary<string, int>[]>();
             for (int i = 0; i < infoList.Count; i++)
             {
                 if (infoList[i].StartsWith("-"))
-                    gamesWithoutTime++;
-                
-                if (infoList[i].Contains("&nbsp;"))
-                    goalAssistList.Add(infoList[i]);
-                else
-                    fixtures.Add(infoList[i]);
-            }
-            fixtures.RemoveRange(fixtures.Count - gamesWithoutTime, gamesWithoutTime);
+                    continue;
 
-            var goalScorers = new Dictionary<string, int>();
-            var assists = new Dictionary<string, int>();
-            for (int i = 0; i < goalAssistList.Count; i++)
-            {
-                ExtractNames(goalAssistList[i], goalScorers, assists);
+                if (infoList[i].Contains("&nbsp;"))
+                {
+                    ExtractNames(infoList[i], goalScorers, assists);
+                }
+                else
+                {
+                    if (fixture.StartsWith("ft"))
+                    {
+                        var matchEvents = new Dictionary<string, int>[2];
+                        if (goalScorers.Count != 0)
+                        {
+                            matchEvents[0] = goalScorers;
+                            goalScorers.Clear();
+                        }
+                        if (assists.Count != 0)
+                        {
+                            matchEvents[1] = assists;
+                            assists.Clear();
+                        }
+                        
+                        if (matchEvents.Length != 0)
+                            matchEventsMap.Add(fixture, matchEvents);
+                    }
+                    
+                    var newFixture = FixFixtureString(infoList[i], teams);
+
+                    if (IsInvalidFixture(fixture)) 
+                        continue;
+                    
+                    fixtures.Add(fixture);
+                    fixture = newFixture;
+                }
             }
-            
+
+            foreach (var pair in matchEventsMap)
+            {
+                var matchFixture = pair.Key;
+                var matchEvents = pair.Value;
+                
+                Debug.LogError(matchFixture);
+                var matchGoalScorers = matchEvents[0];
+                var matchAssists = matchEvents[1];
+                foreach (var x in matchGoalScorers)
+                {
+                    Debug.LogError(x.Key + ", " + x.Value);
+                }
+                foreach (var yAssist in matchAssists)
+                {
+                    Debug.LogError(yAssist.Key + ", " + yAssist.Value);
+                }
+            }
+
             SetFixturesUi(fixtures);
         }
         
@@ -100,24 +142,9 @@ namespace WebReader
             {
                 Destroy(child.gameObject);
             }
-
-            var teams = GetTeamsPlayingToday();
-
+            
             for (int i = 0; i < fixtures.Count; i++)
             {
-                fixtures[i] = fixtures[i].Replace(",", " ");
-                fixtures[i] = DiacriticsRemover.RemoveDiacritics(fixtures[i]);
-                
-                for (int j = 0; j < teams.Count; j++)
-                {
-                    if (fixtures[i].EndsWith(teams[j]))
-                    {
-                        fixtures[i] = fixtures[i].Replace(teams[j], "vs " + teams[j]);
-                    }
-                }
-
-                fixtures[i] = UpdateMatchTime(fixtures[i]);
-
                 var fixtureTemp = Instantiate(fixtureTemplate, fixtureContent.transform);
                 fixtureTemp.GetComponentInChildren<TMP_Text>().text = fixtures[i];
                 
@@ -126,6 +153,32 @@ namespace WebReader
                     fixtureTemp.GetComponentInChildren<TMP_Text>().fontStyle = FontStyles.Underline;
                 }
             }
+        }
+
+        private string FixFixtureString(string fixture, List<string> teams)
+        {
+            fixture = fixture.Replace(",", " ");
+            fixture = DiacriticsRemover.RemoveDiacritics(fixture);
+                
+            for (int j = 0; j < teams.Count; j++)
+            {
+                if (fixture.EndsWith(teams[j]))
+                {
+                    fixture = fixture.Replace(teams[j], "vs " + teams[j]);
+                }
+            }
+
+            fixture = UpdateMatchTime(fixture);
+
+            return fixture;
+        }
+
+        private bool IsInvalidFixture(string fixture)
+        {
+            var fixtureSplit = fixture.Split(' ');
+            var isInt = int.TryParse(fixtureSplit[0], out var res);
+
+            return fixtureSplit.Length == 3 && isInt;
         }
 
         private void ExtractNames(string goalInfo, IDictionary<string, int> goalScorers, IDictionary<string, int> assists) 
