@@ -32,25 +32,100 @@ namespace WebReader
         
         #endregion
 
+        private string _currentFixture = "";
+        private Dictionary<string, int> _goalScorers = new Dictionary<string, int>();
+        private Dictionary<string, int> _assists = new Dictionary<string, int>();
+
         private void Start()
         {
             GetWebText();
         }
 
-        private void GetWebText()
+        public void GetWebText()
         {
             var web = new HtmlWeb();
             var doc = web.Load(Url);
             var compSpanNodes = doc.DocumentNode.SelectNodes(CompSpan);
 
-            var infoList = new List<string>();
-            for (int i = 0; i < compSpanNodes.Count; i++)
+            var infoList = ReadNodes(compSpanNodes);
+            
+            var teams = GetTeamsPlayingToday();
+
+            var fixtureModule = GetFixtures(infoList, teams);
+            var fixtures = fixtureModule.FixturesList;
+            var fixtureMap = fixtureModule.FixturesMap;
+            
+            SetFixturesUi(fixtures);
+
+            foreach (var pair in fixtureMap)
             {
-                if (!compSpanNodes[i].Id.Contains("compspan"))
+                var matchFixture = pair.Key;
+                var matchFixtureEvents = pair.Value;
+                
+                Debug.LogError(matchFixture);
+                var matchGoalScorers = matchFixtureEvents.GoalScorers;
+                var matchAssists = matchFixtureEvents.Assists;
+                Debug.LogError(matchGoalScorers.Count);
+            }
+            
+            // Generate CSV!! 
+        }
+
+        private Fixtures GetFixtures(List<string> infoList, List<string> teams)
+        {
+            var fixture = "";
+            var fixtures = new List<string>();
+            var fixtureMap = new Dictionary<string, FixtureEvents>();
+
+            for (int i = 0; i < infoList.Count; i++)
+            {
+                if (infoList[i].StartsWith("-"))
+                    continue;
+
+                if (infoList[i].Contains("&nbsp;"))
+                {
+                    ExtractNames(infoList[i]);
+
+                    if (fixture == "")
+                        Debug.LogError("Fixture returned null");
+
+                    var goalScorers = new Dictionary<string, int>(_goalScorers);
+                    var assists = new Dictionary<string, int>(_assists);
+                    var fixtureEvents = new FixtureEvents { GoalScorers = goalScorers, Assists = assists };
+
+                    if (!fixtureMap.ContainsKey(_currentFixture))
+                        fixtureMap.Add(_currentFixture, fixtureEvents);
+
+                    _goalScorers.Clear();
+                    _assists.Clear();
+                }
+                else
+                {
+                    fixture = FixFixtureString(infoList[i], teams);
+
+                    if (IsInvalidFixture(fixture)) 
+                        continue;
+                    
+                    fixtures.Add(fixture);
+                    
+                    _currentFixture = fixture;
+                }
+            }
+            
+            var fixtureModule = new Fixtures{ FixturesList = fixtures, FixturesMap = fixtureMap };
+            return fixtureModule;
+        }
+
+        private List<string> ReadNodes(HtmlNodeCollection nodes)
+        {
+            var infoList = new List<string>();
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                if (!nodes[i].Id.Contains("compspan"))
                     continue;
                 
-                var headerNode = compSpanNodes[i].SelectSingleNode("./div[@class='heading-box']");
-                var matchInfoCollection = compSpanNodes[i].SelectNodes("./following::ul/li");
+                var headerNode = nodes[i].SelectSingleNode("./div[@class='heading-box']");
+                var matchInfoCollection = nodes[i].SelectNodes("./following::ul/li");
                 
                 if (infoList.Count > matchInfoCollection.Count)
                 {
@@ -65,72 +140,8 @@ namespace WebReader
                     infoList.Add(matchInfo);
                 }
             }
-            
-            var teams = GetTeamsPlayingToday();
-            
-            var fixture = "";
-            var fixtures = new List<string>();
-            var goalScorers = new Dictionary<string, int>();
-            var assists = new Dictionary<string, int>();
-            var matchEventsMap = new Dictionary<string, Dictionary<string, int>[]>();
-            for (int i = 0; i < infoList.Count; i++)
-            {
-                if (infoList[i].StartsWith("-"))
-                    continue;
 
-                if (infoList[i].Contains("&nbsp;"))
-                {
-                    ExtractNames(infoList[i], goalScorers, assists);
-                }
-                else
-                {
-                    if (fixture.StartsWith("ft"))
-                    {
-                        var matchEvents = new Dictionary<string, int>[2];
-                        if (goalScorers.Count != 0)
-                        {
-                            matchEvents[0] = goalScorers;
-                            goalScorers.Clear();
-                        }
-                        if (assists.Count != 0)
-                        {
-                            matchEvents[1] = assists;
-                            assists.Clear();
-                        }
-                        
-                        if (matchEvents.Length != 0)
-                            matchEventsMap.Add(fixture, matchEvents);
-                    }
-                    
-                    var newFixture = FixFixtureString(infoList[i], teams);
-
-                    if (IsInvalidFixture(fixture)) 
-                        continue;
-                    
-                    fixtures.Add(fixture);
-                    fixture = newFixture;
-                }
-            }
-
-            foreach (var pair in matchEventsMap)
-            {
-                var matchFixture = pair.Key;
-                var matchEvents = pair.Value;
-                
-                Debug.LogError(matchFixture);
-                var matchGoalScorers = matchEvents[0];
-                var matchAssists = matchEvents[1];
-                foreach (var x in matchGoalScorers)
-                {
-                    Debug.LogError(x.Key + ", " + x.Value);
-                }
-                foreach (var yAssist in matchAssists)
-                {
-                    Debug.LogError(yAssist.Key + ", " + yAssist.Value);
-                }
-            }
-
-            SetFixturesUi(fixtures);
+            return infoList;
         }
         
         private void SetFixturesUi(List<string> fixtures)
@@ -181,13 +192,13 @@ namespace WebReader
             return fixtureSplit.Length == 3 && isInt;
         }
 
-        private void ExtractNames(string goalInfo, IDictionary<string, int> goalScorers, IDictionary<string, int> assists) 
+        private void ExtractNames(string goalInfo) 
         {
             goalInfo = goalInfo.Replace(",", "");
-            var regex = new Regex(@"([a-zA-Z\w]+)");
+            var regex = new Regex(@"([a-zA-Z\w \t\r\n\-]+)");    // Regular Expression to match player names 
             var match = regex.Match(goalInfo);
-
-            GetAllMatches(match, goalScorers, assists);
+            
+            GetAllRegexMatchesInString(match);
         }
 
         private string UpdateMatchTime(string fixture)
@@ -222,43 +233,53 @@ namespace WebReader
             return fixture;
         }
         
-        private void GetAllMatches(Match match, IDictionary<string, int> goalScorers, IDictionary<string, int> assists)
+        private void GetAllRegexMatchesInString(Match match)
         {
             var str = match.Groups[1].Value;
             
-            AddToGoalAssistMaps(str, goalScorers, assists);
+            AddToGoalAssistMaps(str);
 
             var nextMatch = match.NextMatch();
             if (nextMatch.Success)
             {
-                GetAllMatches(nextMatch, goalScorers, assists);
+                GetAllRegexMatchesInString(nextMatch);
             }
         }
-
-        private void AddToGoalAssistMaps(string playerName, IDictionary<string, int> goalScorers, IDictionary<string, int> assists)
+        
+        private void AddToGoalAssistMaps(string playerName)
         {
             var containDigit = playerName.Any(char.IsDigit);
             if (containDigit)
-                return;
+            {
+                playerName = Regex.Replace(playerName, @"[\d-]", string.Empty);
+            };
             
-            if (playerName.Contains("nbsp"))
+            if (playerName.Contains("nbsp") || playerName == "")
                 return;
             
             if (playerName.StartsWith("assistby"))
             {
                 playerName = RemoveAssistText(playerName);
                 
-                if (!assists.ContainsKey(playerName))
-                    assists.Add(playerName, 1);
+                if (!_assists.ContainsKey(playerName))
+                    _assists.Add(playerName, 1);
                 else
-                    assists[playerName]++;
+                    _assists[playerName]++;
+                
+                // Debug.LogError("Assist: " + playerName);
             }
             else
             {
-                if (!goalScorers.ContainsKey(playerName))
-                    goalScorers.Add(playerName, 1);
+                if (!_goalScorers.ContainsKey(playerName))
+                {
+                    _goalScorers.Add(playerName, 1);
+                }
                 else
-                    goalScorers[playerName]++;
+                {
+                    _goalScorers[playerName]++;
+                }
+                
+                // Debug.LogError("Goal Scored: " + playerName);
             }
         }
         
@@ -271,19 +292,19 @@ namespace WebReader
             var teams = new List<string>();
             for (int i = 0; i < nodeCollection.Count; i++)
             {
-                var nodeString = nodeCollection[i].InnerText;
-                nodeString = RemoveWhitespace(nodeString);
-                nodeString = nodeString.Replace(",", " ");
-                nodeString = nodeString.Replace(".", "");
-                nodeString = DiacriticsRemover.RemoveDiacritics(nodeString);
+                var teamName = nodeCollection[i].InnerText;
+                teamName = RemoveWhitespace(teamName);
+                teamName = teamName.Replace(",", " ");
+                teamName = teamName.Replace(".", "");
+                teamName = DiacriticsRemover.RemoveDiacritics(teamName);
                 
-                if (!IsTeamName(nodeString))
+                if (!IsTeamName(teamName))
                     continue;
 
-                if (!teams.Contains(nodeString))
-                    teams.Add(nodeString);
+                if (!teams.Contains(teamName))
+                    teams.Add(teamName);
                 else
-                    Debug.LogError("Teams list already contains team");
+                    Debug.LogError("Teams list already contains team: " + teamName);
             }
 
             return teams;
