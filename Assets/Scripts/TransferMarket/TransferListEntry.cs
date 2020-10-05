@@ -33,7 +33,7 @@ namespace Dashboard
 
             // Get athlete stats from player remote key map using players name
             var athleteStats = new AthleteStats();
-            var playerRemoteKeyMap = TransferListWindow.PlayerRemoteKeyMap;
+            var playerRemoteKeyMap = TeamSheetSaveData.PlayerRemoteKeyMap;
             foreach (var pair in playerRemoteKeyMap.Where(pair => pair.Value.RemoteConfigKey == playerRemoteConfigKey))
             {
                 athleteStats = pair.Value;

@@ -11,6 +11,13 @@ namespace DefaultNamespace
     {
         // key: teamSheetPosition, value: AthleteStats
         public Dictionary<string, AthleteStats> teamSheetData = new Dictionary<string, AthleteStats>();
+        
+        /// <summary>
+        /// Map storing all players and their information.
+        /// <Key> Footballers unique RemoteConfigKey </Key>
+        /// <Value> Footballers AthleteStats </Value>
+        /// </summary>
+        public static readonly Dictionary<string, AthleteStats> PlayerRemoteKeyMap = new Dictionary<string, AthleteStats>();
     }
 
     // created second football player details as MonoBehaviour methods cannot be serialized

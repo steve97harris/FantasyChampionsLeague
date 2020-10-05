@@ -198,7 +198,7 @@ MonoBehaviour:
       - m_Target: {fileID: 5023690916632707046, guid: 74f4a15fb19df104ba79a1b8af51bad1,
           type: 3}
         m_TargetAssemblyTypeName: WebReader.WebClientReader, Assembly-CSharp
-        m_MethodName: GetWebText
+        m_MethodName: SetFixturesPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

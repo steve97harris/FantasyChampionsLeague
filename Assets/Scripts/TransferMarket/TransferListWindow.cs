@@ -13,13 +13,6 @@ namespace Dashboard
     public class TransferListWindow : MonoBehaviour
     {
         public static TransferListWindow Instance;
-        
-        /// <summary>
-        /// Map storing all players and their information.
-        /// <Key> Footballers unique RemoteConfigKey </Key>
-        /// <Value> Footballers AthleteStats </Value>
-        /// </summary>
-        public static readonly Dictionary<string, AthleteStats> PlayerRemoteKeyMap = new Dictionary<string, AthleteStats>();
 
         private void Awake()
         {
@@ -58,7 +51,7 @@ namespace Dashboard
                     TotalPoints = playerFclPoints
                 };
                 
-                PlayerRemoteKeyMap.Add(playerRemoteConfigKey, athleteStats);
+                TeamSheetSaveData.PlayerRemoteKeyMap.Add(playerRemoteConfigKey, athleteStats);
             }
         }
 
@@ -79,7 +72,8 @@ namespace Dashboard
                 Destroy(child.gameObject);
             }
 
-            foreach (var pair in PlayerRemoteKeyMap)        
+            var playerRemoteKeyMap = TeamSheetSaveData.PlayerRemoteKeyMap;
+            foreach (var pair in playerRemoteKeyMap)        
             {
                 // instantiate new player transfer entry
                 var entryObject = Instantiate(playerTransferEntry, transferListContent);
