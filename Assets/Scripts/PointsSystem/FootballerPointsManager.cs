@@ -22,21 +22,11 @@ namespace DefaultNamespace
             var footballPlayerPointsDatabaseList =
                 CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/FootballPlayerPointsDatabase.csv");
 
-            var footballPlayerPointsMap = new Dictionary<string, int>();
+            var footballPlayerPointsMap = new List<string[]>();
             for (int i = 0; i < footballPlayerPointsDatabaseList.Count; i++)
             {
                 var split = footballPlayerPointsDatabaseList[i].Split(',');
-                var club = split[0];
-                var playerName = split[1];
-                var totalPoints = split[2];
-                int.TryParse(totalPoints, out var totalPointInt);
-
-                if (!footballPlayerPointsMap.ContainsKey(playerName))
-                {
-                    footballPlayerPointsMap.Add(playerName, totalPointInt);
-                }
-                else
-                    Debug.LogError("FootballPlayerPointsMap already contains: " + playerName);
+                footballPlayerPointsMap.Add(split);
             }
 
             var fixtureInfo = FixturePanelModule.Instance.GetFixtures();
@@ -54,12 +44,26 @@ namespace DefaultNamespace
                     var playerName = scorer.Key;
                     var goalsScored = scorer.Value;
 
-                    if (!footballPlayerPointsMap.ContainsKey(playerName)) 
+                    var playerDetails = footballPlayerPointsMap.Select(x => x).Where(x => x[1] == playerName).ToList();
+                    if (playerDetails.Count == 0)
                         continue;
-                    
-                    var goalPoints = CalculateGoalPoints(goalsScored);
 
-                    footballPlayerPointsMap[playerName] += goalPoints;
+                    var playerGoalPoints = CalculateGoalPoints(goalsScored);
+
+                    if (playerDetails.Count == 1)
+                    {
+                        var arr = playerDetails[0];
+
+                        int.TryParse(arr[2], out var totalPlayerPointsInt);
+                        totalPlayerPointsInt += playerGoalPoints;
+
+                        arr[2] = totalPlayerPointsInt.ToString();
+                    }
+                    
+                    if (playerDetails.Count > 1)
+                    {
+                        Debug.LogError("Error: Two players with same name, Points for player not updated!!");
+                    }
                 }
 
                 foreach (var assistMaker in matchAssists)
@@ -67,13 +71,29 @@ namespace DefaultNamespace
                     var playerName = assistMaker.Key;
                     var assistsMade = assistMaker.Value;
 
-                    if (!footballPlayerPointsMap.ContainsKey(playerName)) 
+                    var playerDetails = footballPlayerPointsMap.Select(x => x).Where(x => x[1] == playerName).ToList();
+                    if (playerDetails.Count == 0)
                         continue;
-                    
+
                     var assistPoints = CalculateAssistPoints(assistsMade);
 
-                    footballPlayerPointsMap[playerName] += assistPoints;
+                    if (playerDetails.Count == 1)
+                    {
+                        var arr = playerDetails[0];
+
+                        int.TryParse(arr[2], out var totalPlayerPointsInt);
+                        totalPlayerPointsInt += assistPoints;
+
+                        arr[2] = totalPlayerPointsInt.ToString();
+                    }
+
+                    if (playerDetails.Count > 1)
+                    {
+                        Debug.LogError("Error: Two players with same name, Points for player not updated!!");
+                    }
                 }
+                
+                // NEEDS TESTING^^^
             }
         }
 
