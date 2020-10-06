@@ -53,9 +53,6 @@ namespace DefaultNamespace
         }
 
         /// <summary>
-        /// Retrieves all footballers current gameweek points.
-        /// Updates TeamSheetSaveData with current points.
-        /// Saves TeamSheetSaveData to entity's playfab profile.
         /// Sets TeamSheetUi.
         /// Updates and Saves HeadCoachSaveData.
         /// Sets HeadCoachUi.
@@ -64,36 +61,13 @@ namespace DefaultNamespace
         /// <param name="obj"></param>
         private void SetPoints(ConfigResponse obj)
         {
-            var footballPlayerGwPointsMap = new Dictionary<string,int>();
-            for (int i = 0; i < PlayerRemoteConfigKeysList.Count; i++)
-            {
-                var gwPoints = ConfigManager.appConfig.GetInt(PlayerRemoteConfigKeysList[i]);
-                footballPlayerGwPointsMap.Add(PlayerRemoteConfigKeysList[i],gwPoints);
-            }
-            
             var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
             if (teamSheetSaveData.teamSheetData == null)
             {
                 Debug.LogError("teamSheetData returned null");
                 return;
-            } 
-
-            var teamSheetDataMap = teamSheetSaveData.teamSheetData;
-            foreach (var pair in teamSheetDataMap)
-            {
-                foreach (var pair2 in footballPlayerGwPointsMap.Where(pair2 => pair2.Key == pair.Value.RemoteConfigKey))
-                {
-                    pair.Value.TotalPoints = pair2.Value.ToString();
-                }
             }
-            
-            teamSheetSaveData = new TeamSheetSaveData()
-            {
-                teamSheetData = teamSheetDataMap
-            };
-            
-            PlayFabEntityFileManager.Instance.SavePlayFabTeamSheetData(teamSheetSaveData);
-            
+
             TeamSheetDatabase.Instance.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
 
             PointsTeamSheetManager.Instance.SetHeadCoachPoints();

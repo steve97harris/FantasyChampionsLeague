@@ -8,11 +8,19 @@ using GoogleSheetsLevelSynchronizer;
 using UnityEngine;
 using Newtonsoft.Json;
 using PlayFab;
+using UnityEngine.Serialization;
 
 public class DashBoardManager : MonoBehaviour
 {
     public static DashBoardManager Instance;
 
+    #region File Paths
+
+    public string footballPlayerDatabasePath = Application.streamingAssetsPath + "/FootballPlayerDatabase.csv";
+    public string footballPlayerPointsDatabasePath = Application.streamingAssetsPath + "/FootballPlayerPointsDatabase.csv";
+
+    #endregion
+    
     /*
      *  ObjectName - Index 
      * "LoginPanel" - 0
@@ -89,7 +97,7 @@ public class DashBoardManager : MonoBehaviour
     /// </summary>
     public void LoadTransferList()
     {
-        var footballPlayerDatabase = CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/FootballPlayerDatabase.csv");
+        var footballPlayerDatabase = CsvReader.LoadCsvFile(this.footballPlayerDatabasePath);
         TransferListWindow.Instance.GetPlayerTransferList(footballPlayerDatabase);
     }
 

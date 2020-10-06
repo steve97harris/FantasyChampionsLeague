@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using CSV;
 using UnityEngine;
 using WebReader;
@@ -20,7 +22,7 @@ namespace DefaultNamespace
         public void GetFootballerPoints()
         {
             var footballPlayerPointsDatabaseList =
-                CsvReader.LoadCsvFile(Application.streamingAssetsPath + "/FootballPlayerPointsDatabase.csv");
+                CsvReader.LoadCsvFile(DashBoardManager.Instance.footballPlayerPointsDatabasePath);
 
             var footballPlayerPointsMap = new List<string[]>();
             for (int i = 0; i < footballPlayerPointsDatabaseList.Count; i++)
@@ -37,64 +39,88 @@ namespace DefaultNamespace
                 var matchFixture = pair.Key;
                 var matchFixtureEvents = pair.Value;
 
+                Debug.LogError(matchFixture);
+                
                 var matchGoalScorers = matchFixtureEvents.GoalScorers;
                 var matchAssists = matchFixtureEvents.Assists;
-                foreach (var scorer in matchGoalScorers)
+
+                if (matchGoalScorers != null)
                 {
-                    var playerName = scorer.Key;
-                    var goalsScored = scorer.Value;
-
-                    var playerDetails = footballPlayerPointsMap.Select(x => x).Where(x => x[1] == playerName).ToList();
-                    if (playerDetails.Count == 0)
-                        continue;
-
-                    var playerGoalPoints = CalculateGoalPoints(goalsScored);
-
-                    if (playerDetails.Count == 1)
+                    foreach (var scorer in matchGoalScorers)
                     {
-                        var arr = playerDetails[0];
-
-                        int.TryParse(arr[2], out var totalPlayerPointsInt);
-                        totalPlayerPointsInt += playerGoalPoints;
-
-                        arr[2] = totalPlayerPointsInt.ToString();
-                    }
+                        var playerName = scorer.Key;
+                        var goalsScored = scorer.Value;
                     
-                    if (playerDetails.Count > 1)
-                    {
-                        Debug.LogError("Error: Two players with same name, Points for player not updated!!");
+                        Debug.LogError("Goal: " + playerName + ", " + goalsScored);
+
+                        var playerDetails = footballPlayerPointsMap.Select(x => x).Where(x => x[1] == playerName).ToList();
+                        if (playerDetails.Count == 0)
+                            continue;
+
+                        var playerGoalPoints = CalculateGoalPoints(goalsScored);
+
+                        if (playerDetails.Count == 1)
+                        {
+                            var arr = playerDetails[0];
+
+                            int.TryParse(arr[2], out var totalPlayerPointsInt);
+                            totalPlayerPointsInt += playerGoalPoints;
+
+                            arr[2] = totalPlayerPointsInt.ToString();
+                        }
+                    
+                        if (playerDetails.Count > 1)
+                        {
+                            Debug.LogError("Error: Two players with same name, Points for player not updated!!");
+                        }
                     }
                 }
 
-                foreach (var assistMaker in matchAssists)
+
+                if (matchAssists != null)
                 {
-                    var playerName = assistMaker.Key;
-                    var assistsMade = assistMaker.Value;
-
-                    var playerDetails = footballPlayerPointsMap.Select(x => x).Where(x => x[1] == playerName).ToList();
-                    if (playerDetails.Count == 0)
-                        continue;
-
-                    var assistPoints = CalculateAssistPoints(assistsMade);
-
-                    if (playerDetails.Count == 1)
+                    foreach (var assistMaker in matchAssists)
                     {
-                        var arr = playerDetails[0];
+                        var playerName = assistMaker.Key;
+                        var assistsMade = assistMaker.Value;
+                    
+                        // Debug.LogError("Assist: " + playerName + ", " + assistsMade);
 
-                        int.TryParse(arr[2], out var totalPlayerPointsInt);
-                        totalPlayerPointsInt += assistPoints;
+                        var playerDetails = footballPlayerPointsMap.Select(x => x).Where(x => x[1] == playerName).ToList();
+                        if (playerDetails.Count == 0)
+                            continue;
 
-                        arr[2] = totalPlayerPointsInt.ToString();
+                        var assistPoints = CalculateAssistPoints(assistsMade);
+
+                        if (playerDetails.Count == 1)
+                        {
+                            var arr = playerDetails[0];
+
+                            int.TryParse(arr[2], out var totalPlayerPointsInt);
+                            totalPlayerPointsInt += assistPoints;
+
+                            arr[2] = totalPlayerPointsInt.ToString();
+                        }
+
+                        if (playerDetails.Count > 1)
+                        {
+                            Debug.LogError("Error: Two players with same name, Points for player not updated!!");
+                        }
                     }
+                }
+            }
 
-                    if (playerDetails.Count > 1)
-                    {
-                        Debug.LogError("Error: Two players with same name, Points for player not updated!!");
-                    }
+            using (StreamWriter writer = new StreamWriter(DashBoardManager.Instance.footballPlayerPointsDatabasePath, false))
+            {
+                for (int i = 0; i < footballPlayerPointsMap.Count; i++)
+                {
+                    var line = string.Join(",", footballPlayerPointsMap[i]);
+                    writer.WriteLine(line);
+                    writer.Flush();
                 }
                 
-                // NEEDS TESTING^^^
             }
+            
         }
 
         private int CalculateGoalPoints(int numberOfGoals)
