@@ -1,0 +1,282 @@
+Using pre-set license
+Built from '2020.2/staging' branch; Version is '2020.2.0b5 (e2067236bd5c) revision 14812786'; Using compiler version '192528614'; Build Type 'Release'
+OS: 'Windows 10  (10.0.0) 64bit' Language: 'en' Physical Memory: 16348 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+ COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\2020.2.0b5\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+C:/Users/Steve/Documents/GitHub/FantasyChampionsLeague
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+59705
+Successfully changed project path to: C:/Users/Steve/Documents/GitHub/FantasyChampionsLeague
+C:/Users/Steve/Documents/GitHub/FantasyChampionsLeague
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 62.87 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.2.0b5 (e2067236bd5c)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2020.2.0b5/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/Steve/Documents/GitHub/FantasyChampionsLeague/Assets
+GfxDevice: creating device client; threaded=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 960 (ID=0x13d8)
+    Vendor:   
+    VRAM:     3038 MB
+    Driver:   22.21.13.8205
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2020.2.0b5/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2020.2.0b5/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2020.2.0b5/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56724
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.2.0b5/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.002764 seconds.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 49.88 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  3.964 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.004204 seconds.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\Steve\Documents\GitHub\FantasyChampionsLeague\Library\PackageCache\com.unity.ext.nunit@1.0.0\net35\unity-custom\nunit.framework.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.31 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.659 seconds
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.06 seconds
+Refreshing native plugins compatible for Editor in 1.63 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1285 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 68.0 MB.
+System memory in use after: 68.0 MB.
+
+Unloading 14 unused Assets to reduce memory usage. Loaded Objects now: 1722.
+Total: 5.295100 ms (FindLiveObjects: 0.747300 ms CreateObjectMapping: 0.077000 ms MarkObjects: 4.398500 ms  DeleteObjects: 0.070000 ms)
+
+========================================================================
+Received Import Request.
+  path: Assets/StreamingAssets/FootballPlayerPointsDatabase.csv
+  artifactKey: Guid(6e5c764d723415443bb780c3493547d6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/StreamingAssets/FootballPlayerPointsDatabase.csv using Guid(6e5c764d723415443bb780c3493547d6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'efad8a66f33963eeda0679677462d6f3') in 0.054005 seconds
+  Import took 0.058049 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000294 seconds.
+  path: Assets/StreamingAssets
+  artifactKey: Guid(eb7f1a1cc9520fa41b6bf2a999dad580) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/StreamingAssets using Guid(eb7f1a1cc9520fa41b6bf2a999dad580) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f45cdfa099cb08ac9c47ab3d714912c6') in 0.004601 seconds
+  Import took 0.008200 seconds .
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 3.47 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 7 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 42.1 MB.
+System memory in use after: 42.3 MB.
+
+Unloading 6 unused Assets to reduce memory usage. Loaded Objects now: 1722.
+Total: 3.406600 ms (FindLiveObjects: 0.608400 ms CreateObjectMapping: 0.151700 ms MarkObjects: 2.623100 ms  DeleteObjects: 0.020900 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 118.990331 seconds.
+  path: Assets/StreamingAssets/FootballPlayerDatabase.csv
+  artifactKey: Guid(fbb10f33c2cdd5940968acea564b5f47) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/StreamingAssets/FootballPlayerDatabase.csv using Guid(fbb10f33c2cdd5940968acea564b5f47) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '72e9c2ff200380491e82978654ce4130') in 0.011829 seconds
+  Import took 0.016815 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.414455 seconds.
+  path: Assets/StreamingAssets/FCL - FootballPlayerPointsDatabase.csv
+  artifactKey: Guid(93a89201abedc394fa352fff8f36c505) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/StreamingAssets/FCL - FootballPlayerPointsDatabase.csv using Guid(93a89201abedc394fa352fff8f36c505) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f5773233f357e2c1aca2dbe663ead1d1') in 0.007428 seconds
+  Import took 0.012311 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 5.032726 seconds.
+  path: Assets/StreamingAssets/FootballPlayerPointsDatabase.csv
+  artifactKey: Guid(93a89201abedc394fa352fff8f36c505) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/StreamingAssets/FootballPlayerPointsDatabase.csv using Guid(93a89201abedc394fa352fff8f36c505) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ce7d7e2160edae2d9f7e2c6df8b776f0') in 0.007236 seconds
+  Import took 0.011101 seconds .
+
+========================================================================
+Received Prepare
+Reloading mono domain
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.2.0b5/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.003726 seconds.
+Symbol file LoadedFromMemory doesn't match image C:\Users\Steve\Documents\GitHub\FantasyChampionsLeague\Library\PackageCache\com.unity.ext.nunit@1.0.0\net35\unity-custom\nunit.framework.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 47.73 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.807 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.003301 seconds.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\Steve\Documents\GitHub\FantasyChampionsLeague\Library\PackageCache\com.unity.ext.nunit@1.0.0\net35\unity-custom\nunit.framework.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.30 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.468 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.32 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 14 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 42.4 MB.
+System memory in use after: 42.5 MB.
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 1728.
+Total: 3.285600 ms (FindLiveObjects: 0.448300 ms CreateObjectMapping: 0.065500 ms MarkObjects: 2.746900 ms  DeleteObjects: 0.022600 ms)
+
+========================================================================
+Received Prepare
+Reloading mono domain
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.2.0b5/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.004973 seconds.
+Symbol file LoadedFromMemory doesn't match image C:\Users\Steve\Documents\GitHub\FantasyChampionsLeague\Library\PackageCache\com.unity.ext.nunit@1.0.0\net35\unity-custom\nunit.framework.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 95.49 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  4.401 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.004706 seconds.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\Steve\Documents\GitHub\FantasyChampionsLeague\Library\PackageCache\com.unity.ext.nunit@1.0.0\net35\unity-custom\nunit.framework.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.32 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.649 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.32 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 42.4 MB.
+System memory in use after: 42.5 MB.
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 1734.
+Total: 2.708300 ms (FindLiveObjects: 0.567100 ms CreateObjectMapping: 0.121000 ms MarkObjects: 1.995800 ms  DeleteObjects: 0.022200 ms)
+
+========================================================================
+Received Prepare
+Reloading mono domain
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.2.0b5/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.002872 seconds.
+Symbol file LoadedFromMemory doesn't match image C:\Users\Steve\Documents\GitHub\FantasyChampionsLeague\Library\PackageCache\com.unity.ext.nunit@1.0.0\net35\unity-custom\nunit.framework.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 39.50 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.633 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.003561 seconds.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\Steve\Documents\GitHub\FantasyChampionsLeague\Library\PackageCache\com.unity.ext.nunit@1.0.0\net35\unity-custom\nunit.framework.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.32 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  2.699 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.52 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 42.5 MB.
+System memory in use after: 42.6 MB.
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 1740.
+Total: 8.464200 ms (FindLiveObjects: 0.481800 ms CreateObjectMapping: 0.095800 ms MarkObjects: 7.858000 ms  DeleteObjects: 0.025700 ms)
+
+========================================================================
+Received Prepare
+Reloading mono domain
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.2.0b5/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.006211 seconds.
+Symbol file LoadedFromMemory doesn't match image C:\Users\Steve\Documents\GitHub\FantasyChampionsLeague\Library\PackageCache\com.unity.ext.nunit@1.0.0\net35\unity-custom\nunit.framework.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 43.10 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  2.073 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.004285 seconds.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image C:\Users\Steve\Documents\GitHub\FantasyChampionsLeague\Library\PackageCache\com.unity.ext.nunit@1.0.0\net35\unity-custom\nunit.framework.dll
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.61 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.793 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.31 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 42.6 MB.
+System memory in use after: 42.7 MB.
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 1746.
+Total: 2.969500 ms (FindLiveObjects: 0.438900 ms CreateObjectMapping: 0.101600 ms MarkObjects: 2.396200 ms  DeleteObjects: 0.031200 ms)
+
