@@ -121,18 +121,20 @@ namespace DefaultNamespace
 
         private void WriteToFootballerPointsDatabaseCsv(List<string[]> footballPlayerPointsMap)
         {
-            using (StreamWriter writer = new StreamWriter("FootballPlayerPointsDatabase.csv"))
-            {
-                for (int i = 0; i < footballPlayerPointsMap.Count; i++)
-                {
-                    var line = string.Join(",", footballPlayerPointsMap[i]);
-                    Debug.LogError(line);
-                    
-                    writer.WriteLine(line);
-                }
-                writer.Close();
-            }
-            // TEST^^^
+            // using (StreamWriter writer = new StreamWriter())
+            // {
+            //     for (int i = 0; i < footballPlayerPointsMap.Count; i++)
+            //     {
+            //         var line = string.Join(",", footballPlayerPointsMap[i]);
+            //         Debug.LogError(line);
+            //         
+            //         writer.WriteLine(line);
+            //     }
+            //     writer.Close();
+            // }
+            
+            // Store file on playfab?
+            // Can't write to streaming assets folder
         }
 
         private bool IsChampionsTeam(List<string> clubNames, string matchFixture)
