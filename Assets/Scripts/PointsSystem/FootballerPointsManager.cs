@@ -6,18 +6,26 @@ using System.Text;
 using System.Text.RegularExpressions;
 using CSV;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WebReader;
+using Firebase;
+using Firebase.Storage;
 
 namespace DefaultNamespace
 {
     public class FootballerPointsManager : MonoBehaviour
     {
         public static FootballerPointsManager Instance;
+        
+        // Needs to be from firebase cloud storage!!
+        public string persistentFootballPlayerPointsDatabasePath;
 
         private void Awake()
         {
             if (Instance == null)
                 Instance = this;
+            
+            persistentFootballPlayerPointsDatabasePath = Application.persistentDataPath + "/FootballPlayerPointsDatabase.csv";
         }
         
         private enum FootballMatchEvent
@@ -28,8 +36,7 @@ namespace DefaultNamespace
 
         public void GetFootballerPoints()
         {
-            var footballPlayerPointsDatabaseList =
-                CsvReader.LoadCsvFile(DashBoardManager.Instance.footballPlayerPointsDatabasePath);
+            var footballPlayerPointsDatabaseList = CsvReader.LoadCsvFile(File.Exists(persistentFootballPlayerPointsDatabasePath) ? persistentFootballPlayerPointsDatabasePath : DashBoardManager.Instance.defaultFootballPlayerPointsDatabasePath);
 
             var clubNames = new List<string>();
             var footballPlayerPointsMap = new List<string[]>();
@@ -53,6 +60,7 @@ namespace DefaultNamespace
                     {"Manuel Neuer", 1}
                 }
             });
+            // -----------------------
 
             foreach (var pair in fixtureMap)
             {
@@ -121,7 +129,11 @@ namespace DefaultNamespace
 
         private void WriteToFootballerPointsDatabaseCsv(List<string[]> footballPlayerPointsMap)
         {
-            // using (StreamWriter writer = new StreamWriter())
+            // Upload to firebase cloud storage
+            // if (File.Exists(persistentFootballPlayerPointsDatabasePath))
+            //     File.Delete(persistentFootballPlayerPointsDatabasePath);
+            //
+            // using (StreamWriter writer = new StreamWriter(persistentFootballPlayerPointsDatabasePath, true))
             // {
             //     for (int i = 0; i < footballPlayerPointsMap.Count; i++)
             //     {
@@ -132,9 +144,6 @@ namespace DefaultNamespace
             //     }
             //     writer.Close();
             // }
-            
-            // Store file on playfab?
-            // Can't write to streaming assets folder
         }
 
         private bool IsChampionsTeam(List<string> clubNames, string matchFixture)

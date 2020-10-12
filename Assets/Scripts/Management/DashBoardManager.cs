@@ -17,7 +17,7 @@ public class DashBoardManager : MonoBehaviour
     #region File Paths
 
     public string footballPlayerDatabasePath = Application.streamingAssetsPath + "/FootballPlayerDatabase.csv";
-    public string footballPlayerPointsDatabasePath = Application.streamingAssetsPath + "/FootballPlayerPointsDatabase.csv";
+    public string defaultFootballPlayerPointsDatabasePath = Application.streamingAssetsPath + "/FootballPlayerPointsDatabase.csv";
 
     #endregion
     

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>93929825530-onoqlo182qkq9ch11v5p1u0d2hetlrco.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.93929825530-onoqlo182qkq9ch11v5p1u0d2hetlrco</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAIHqvD0Lx4kioMsIMY5mTimpHk-OKNS_s</string>
+	<key>GCM_SENDER_ID</key>
+	<string>93929825530</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.steveharrisLtd.FCL</string>
+	<key>PROJECT_ID</key>
+	<string>fantasychampionsleague</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fantasychampionsleague.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:93929825530:ios:702156812e4fcb69821543</string>
+	<key>DATABASE_URL</key>
+	<string>https://fantasychampionsleague.firebaseio.com</string>
+</dict>
+</plist>
