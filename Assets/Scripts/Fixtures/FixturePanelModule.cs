@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using WebReader;
 
 namespace DefaultNamespace
@@ -21,12 +22,6 @@ namespace DefaultNamespace
         {
             if (Instance == null)
                 Instance = this;
-        }
-
-        private void Start()
-        {
-            SetFixturesPanel();
-            FootballerPointsManager.Instance.GetFootballerPoints();
         }
 
         public void SetFixturesPanel()
@@ -285,8 +280,6 @@ namespace DefaultNamespace
 
                 if (!teams.Contains(teamName))
                     teams.Add(teamName);
-                else
-                    Debug.LogError("Teams list already contains team: " + teamName);
             }
 
             return teams;

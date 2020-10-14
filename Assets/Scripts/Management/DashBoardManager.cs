@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using CSV;
+using System.IO;
 using Dashboard;
 using DefaultNamespace;
 using GoogleSheetsLevelSynchronizer;
@@ -16,8 +16,11 @@ public class DashBoardManager : MonoBehaviour
 
     #region File Paths
 
-    public string footballPlayerDatabasePath = Application.streamingAssetsPath + "/FootballPlayerDatabase.csv";
-    public string defaultFootballPlayerPointsDatabasePath = Application.streamingAssetsPath + "/FootballPlayerPointsDatabase.csv";
+    public const string FileNameA = "FootballPlayerDatabase.csv";
+    public const string FileNameB = "FootballPlayerPointsDatabase.csv";
+
+    public string footballPlayerDatabasePath = Path.Combine(Application.streamingAssetsPath,FileNameA);
+    public string defaultFootballPlayerPointsDatabasePath = Path.Combine(Application.streamingAssetsPath, FileNameB);
 
     #endregion
     
@@ -97,7 +100,7 @@ public class DashBoardManager : MonoBehaviour
     /// </summary>
     public void LoadTransferList()
     {
-        var footballPlayerDatabase = CsvReader.LoadCsvFile(this.footballPlayerDatabasePath);
+        var footballPlayerDatabase = CsvReader.LoadCsvFileViaPath(footballPlayerDatabasePath);
         TransferListWindow.Instance.GetPlayerTransferList(footballPlayerDatabase);
     }
 

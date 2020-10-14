@@ -78,6 +78,7 @@ namespace PlayFab
                 DashBoardManager.Instance.SetScreenActive(0);        // set login panel active
             }
             
+            FixturePanelModule.Instance.SetFixturesPanel();
             DashBoardManager.Instance.SetGameObjectActive(false, "ScreenSelector");
             TransferListEntry.Instance.InstantiateTeamSheet("Transfer");
             DashBoardManager.Instance.LoadTransferList();

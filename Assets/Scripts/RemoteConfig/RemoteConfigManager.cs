@@ -30,7 +30,7 @@ namespace DefaultNamespace
         {
             ConfigManager.FetchConfigs<UserAttributes, AppAttributes>(new UserAttributes(), new AppAttributes());
             ConfigManager.FetchCompleted += SetTeamSheet;
-            ConfigManager.FetchCompleted += SetPoints;
+            ConfigManager.FetchCompleted += ConfigurePointsWithFootballPlayerPointsDatabase;
             ConfigManager.FetchCompleted += InitialLoadingComplete;
         }
 
@@ -59,7 +59,7 @@ namespace DefaultNamespace
         /// Sets Gameweek Title.
         /// </summary>
         /// <param name="obj"></param>
-        private void SetPoints(ConfigResponse obj)
+        private async void ConfigurePointsWithFootballPlayerPointsDatabase(ConfigResponse obj)
         {
             var teamSheetSaveData = PlayFabEntityFileManager.Instance.GetTeamSheetData();
             if (teamSheetSaveData.teamSheetData == null)
@@ -67,6 +67,33 @@ namespace DefaultNamespace
                 Debug.LogError("teamSheetData returned null");
                 return;
             }
+
+            var fileBStream = await FirebaseDataStorage.Instance.DownloadFileStreamAsync(DashBoardManager.FileNameB);
+            var csvList = CsvReader.LoadCsvFileViaStream(fileBStream);
+
+            var currentTeamSheetData = teamSheetSaveData.teamSheetData;
+            foreach (var pair in currentTeamSheetData)
+            {
+                var athleteStats = pair.Value;
+                var remoteConfigKey = athleteStats.RemoteConfigKey;
+
+                var csvPlayerData = csvList.Select(x => x).Where(x => x.Contains(remoteConfigKey)).ToArray();
+                if (csvPlayerData.Length != 1)
+                {
+                    Debug.LogError("Error: 2 players with same RemoteConfigKey. Continuing...");
+                    continue;
+                }
+
+                var playerData = csvPlayerData[0];
+                var playerDataSplit = playerData.Split(',');
+                var currentPlayerPoints = playerDataSplit[2];
+                
+                athleteStats.TotalPoints = currentPlayerPoints;
+                
+                Debug.LogError("player data: " + playerData);
+            }
+
+            teamSheetSaveData.teamSheetData = currentTeamSheetData;
 
             TeamSheetDatabase.Instance.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
 
@@ -91,7 +118,7 @@ namespace DefaultNamespace
         private void OnDestroy()
         {
             ConfigManager.FetchCompleted -= SetTeamSheet;
-            ConfigManager.FetchCompleted -= SetPoints;
+            ConfigManager.FetchCompleted -= ConfigurePointsWithFootballPlayerPointsDatabase;
             ConfigManager.FetchCompleted -= InitialLoadingComplete;
         }
     }

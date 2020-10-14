@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using CSV;
 using UnityEngine;
 using UnityEngine.Serialization;
 using WebReader;
@@ -16,16 +15,13 @@ namespace DefaultNamespace
     public class FootballerPointsManager : MonoBehaviour
     {
         public static FootballerPointsManager Instance;
-        
-        // Needs to be from firebase cloud storage!!
-        public string persistentFootballPlayerPointsDatabasePath;
 
         private void Awake()
         {
             if (Instance == null)
                 Instance = this;
             
-            persistentFootballPlayerPointsDatabasePath = Application.persistentDataPath + "/FootballPlayerPointsDatabase.csv";
+            UpdateFirebaseFootballPlayerPointsDatabaseWithCurrentFixtures();
         }
         
         private enum FootballMatchEvent
@@ -34,66 +30,79 @@ namespace DefaultNamespace
             Assist
         }
 
-        public void GetFootballerPoints()
+        private async void UpdateFirebaseFootballPlayerPointsDatabaseWithCurrentFixtures()
         {
-            var footballPlayerPointsDatabaseList = CsvReader.LoadCsvFile(File.Exists(persistentFootballPlayerPointsDatabasePath) ? persistentFootballPlayerPointsDatabasePath : DashBoardManager.Instance.defaultFootballPlayerPointsDatabasePath);
+            var stream = await FirebaseDataStorage.Instance.DownloadFileStreamAsync(DashBoardManager.FileNameB);
+            var footballPlayerPointsDatabaseList = CsvReader.LoadCsvFileViaStream(stream);
+            if (footballPlayerPointsDatabaseList.Count > 0)
+                DisplayFootballPlayerPointsDatabase(footballPlayerPointsDatabaseList);
+            else
+                Debug.LogError("FootballPlayerPointsDatabaseList returned count = 0");
 
             var clubNames = new List<string>();
-            var footballPlayerPointsMap = new List<string[]>();
+            var footballPlayerPointsList = new List<string[]>();
             for (int i = 0; i < footballPlayerPointsDatabaseList.Count; i++)
             {
                 var split = footballPlayerPointsDatabaseList[i].Split(',');
-                footballPlayerPointsMap.Add(split);
+                footballPlayerPointsList.Add(split);
                 
                 if (!clubNames.Contains(split[0]))
                     clubNames.Add(split[0]);
             }
 
-            var fixtureInfo = FixturePanelModule.Instance.GetFixtures();
+            var fixtureInfo = FixturePanelModule.Instance.GetFixtures();        // Get today's fixtures and events
             var fixtureMap = fixtureInfo.FixturesMap;
             
-            //Test case;
-            fixtureMap.Add("ft 1-0 Bayern Munich vs PSG", new FixtureEvents
-            {
-                GoalScorers = new Dictionary<string, int>
-                {
-                    {"Manuel Neuer", 1}
-                }
-            });
-            // -----------------------
-
+            // Test Case:
+            // fixtureMap.Add("PSG vs flkgnldknfgsd", new FixtureEvents
+            // {
+            //     GoalScorers = new Dictionary<string, int>
+            //     {
+            //         {"Neymar Jr", 23}
+            //     }
+            // });
+            // --------------
+            
             foreach (var pair in fixtureMap)
             {
                 var matchFixture = pair.Key;
                 var matchFixtureEvents = pair.Value;
-
+                
                 var isChampionsTeam = IsChampionsTeam(clubNames, matchFixture);
                 if (!isChampionsTeam)
                     continue;
                 
-                // Debug.LogError(matchFixture);
+                Debug.LogError(matchFixture);
                 
                 var matchGoalScorers = matchFixtureEvents.GoalScorers;
                 var matchAssists = matchFixtureEvents.Assists;
 
                 if (matchGoalScorers != null)
-                    UpdateFootballerPointsMap(matchGoalScorers, footballPlayerPointsMap, FootballMatchEvent.Goal);
+                    UpdateFootballPlayerPointsList(matchGoalScorers, footballPlayerPointsList, FootballMatchEvent.Goal);
     
                 if (matchAssists != null)
-                    UpdateFootballerPointsMap(matchAssists, footballPlayerPointsMap, FootballMatchEvent.Assist);
+                    UpdateFootballPlayerPointsList(matchAssists, footballPlayerPointsList, FootballMatchEvent.Assist);
+            }
+            
+            var strList = new List<string>();
+            for (int i = 0; i < footballPlayerPointsList.Count; i++)
+            {
+                var line = string.Join(",", footballPlayerPointsList[i]);
+                strList.Add(line);
             }
 
-            WriteToFootballerPointsDatabaseCsv(footballPlayerPointsMap);
+            var byteData = FirebaseDataStorage.Instance.ConvertStringArrayListToByteArray(strList);
+            FirebaseDataStorage.Instance.UploadFromBytes(byteData, DashBoardManager.FileNameB);
         }
 
-        private void UpdateFootballerPointsMap(Dictionary<string, int> playerEvents, List<string[]> footballPlayerPointsMap, FootballMatchEvent eventType)
+        private void UpdateFootballPlayerPointsList(Dictionary<string, int> playerEvents, List<string[]> footballPlayerPointsMap, FootballMatchEvent eventType)
         {
             foreach (var scorer in playerEvents)
             {
                 var playerName = scorer.Key;
                 var eventValue = scorer.Value;
                     
-                // Debug.LogError("EventType: " + eventType + ", PlayerName: " + playerName + ", " + eventValue);
+                Debug.LogError("EventType: " + eventType + ", PlayerName: " + playerName + ", " + eventValue);
 
                 var playerDetails = footballPlayerPointsMap.Select(x => x).Where(x => x[1] == playerName).ToList();
                 if (playerDetails.Count == 0)
@@ -127,25 +136,6 @@ namespace DefaultNamespace
             }
         }
 
-        private void WriteToFootballerPointsDatabaseCsv(List<string[]> footballPlayerPointsMap)
-        {
-            // Upload to firebase cloud storage
-            // if (File.Exists(persistentFootballPlayerPointsDatabasePath))
-            //     File.Delete(persistentFootballPlayerPointsDatabasePath);
-            //
-            // using (StreamWriter writer = new StreamWriter(persistentFootballPlayerPointsDatabasePath, true))
-            // {
-            //     for (int i = 0; i < footballPlayerPointsMap.Count; i++)
-            //     {
-            //         var line = string.Join(",", footballPlayerPointsMap[i]);
-            //         Debug.LogError(line);
-            //         
-            //         writer.WriteLine(line);
-            //     }
-            //     writer.Close();
-            // }
-        }
-
         private bool IsChampionsTeam(List<string> clubNames, string matchFixture)
         {
             var championsTeamPlayingInFixture = false;
@@ -169,6 +159,25 @@ namespace DefaultNamespace
         {
             const int pointsPerAssist = 4;
             return numberOfAssists * pointsPerAssist;
+        }
+
+        private void DisplayFootballPlayerPointsDatabase(List<string> footballPlayerPointsDatabaseList)
+        {
+            var str = "";
+            for (int i = 0; i < footballPlayerPointsDatabaseList.Count; i++)
+            {
+                str += footballPlayerPointsDatabaseList[i] + Environment.NewLine;
+            }
+            Debug.Log(str);
+        }
+
+        private List<string[]> ResetAllFootballPlayersPoints(List<string[]> footballPlayerPointsList, string newPointValue)
+        {
+            for (int i = 0; i < footballPlayerPointsList.Count; i++)
+            {
+                footballPlayerPointsList[i][2] = newPointValue;
+            }
+            return footballPlayerPointsList;
         }
     }
 }
