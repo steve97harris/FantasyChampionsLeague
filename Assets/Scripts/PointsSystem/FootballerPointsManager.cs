@@ -20,20 +20,19 @@ namespace DefaultNamespace
         {
             if (Instance == null)
                 Instance = this;
-            
-            UpdateFirebaseFootballPlayerPointsDatabaseWithCurrentFixtures();
         }
-        
+
         private enum FootballMatchEvent
         {
             Goal,
             Assist
         }
 
-        private async void UpdateFirebaseFootballPlayerPointsDatabaseWithCurrentFixtures()
+        public async void UpdateFirebaseFootballPlayerPointsDatabaseWithCurrentFixtures()
         {
             var stream = await FirebaseDataStorage.Instance.DownloadFileStreamAsync(DashBoardManager.FileNameB);
             var footballPlayerPointsDatabaseList = CsvReader.LoadCsvFileViaStream(stream);
+            
             if (footballPlayerPointsDatabaseList.Count > 0)
                 DisplayFootballPlayerPointsDatabase(footballPlayerPointsDatabaseList);
             else
