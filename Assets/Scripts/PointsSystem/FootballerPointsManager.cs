@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using ErrorManagement;
 using UnityEngine;
 using UnityEngine.Serialization;
 using WebReader;
@@ -36,7 +37,9 @@ namespace DefaultNamespace
             if (footballPlayerPointsDatabaseList.Count > 0)
                 DisplayFootballPlayerPointsDatabase(footballPlayerPointsDatabaseList);
             else
+            {
                 Debug.LogError("FootballPlayerPointsDatabaseList returned count = 0");
+            }
 
             var clubNames = new List<string>();
             var footballPlayerPointsList = new List<string[]>();
@@ -49,7 +52,7 @@ namespace DefaultNamespace
                     clubNames.Add(split[0]);
             }
 
-            var fixtureInfo = FixturePanelModule.Instance.GetFixtures();        // Get today's fixtures and events
+            var fixtureInfo = FixturePanelModule.Instance.GetFixtures();        // Get today's football fixtures and events
             var fixtureMap = fixtureInfo.FixturesMap;
             
             // Test Case:
@@ -69,10 +72,13 @@ namespace DefaultNamespace
                 
                 var isChampionsTeam = IsChampionsTeam(clubNames, matchFixture);
                 if (!isChampionsTeam)
+                {
+                    Debug.Log("[Non FCL]: " + matchFixture);
                     continue;
+                }
                 
-                Debug.LogError(matchFixture);
-                
+                Debug.Log("[FCL]: " + matchFixture);
+
                 var matchGoalScorers = matchFixtureEvents.GoalScorers;
                 var matchAssists = matchFixtureEvents.Assists;
 
@@ -101,7 +107,7 @@ namespace DefaultNamespace
                 var playerName = scorer.Key;
                 var eventValue = scorer.Value;
                     
-                Debug.LogError("EventType: " + eventType + ", PlayerName: " + playerName + ", " + eventValue);
+                Debug.Log("EventType: " + eventType + ", PlayerName: " + playerName + ", " + eventValue);
 
                 var playerDetails = footballPlayerPointsMap.Select(x => x).Where(x => x[1] == playerName).ToList();
                 if (playerDetails.Count == 0)

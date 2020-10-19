@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ErrorManagement;
 using Firebase.Auth;
 using Firebase.Storage;
 using UnityEngine;
@@ -72,7 +73,9 @@ namespace DefaultNamespace
                 if (task.IsFaulted || task.IsCanceled)
                 {
                     if (task.Exception != null)
+                    {
                         Debug.LogError(task.Exception.ToString());
+                    }
                 }
                 else
                 {
@@ -106,18 +109,21 @@ namespace DefaultNamespace
         public async Task<Stream> DownloadFileStreamAsync(string fileName)
         {
             var footballPlayerPointsDataRef = _storageReference.Child(fileName);
-            Debug.LogError(footballPlayerPointsDataRef);
+            Debug.Log(footballPlayerPointsDataRef);
 
             Stream fileStream = null;
             await footballPlayerPointsDataRef.GetStreamAsync(stream =>
             {
                 fileStream = stream;
-                Debug.Log("fileStream: " + fileStream);
             }, null, CancellationToken.None).ContinueWith(resultTask =>
             {
                 if (!resultTask.IsFaulted && !resultTask.IsCanceled)
                 {
                     Debug.Log("File Stream Download Complete!");
+                }
+                else
+                {
+                    Debug.LogError(resultTask.Exception);
                 }
             });
 
