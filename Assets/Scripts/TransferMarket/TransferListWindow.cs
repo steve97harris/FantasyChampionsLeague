@@ -42,7 +42,7 @@ namespace Dashboard
                 
                 var athleteStats = new AthleteStats()
                 {
-                    Name = playerName,
+                    PlayerName = playerName,
                     Position = playerPosition,
                     Price = playerPrice,
                     Rating = playerRating,
@@ -87,7 +87,7 @@ namespace Dashboard
                 entryObject.AddComponent<FootballPlayerDetails>();
                 TeamSheetDatabase.Instance.SetFootballPlayerDetails(entryObject, pair.Value);
                 
-                playerNameObj.GetComponent<TMP_Text>().text = pair.Value.Name;
+                playerNameObj.GetComponent<TMP_Text>().text = pair.Value.PlayerName;
                 playerPriceObj.GetComponent<TMP_Text>().text = "$" + pair.Value.Price;
                 playerPositionObj.GetComponent<TMP_Text>().text = pair.Value.Position;
 

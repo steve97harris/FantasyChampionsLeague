@@ -77,7 +77,7 @@ namespace Dashboard
         private bool IsValidFootballerEntry(AthleteStats athleteStats, FootballPlayerDetails playerTeamSheetEntryDetails)
         {
             var isValid = IsValidPlayerPosition(athleteStats.Position, playerTeamSheetEntryDetails.teamSheetPosition) &&
-                           !PlayerAlreadyInTeam(athleteStats.Name) && !ToManyPlayersFromSameClub(athleteStats.Team) && athleteStats.Name != "";
+                           !PlayerAlreadyInTeam(athleteStats.PlayerName) && !ToManyPlayersFromSameClub(athleteStats.Team) && athleteStats.PlayerName != "";
             
             return isValid;
         }
@@ -144,7 +144,7 @@ namespace Dashboard
             
             foreach (var pair in teamSheet.teamSheetData)
             {
-                if (pair.Value.Name == playerName) return true;
+                if (pair.Value.PlayerName == playerName) return true;
             }
 
             return false;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Dashboard;
 using DefaultNamespace;
 using PlayFab.ClientModels;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using LoginResult = PlayFab.ClientModels.LoginResult;
@@ -13,8 +14,6 @@ namespace PlayFab
     public class PlayFabController : MonoBehaviour
     {
         public static PlayFabController Instance;
-
-        public static bool LoadingInProgress;
         
         private string _userEmail;
         private string _userPassword;
@@ -38,16 +37,10 @@ namespace PlayFab
             }
             DontDestroyOnLoad(this.gameObject.transform.parent.gameObject);
         }
-
-        // /// <summary>
-        // /// Sets PlayFab title ID settings
-        // /// Checks player preferences for a previous login on device. If player has previously logged in on the device then login automatically.
-        // /// If auto login fails then activate login panel.
-        // /// </summary>
+        
         public void Start()
         {
-            LoadingInProgress = true;
-            StartCoroutine(Loading());
+            DashBoardManager.Instance.SetScreenActive(0);
             
             if (string.IsNullOrEmpty(PlayFabSettings.TitleId))
             {
@@ -83,84 +76,7 @@ namespace PlayFab
             TransferListEntry.Instance.InstantiateTeamSheet("Transfer");
             DashBoardManager.Instance.LoadTransferList();
         }
-
-        /// <summary>
-        /// Sets Loading Panel active while loading in progress.
-        /// loadingInProgress set to false once configs have all been fetched. (RemoteConfigManager.InitialLoadingComplete())
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator Loading()
-        {
-            while (LoadingInProgress)
-            {
-                DashBoardManager.Instance.SetScreenActive(7);
-                yield return new WaitForSeconds(0.1f);
-            }
-            
-            Debug.Log("Loading Complete!!");
-            ActivateDashBoard();
-        }
         
-        private void ActivateDashBoard()
-        {
-            DashBoardManager.Instance.SetScreenActive(1);
-            DashBoardManager.Instance.SetGameObjectActive(true, "ScreenSelector");
-        }
-
-        #region Login
-        /// <summary>
-        /// If login successful;
-        /// Set player preferences.
-        /// Start loading player data and files.
-        /// </summary>
-        /// <param name="result"></param>
-        private void OnLoginSuccess(LoginResult result)
-        {
-            Debug.Log("Boom!! Successful API Login.");
-            
-            PlayerPrefs.SetString("EMAIL", _userEmail);
-            PlayerPrefs.SetString("PASSWORD", _userPassword);
-
-            EntityId = result.EntityToken.Entity.Id;
-            EntityType = result.EntityToken.Entity.Type;
-            
-            StartCoroutine(TeamSheetDatabase.Instance.WaitForPlayFabLogin());    // wait for playfab player login and load player data
-        }
-
-        /// <summary>
-        /// Generates PlayFab Error Report
-        /// </summary>
-        /// <param name="error"></param>
-        public void ErrorCallback(PlayFabError error)
-        {
-            Debug.LogError(error.GenerateErrorReport());
-        }
-
-        /// <summary>
-        /// If auto login fails, Register new user 
-        /// </summary>
-        /// <param name="error"></param>
-        private void OnLoginFailure(PlayFabError error)
-        {
-            var registerRequest = new RegisterPlayFabUserRequest {Email = _userEmail, Password = _userPassword, Username = _userName};
-            PlayFabClientAPI.RegisterPlayFabUser(registerRequest, OnRegisterSuccess, ErrorCallback);
-        }
-        
-        private void OnRegisterSuccess(RegisterPlayFabUserResult result)
-        { 
-            Debug.Log("Boom!! Successful API Registration.");
-            
-            PlayerPrefs.SetString("EMAIL", _userEmail); 
-            PlayerPrefs.SetString("PASSWORD", _userPassword);
-            
-            PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = _userName}, OnDisplayName, ErrorCallback);
-        }
-        
-        public void OnDisplayName(UpdateUserTitleDisplayNameResult result)
-        {
-            Debug.Log("username: " + result.DisplayName);
-        }
-
         #region On Value Changed functions
 
         public void GetUserEmail(string email)
@@ -180,13 +96,122 @@ namespace PlayFab
 
         #endregion
 
+        #region Login
+        
         // Login button
         public void OnClickLogin()
         {
             var request = new LoginWithEmailAddressRequest { Email = _userEmail, Password = _userPassword };
             PlayFabClientAPI.LoginWithEmailAddress(request, OnLoginSuccess, OnLoginFailure);
         }
+        
+        /// <summary>
+        /// If login successful;
+        /// Set player preferences.
+        /// Start loading player data and files.
+        /// </summary>
+        /// <param name="result"></param>
+        private void OnLoginSuccess(LoginResult result)
+        {
+            Debug.Log("Boom!! Successful API Login." + Environment.NewLine + "Email: " + _userEmail);
+            
+            PlayerPrefs.SetString("EMAIL", _userEmail);
+            PlayerPrefs.SetString("PASSWORD", _userPassword);
 
+            EntityId = result.EntityToken.Entity.Id;
+            EntityType = result.EntityToken.Entity.Type;
+            
+            StartCoroutine(TeamSheetDatabase.Instance.WaitForPlayFabLogin());    // wait for playfab player login and load player data
+        }
+        
+        /// <summary>
+        /// If auto login fails
+        /// </summary>
+        /// <param name="error"></param>
+        private void OnLoginFailure(PlayFabError error)
+        {
+            Debug.LogError(error.GenerateErrorReport());
+
+            DisplayLoginRegisterFailure(error);
+        }
+        # endregion
+
+        #region Register
+
+        public void OnClickRegister()
+        {
+            var registerRequest = new RegisterPlayFabUserRequest {Email = _userEmail, Password = _userPassword, Username = _userName};
+            PlayFabClientAPI.RegisterPlayFabUser(registerRequest, OnRegisterSuccess, OnRegisterFailure);
+        }
+                
+        private void OnRegisterSuccess(RegisterPlayFabUserResult result)
+        { 
+            Debug.Log("Boom!! Successful API Registration.");
+                    
+            PlayerPrefs.SetString("EMAIL", _userEmail); 
+            PlayerPrefs.SetString("PASSWORD", _userPassword);
+                    
+            PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = _userName}, OnDisplayNameUpdated, ErrorCallback);
+                    
+            OnAddUsernameToAccount();
+        }
+
+        private void OnRegisterFailure(PlayFabError error)
+        {
+            Debug.LogError(error.GenerateErrorReport());
+                    
+            DisplayLoginRegisterFailure(error);
+        }
+
+        // Login button for AddLoginPanel
+        // Adds playfab username/password auth to an existing account created via an anonymous auth method, e.g. automatic device ID login.
+        private void OnAddUsernameToAccount()
+        {
+            var addLoginRequest = new AddUsernamePasswordRequest() {Email = _userEmail, Password = _userPassword, Username = _userName};
+            PlayFabClientAPI.AddUsernamePassword(addLoginRequest, OnAddUsernameSuccess, ErrorCallback);
+        }
+                
+        private void OnAddUsernameSuccess(AddUsernamePasswordResult result)
+        {
+            Debug.Log("Boom!! Successful username update.");
+                    
+            PlayerPrefs.SetString("EMAIL", _userEmail);
+            PlayerPrefs.SetString("PASSWORD", _userPassword);
+        }
+
+        #endregion
+
+        #region General
+
+        /// <summary>
+        /// Generates PlayFab Error Report
+        /// </summary>
+        /// <param name="error"></param>
+        public void ErrorCallback(PlayFabError error)
+        {
+            Debug.LogError(error.GenerateErrorReport());
+        }
+
+        public void OnDisplayNameUpdated(UpdateUserTitleDisplayNameResult result)
+        {
+            Debug.Log("DisplayName Updated!" + Environment.NewLine + "DisplayName/Username: " + result.DisplayName);
+        }
+
+        private void DisplayLoginRegisterFailure(PlayFabError error)
+        {
+            var errorTextObj = GameObjectFinder.FindSingleObjectByName("LoginErrorText");
+            errorTextObj.GetComponent<TMP_Text>().text = error.GenerateErrorReport();
+                    
+            Instance.StartCoroutine(SetActiveFor(4f, errorTextObj));
+        }
+
+        private IEnumerator SetActiveFor(float activeTime, GameObject obj)
+        {
+            obj.SetActive(true);
+            yield return new WaitForSeconds(activeTime);
+            obj.SetActive(false);
+        }
+                
         // returns device ID
         private string ReturnMobileId()
         {
@@ -194,27 +219,7 @@ namespace PlayFab
             return deviceId;
         }
 
-        // Open Add Login panel for creating new accounts
-        public void OpenAddLogin()
-        {
-            DashBoardManager.Instance.SetScreenActive(7);
-        }
-
-        // Login button for AddLoginPanel
-        // Adds playfab username/password auth to an existing account created via an anonymous auth method, e.g. automatic device ID login.
-        public void OnClickAddLogin()
-        {
-            var addLoginRequest = new AddUsernamePasswordRequest() {Email = _userEmail, Password = _userPassword, Username = _userName};
-            PlayFabClientAPI.AddUsernamePassword(addLoginRequest, OnAddLoginSuccess, ErrorCallback);
-        }
-        
-        private void OnAddLoginSuccess(AddUsernamePasswordResult result)
-        {
-            Debug.Log("Boom!! Successful API Registration.");
-            
-            PlayerPrefs.SetString("EMAIL", _userEmail);
-            PlayerPrefs.SetString("PASSWORD", _userPassword);
-        }
+        #endregion
 
         #region Change Account Buttons
 
@@ -233,8 +238,6 @@ namespace PlayFab
         {
             DashBoardManager.Instance.SetGameObjectActive(false, "ChangeAccountConfirmationPanel");
         }
-
-        #endregion
 
         #endregion
     }

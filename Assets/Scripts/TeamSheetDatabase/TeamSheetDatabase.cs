@@ -162,7 +162,7 @@ namespace DefaultNamespace
                 SetFootballPlayerDetails(playerTeamEntryCanvas, athleteStats);
 
                 var obj = playerTeamEntryCanvas.transform.GetChild(0);
-                obj.transform.GetChild(4).GetComponent<TMP_Text>().text = athleteStats.Name;
+                obj.transform.GetChild(4).GetComponent<TMP_Text>().text = athleteStats.PlayerName;
                 
                 switch (teamSheetObjName)
                 {
@@ -194,7 +194,7 @@ namespace DefaultNamespace
         {
             var playerDetails = playerTeamEntryCanvas.GetComponent<FootballPlayerDetails>();
             
-            playerDetails.playerName = athleteStats.Name;
+            playerDetails.playerName = athleteStats.PlayerName;
             playerDetails.team = athleteStats.Team;
             playerDetails.price = athleteStats.Price;
             playerDetails.rating = athleteStats.Rating;

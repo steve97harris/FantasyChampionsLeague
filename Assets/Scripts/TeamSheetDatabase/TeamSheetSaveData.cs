@@ -23,7 +23,7 @@ namespace DefaultNamespace
     // created second football player details as MonoBehaviour methods cannot be serialized
     public class AthleteStats
     {
-        public string Name;
+        public string PlayerName;
         public string Team;
         public string Rating;
         public string Price;

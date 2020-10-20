@@ -35,7 +35,6 @@ namespace ErrorManagement
         private string SaveErrorLog()
         {
             var logPathA = CombinePaths(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "Low", Application.companyName, Application.productName, "Player.log");
-            Debug.Log(logPathA);
             
             var logPathB = @"C:\Users\Steve\Documents\ErrorLogs\FCL\logs" + @"\log-" + $"{DateTime.Now:dd-MMM-yyyy}" + ".log";
             Debug.Log(logPathB);

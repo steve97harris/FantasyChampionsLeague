@@ -112,7 +112,7 @@ namespace DefaultNamespace
             /* Only effective if FetchConfigs is last function in TeamSheetDatabase Coroutines.
              * RemoteConfigManager.Instance.FetchConfigs();    (TeamSheetDatabase line 64) */
 
-            PlayFabController.LoadingInProgress = false;
+            DashBoardManager.Instance.ActivateDashBoard();
         }
 
         private void OnDestroy()

@@ -68,7 +68,7 @@ namespace PlayFab
         /// </summary>
         public void ChangePlayerDisplayName()
         {
-            PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = _playFabDisplayName}, PlayFabController.Instance.OnDisplayName, PlayFabController.Instance.ErrorCallback);
+            PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest {DisplayName = _playFabDisplayName}, PlayFabController.Instance.OnDisplayNameUpdated, PlayFabController.Instance.ErrorCallback);
             SetProfileCanvasUi(_playFabIdentity, _playFabDisplayName);
         }
 

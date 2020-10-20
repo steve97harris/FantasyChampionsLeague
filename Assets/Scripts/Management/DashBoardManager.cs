@@ -25,24 +25,12 @@ namespace DefaultNamespace
 
         #endregion
         
-        /*
-         *  ObjectName - Index 
-         * "LoginPanel" - 0
-         * "DashBoardPanel" - 1
-         * "PointsPanel" - 2
-         * "TransferPanel" - 3
-         * "LeagueLeaderboardsPanel" - 4
-         * "PlayerProfilePanel" - 5
-         * "AddLoginPanel" - 6
-         * "LoadingPanel" - 7
-         * "FixturesPanel" - 8
-         */
         /// <summary>
         /// List of all main panels
         /// </summary>
         private readonly List<string> _mainPanelNames = new List<string>()
         {
-            "LoginPanel", "DashBoardPanel", "PointsPanel", "TransferPanel", "LeagueLeaderboardsPanel", "PlayerProfilePanel", "AddLoginPanel", "LoadingPanel", "FixturesPanel"
+            "LoginPanel", "DashBoardPanel", "PointsPanel", "TransferPanel", "LeagueLeaderboardsPanel", "PlayerProfilePanel", "LoadingPanel", "FixturesPanel"
         };
 
         private void Awake()
@@ -91,7 +79,7 @@ namespace DefaultNamespace
 
         public void FixturesPanel()
         {
-            SetScreenActive(8);
+            SetScreenActive(7);
         }
 
         #endregion
@@ -104,9 +92,23 @@ namespace DefaultNamespace
             var footballPlayerDatabase = CsvReader.LoadCsvFileViaPath(footballPlayerDatabasePath);
             TransferListWindow.Instance.GetPlayerTransferList(footballPlayerDatabase);
         }
+        
+        public void ActivateDashBoard()
+        {
+            SetScreenActive(1);
+            SetGameObjectActive(true, "ScreenSelector");
+        }
 
         /// <summary>
-        /// Sets screen active with respect to the index entered and sets all other screens inactive
+        /// Sets screen active with respect to the index entered and sets all other screens inactive.
+        /// LoginPanel - 0
+        /// DashBoardPanel - 1
+        /// PointsPanel - 2
+        /// TransferPanel - 3
+        /// LeagueLeaderboardsPanel - 4
+        /// PlayerProfilePanel - 5
+        /// LoadingPanel - 6
+        /// FixturesPanel - 7
         /// </summary>
         /// <param name="index"></param>
         public void SetScreenActive(int index)
