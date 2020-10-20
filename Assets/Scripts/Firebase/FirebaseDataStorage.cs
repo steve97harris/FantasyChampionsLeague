@@ -22,19 +22,26 @@ namespace DefaultNamespace
         private const string FirebaseFileStorageUrl = "gs://fantasychampionsleague.appspot.com";
 
         private static StorageReference _storageReference;
+        
+        public void OnEnable()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                if (Instance != this)
+                {
+                    Destroy(this.gameObject);
+                }
+            }
+            DontDestroyOnLoad(this.gameObject.transform.parent.gameObject);
+        }
 
         private void Awake()
         {
-            if (Instance == null)
-                Instance = this;
-            
             _storageReference = GetStorageRef(FirebaseFileStorageUrl);
-
-            var scene = SceneManager.GetActiveScene();
-            Debug.LogError(scene.name);
-            
-            if (scene.name == "PointsManagementSystem")
-                FootballerPointsManager.Instance.UpdateFirebaseFootballPlayerPointsDatabaseWithCurrentFixtures();
         }
 
         private IEnumerator CreateAnonymousUser()

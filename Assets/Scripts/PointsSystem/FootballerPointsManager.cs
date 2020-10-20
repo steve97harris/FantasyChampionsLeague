@@ -10,6 +10,7 @@ using UnityEngine.Serialization;
 using WebReader;
 using Firebase;
 using Firebase.Storage;
+using UnityEngine.SceneManagement;
 
 namespace DefaultNamespace
 {
@@ -17,10 +18,28 @@ namespace DefaultNamespace
     {
         public static FootballerPointsManager Instance;
 
-        private void Awake()
+        public void OnEnable()
         {
             if (Instance == null)
+            {
                 Instance = this;
+            }
+            else
+            {
+                if (Instance != this)
+                {
+                    Destroy(this.gameObject);
+                }
+            }
+            DontDestroyOnLoad(this.gameObject.transform.parent.gameObject);
+            
+            var scene = SceneManager.GetActiveScene();
+            Debug.LogError(scene.name);
+            
+            if (scene.name != "PointsManagementSystem") 
+                return;
+            
+            UpdateFirebaseFootballPlayerPointsDatabaseWithCurrentFixtures();
         }
 
         private enum FootballMatchEvent
@@ -69,15 +88,15 @@ namespace DefaultNamespace
             {
                 var matchFixture = pair.Key;
                 var matchFixtureEvents = pair.Value;
+                var matchLeague = pair.Value.League;
                 
-                var isChampionsTeam = IsChampionsTeam(clubNames, matchFixture);
-                if (!isChampionsTeam)
+                if (!IsChampionsTeam(clubNames, matchFixture) && !IsChampionsLeagueFixture(matchLeague))
                 {
-                    Debug.Log("[Non FCL]: " + matchFixture);
+                    Debug.Log("[Non FCL]: " + matchFixture + "{" + matchLeague + "}");
                     continue;
                 }
                 
-                Debug.Log("[FCL]: " + matchFixture);
+                Debug.Log("[FCL]: " + matchFixture + "{" + matchLeague + "}");
 
                 var matchGoalScorers = matchFixtureEvents.GoalScorers;
                 var matchAssists = matchFixtureEvents.Assists;
@@ -152,6 +171,11 @@ namespace DefaultNamespace
             }
 
             return championsTeamPlayingInFixture;
+        }
+
+        private bool IsChampionsLeagueFixture(string league)
+        {
+            return league.Contains("UEFA Champions League");
         }
 
         private int CalculateGoalPoints(int numberOfGoals)

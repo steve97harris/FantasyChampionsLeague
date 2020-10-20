@@ -15,6 +15,7 @@ namespace DefaultNamespace
         public static FixturePanelModule Instance;
         
         private string _currentFixture = "";
+        private string _currentLeague = "";
         private readonly Dictionary<string, int> _goalScorers = new Dictionary<string, int>();
         private readonly Dictionary<string, int> _assists = new Dictionary<string, int>();
 
@@ -43,7 +44,7 @@ namespace DefaultNamespace
             var teams = GetTeamsPlayingToday();
             
             var fixture = "";
-            var fixtures = new List<string>();
+            var fixtureList = new List<string>();
             var fixtureMap = new Dictionary<string, FixtureEvents>();
 
             for (int i = 0; i < infoList.Count; i++)
@@ -60,7 +61,7 @@ namespace DefaultNamespace
 
                     var goalScorers = new Dictionary<string, int>(_goalScorers);
                     var assists = new Dictionary<string, int>(_assists);
-                    var fixtureEvents = new FixtureEvents { GoalScorers = goalScorers, Assists = assists };
+                    var fixtureEvents = new FixtureEvents { GoalScorers = goalScorers, Assists = assists, League = _currentLeague};
 
                     if (!fixtureMap.ContainsKey(_currentFixture))
                         fixtureMap.Add(_currentFixture, fixtureEvents);
@@ -72,16 +73,21 @@ namespace DefaultNamespace
                 {
                     fixture = FixFixtureString(infoList[i], teams);
 
-                    if (IsInvalidFixture(fixture)) 
+                    if (IsInvalidFixture(fixture))
                         continue;
-                    
-                    fixtures.Add(fixture);
+
+                    fixtureList.Add(fixture);
                     
                     _currentFixture = fixture;
+
+                    if (IsLeagueName(fixture))
+                    {
+                        _currentLeague = fixture;
+                    }
                 }
             }
             
-            var fixtureModule = new Fixtures{ FixturesList = fixtures, FixturesMap = fixtureMap };
+            var fixtureModule = new Fixtures{ FixturesList = fixtureList, FixturesMap = fixtureMap };
             return fixtureModule;
         }
 
@@ -128,7 +134,7 @@ namespace DefaultNamespace
                 var fixtureTemp = Instantiate(fixtureTemplate, fixtureContent.transform);
                 fixtureTemp.GetComponentInChildren<TMP_Text>().text = fixtures[i];
                 
-                if (fixtures[i].Contains('('))
+                if (IsLeagueName(fixtures[i]))
                 {
                     fixtureTemp.GetComponentInChildren<TMP_Text>().fontStyle = FontStyles.Underline;
                 }
@@ -191,6 +197,11 @@ namespace DefaultNamespace
             var isInt = int.TryParse(fixtureSplit[0], out var res);
 
             return fixtureSplit.Length == 3 && isInt;
+        }
+
+        private bool IsLeagueName(string fixture)
+        {
+            return fixture.Contains("(") && fixture.Contains(")");
         }
 
         private void ExtractNames(string goalInfo) 
