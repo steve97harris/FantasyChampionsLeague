@@ -97,9 +97,9 @@ namespace DefaultNamespace
 
             TeamSheetDatabase.Instance.SetTeamSheetUi(teamSheetSaveData, "PointsTeamSheet");
 
-            PointsTeamSheetManager.Instance.SetHeadCoachPoints();
-            PointsTeamSheetManager.Instance.SetHeadCoachUi();
-            PointsTeamSheetManager.Instance.UpdateGameweekTitle();
+            GamePlayerPointsModule.Instance.SetHeadCoachPoints();
+            GamePlayerPointsModule.Instance.SetHeadCoachUi();
+            GamePlayerPointsModule.Instance.UpdateGameweekTitle();
         }
 
         /// <summary>

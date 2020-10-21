@@ -10,9 +10,9 @@ using WebReader;
 
 namespace DefaultNamespace
 {
-    public class FixturePanelModule : MonoBehaviour
+    public class EventsAndFixturesModule : MonoBehaviour
     {
-        public static FixturePanelModule Instance;
+        public static EventsAndFixturesModule Instance;
         
         private string _currentFixture = "";
         private string _currentLeague = "";
@@ -27,19 +27,17 @@ namespace DefaultNamespace
 
         public void SetFixturesPanel()
         {
-            var fixtureInfo = GetFixtures();
+            var fixtureInfo = GetFixtures(WebClientReader.FootballCriticLiveScoresUrl, WebClientReader.CompSpan);
             var fixtures = fixtureInfo.FixturesList;
             
             SetFixturesUi(fixtures);
         }
         
-        public Fixtures GetFixtures()
+        public Fixtures GetFixtures(string url, string xpath)
         {
-            var footballCriticUrl = WebClientReader.FootballCriticLiveScoresUrl;
-            var compSpanPath = WebClientReader.CompSpan;
-            var compSpanNodes = WebClientReader.Instance.GetHtmlNodeCollection(footballCriticUrl, compSpanPath);
+            var nodeCollection = WebClientReader.Instance.GetHtmlNodeCollection(url, xpath);
 
-            var infoList = ReadNodes(compSpanNodes);
+            var infoList = ReadNodes(nodeCollection);
             
             var teams = GetTeamsPlayingToday();
             
@@ -123,7 +121,7 @@ namespace DefaultNamespace
         {
             var fixtureTemplate = Resources.Load<GameObject>("Prefabs/FixturesPanel/FixtureTemplate");
             var fixtureContent = GameObjectFinder.FindSingleObjectByName("FixturesContent");
-            
+
             foreach (Transform child in fixtureContent.transform)
             {
                 Destroy(child.gameObject);
@@ -236,7 +234,8 @@ namespace DefaultNamespace
             if (playerName.StartsWith("assistby"))
             {
                 playerName = RemoveAssistText(playerName);
-
+                playerName = playerName.Remove(0, 1);
+                
                 if (!_assists.ContainsKey(playerName))
                     _assists.Add(playerName, 1);
                 else

@@ -95,7 +95,6 @@ namespace DefaultNamespace
         
         public void UploadFromLocalFile(string localFilePath, string fileName)
         {
-            
             var footballPlayerPointsDataRef = _storageReference.Child(fileName);
 
             footballPlayerPointsDataRef.PutFileAsync(localFilePath).ContinueWith((Task<StorageMetadata> task) =>
@@ -135,6 +134,53 @@ namespace DefaultNamespace
             });
 
             return fileStream;
+        }
+
+        public async Task<StorageMetadata> DownloadMetaData(string fileName)
+        {
+            var footballPlayerPointsDataRef = _storageReference.Child(fileName);
+
+            StorageMetadata metadata = null;
+            await footballPlayerPointsDataRef.GetMetadataAsync().ContinueWith(task =>
+            {
+                if (!task.IsFaulted && !task.IsCanceled)
+                {
+                    Debug.Log("File MetaData Download Complete!" + Environment.NewLine + task.Result.GetCustomMetadata("date"));
+                    metadata = task.Result;
+                }
+                else
+                {
+                    Debug.LogError(task.Exception);
+                }
+            });
+
+            return metadata;
+        }
+        
+        public void UploadMetaData(string fileName, string date)
+        {
+            var footballPlayerPointsDataRef = _storageReference.Child(fileName);
+            
+            var newMetaData = new MetadataChange
+            {
+                CustomMetadata = new Dictionary<string, string>
+                {
+                    { "date", date }
+                }
+            };
+
+            footballPlayerPointsDataRef.UpdateMetadataAsync(newMetaData).ContinueWith(task =>
+            {
+                if (!task.IsFaulted && !task.IsCanceled)
+                {
+                    Debug.Log("File MetaData Upload Complete!" + Environment.NewLine + task.Result.GetCustomMetadata("date"));
+                }
+                else
+                {
+                    Debug.LogError(task.Exception);
+                }
+            });
+
         }
 
         public byte[] ConvertStringArrayListToByteArray(List<string> footballPlayerPointsList)

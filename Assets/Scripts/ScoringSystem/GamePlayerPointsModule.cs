@@ -11,9 +11,9 @@ using UnityEngine.Serialization;
 
 namespace DefaultNamespace
 {
-    public class PointsTeamSheetManager : MonoBehaviour
+    public class GamePlayerPointsModule : MonoBehaviour
     {
-        public static PointsTeamSheetManager Instance;
+        public static GamePlayerPointsModule Instance;
         private static int _noOfGameweeks = 35;
         
         /// <summary> PointsTeamSheetPlayerMap - map of player prefabs 

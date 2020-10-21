@@ -26,18 +26,26 @@ namespace ErrorManagement
 
         private IEnumerator SendLog()
         {
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(7f);
             
             var logFilePath = SaveErrorLog();
-            SendEmail("steve97harris@hotmail.co.uk", "T0ttenham!" ,"steve97harris@hotmail.co.uk", "FCL Log", "Error Log: " + $"{DateTime.Now:dd-MMM-yyyy}", logFilePath);
+            if (logFilePath != null)
+                SendEmail("steve97harris@hotmail.co.uk", "T0ttenham!" ,"steve97harris@hotmail.co.uk", "FCL Log", "Error Log: " + $"{DateTime.Now:dd-MMM-yyyy}", logFilePath);
         }
 
         private string SaveErrorLog()
         {
             var logPathA = CombinePaths(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "Low", Application.companyName, Application.productName, "Player.log");
+            Debug.Log(logPathA);
             
             var logPathB = @"C:\Users\Steve\Documents\ErrorLogs\FCL\logs" + @"\log-" + $"{DateTime.Now:dd-MMM-yyyy}" + ".log";
             Debug.Log(logPathB);
+
+            if (!File.Exists(logPathA))
+            {
+                Debug.LogError("Log file not found, no log file sent");
+                return null;
+            }
             
             File.Copy(logPathA, logPathB, true);
             return logPathB;

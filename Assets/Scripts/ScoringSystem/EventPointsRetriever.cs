@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,9 +15,9 @@ using UnityEngine.SceneManagement;
 
 namespace DefaultNamespace
 {
-    public class FootballerPointsManager : MonoBehaviour
+    public class EventPointsRetriever : MonoBehaviour
     {
-        public static FootballerPointsManager Instance;
+        public static EventPointsRetriever Instance;
 
         public void OnEnable()
         {
@@ -34,12 +35,10 @@ namespace DefaultNamespace
             DontDestroyOnLoad(this.gameObject.transform.parent.gameObject);
             
             var scene = SceneManager.GetActiveScene();
-            Debug.LogError(scene.name);
-            
-            if (scene.name != "PointsManagementSystem") 
+            if (scene.name != "ScoringSystem") 
                 return;
             
-            UpdateFirebaseFootballPlayerPointsDatabaseWithCurrentFixtures();
+            StartCoroutine(RunEventPointsUpdate());
         }
 
         private enum FootballMatchEvent
@@ -48,13 +47,43 @@ namespace DefaultNamespace
             Assist
         }
 
-        public async void UpdateFirebaseFootballPlayerPointsDatabaseWithCurrentFixtures()
+        private IEnumerator RunEventPointsUpdate()
+        {
+            yield return new WaitForSeconds(1f);
+            
+            RunUpdate();
+        }
+
+        private async void RunUpdate()
+        {
+            var newDate = RetrieveYesterdaysDate();
+            
+            var fileMeta = await FirebaseDataStorage.Instance.DownloadMetaData(DashBoardManager.FileNameB);
+
+            if (fileMeta.GetCustomMetadata("date") == null)
+            {
+                UpdateFirebaseFootballPlayerPointsDatabase(WebClientReader.FootballCriticLiveScoresUrl + "?date=" + newDate, newDate);
+            }
+            else
+            {
+                var lastUpdate = fileMeta.GetCustomMetadata("date");
+                
+                if (lastUpdate != newDate)
+                    UpdateFirebaseFootballPlayerPointsDatabase(WebClientReader.FootballCriticLiveScoresUrl + "?date=" + newDate, newDate);
+                else
+                {
+                    Debug.LogError("PlayerPointsDatabase is up to date, no changes to be made");
+                }
+            }
+        }
+
+        private async void UpdateFirebaseFootballPlayerPointsDatabase(string url, string date)
         {
             var stream = await FirebaseDataStorage.Instance.DownloadFileStreamAsync(DashBoardManager.FileNameB);
             var footballPlayerPointsDatabaseList = CsvReader.LoadCsvFileViaStream(stream);
             
             if (footballPlayerPointsDatabaseList.Count > 0)
-                DisplayFootballPlayerPointsDatabase(footballPlayerPointsDatabaseList);
+                DebugLogFootballPlayerPointsDatabase(footballPlayerPointsDatabaseList);
             else
             {
                 Debug.LogError("FootballPlayerPointsDatabaseList returned count = 0");
@@ -71,7 +100,7 @@ namespace DefaultNamespace
                     clubNames.Add(split[0]);
             }
 
-            var fixtureInfo = FixturePanelModule.Instance.GetFixtures();        // Get today's football fixtures and events
+            var fixtureInfo = EventsAndFixturesModule.Instance.GetFixtures(url, WebClientReader.CompSpan);        // Get today's football fixtures and events
             var fixtureMap = fixtureInfo.FixturesMap;
             
             // Test Case:
@@ -83,7 +112,7 @@ namespace DefaultNamespace
             //     }
             // });
             // --------------
-            
+
             foreach (var pair in fixtureMap)
             {
                 var matchFixture = pair.Key;
@@ -114,9 +143,11 @@ namespace DefaultNamespace
                 var line = string.Join(",", footballPlayerPointsList[i]);
                 strList.Add(line);
             }
+            DebugLogFootballPlayerPointsDatabase(strList);
 
             var byteData = FirebaseDataStorage.Instance.ConvertStringArrayListToByteArray(strList);
             FirebaseDataStorage.Instance.UploadFromBytes(byteData, DashBoardManager.FileNameB);
+            FirebaseDataStorage.Instance.UploadMetaData(DashBoardManager.FileNameB, date);
         }
 
         private void UpdateFootballPlayerPointsList(Dictionary<string, int> playerEvents, List<string[]> footballPlayerPointsMap, FootballMatchEvent eventType)
@@ -130,16 +161,21 @@ namespace DefaultNamespace
 
                 var playerDetails = footballPlayerPointsMap.Select(x => x).Where(x => x[1] == playerName).ToList();
                 if (playerDetails.Count == 0)
+                {
+                    Debug.LogError(playerName + " not found");
                     continue;
+                }
 
                 var playerPoints = 0;
                 switch (eventType)
                 {
                     case FootballMatchEvent.Assist:
                         playerPoints = CalculateAssistPoints(eventValue);
+                        Debug.LogError("assist points = " + playerPoints);
                         break;
                     case FootballMatchEvent.Goal:
                         playerPoints = CalculateGoalPoints(eventValue);
+                        Debug.LogError("goal points = " + playerPoints);
                         break;
                 }
 
@@ -158,6 +194,12 @@ namespace DefaultNamespace
                     Debug.LogError("Error: Two players with same name, Points for player not updated!!");
                 }
             }
+        }
+        
+        private string RetrieveYesterdaysDate()
+        {
+            var date = $"{DateTime.Now.Date.AddDays(-1):yyyy-MM-dd}";
+            return date;
         }
 
         private bool IsChampionsTeam(List<string> clubNames, string matchFixture)
@@ -190,7 +232,7 @@ namespace DefaultNamespace
             return numberOfAssists * pointsPerAssist;
         }
 
-        private void DisplayFootballPlayerPointsDatabase(List<string> footballPlayerPointsDatabaseList)
+        private void DebugLogFootballPlayerPointsDatabase(List<string> footballPlayerPointsDatabaseList)
         {
             var str = "";
             for (int i = 0; i < footballPlayerPointsDatabaseList.Count; i++)
