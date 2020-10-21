@@ -60,11 +60,7 @@ namespace DefaultNamespace
         {
             GetPlayerMap();
             
-            var currentGameweek = ConfigManager.appConfig.GetString("CURRENT_GAMEWEEK");
-
             var headCoachSaveData = PlayFabEntityFileManager.Instance.GetHeadCoachData();
-
-            var previousTotalPoints = headCoachSaveData.CoachTotalPoints;
             
             if (headCoachSaveData.CoachName == null)
             {
@@ -78,34 +74,17 @@ namespace DefaultNamespace
             {
                 headCoachSaveData.CoachPointsPerGw = new int[_noOfGameweeks];
             }
-            
-            for (int i = 0; i < headCoachSaveData.CoachPointsPerGw.Length; i++)
+
+            var coachTotalPoints = 0;
+            foreach (var pair in PointsTeamSheetPlayerMap)
             {
-                if (currentGameweek == (i + 1).ToString())
-                {
-                    // get all player gw points 
-                    var totalGwPoints = 0;
-                    foreach (var pair in PointsTeamSheetPlayerMap)
-                    {
-                        var gwPointsString = pair.Value.GetComponent<FootballPlayerDetails>().gameweekPoints;
-                        int.TryParse(gwPointsString, out var gwPoints);
-                        totalGwPoints += gwPoints;                            // need to account for subs bench!!
-                    }
-
-                    headCoachSaveData.CoachPointsPerGw[i] = totalGwPoints;
-                    headCoachSaveData.CoachCurrentGwPoints = totalGwPoints;
-                }
+                var pointsString = pair.Value.GetComponent<FootballPlayerDetails>().totalPlayerPoints;
+                int.TryParse(pointsString, out var totalPlayerPoints);
+                coachTotalPoints += totalPlayerPoints;                            // need to account for subs bench!!
             }
-
-            headCoachSaveData.CoachTotalPoints = 0;
-            for (int i = 0; i < headCoachSaveData.CoachPointsPerGw.Length; i++)
-            {
-                headCoachSaveData.CoachTotalPoints += headCoachSaveData.CoachPointsPerGw[i];
-            }
-
-            if (previousTotalPoints == headCoachSaveData.CoachTotalPoints) 
-                return;
             
+            headCoachSaveData.CoachTotalPoints = coachTotalPoints;
+
             PlayFabEntityFileManager.Instance.SavePlayFabHeadCoachData(headCoachSaveData);
             PlayFabPlayerStats.Instance.SetStatistics();
         }
@@ -119,7 +98,7 @@ namespace DefaultNamespace
             var coachCurrentGwPoints = PlayFabPlayerStats.Instance.coachCurrentGwPoints;
             
             totalCoachPoints.GetComponent<TMP_Text>().text = coachTotalPoints.ToString();
-            currentGwPoints.GetComponent<TMP_Text>().text = coachCurrentGwPoints.ToString();
+            currentGwPoints.GetComponent<TMP_Text>().text = coachTotalPoints.ToString();
             
             Debug.Log("Coach Ui Data set: { totalPoints: " + coachTotalPoints + " gwPoints: " + coachCurrentGwPoints + "}");
         }

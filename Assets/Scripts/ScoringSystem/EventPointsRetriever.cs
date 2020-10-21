@@ -81,7 +81,17 @@ namespace DefaultNamespace
         {
             var stream = await FirebaseDataStorage.Instance.DownloadFileStreamAsync(DashBoardManager.FileNameB);
             var footballPlayerPointsDatabaseList = CsvReader.LoadCsvFileViaStream(stream);
-            
+
+            var fixtureInfo = EventsAndFixturesModule.Instance.GetFixtures(url, WebClientReader.CompSpan); 
+            var updatedFootballPlayerPointsDatabaseList = GetUpdatedPointsDatabaseList(footballPlayerPointsDatabaseList, fixtureInfo);
+
+            var byteData = FirebaseDataStorage.Instance.ConvertStringArrayListToByteArray(updatedFootballPlayerPointsDatabaseList);
+            FirebaseDataStorage.Instance.UploadFromBytes(byteData, DashBoardManager.FileNameB);
+            FirebaseDataStorage.Instance.UploadMetaData(DashBoardManager.FileNameB, date);
+        }
+
+        private List<string> GetUpdatedPointsDatabaseList(List<string> footballPlayerPointsDatabaseList, Fixtures fixtureInfo)
+        {
             if (footballPlayerPointsDatabaseList.Count > 0)
                 DebugLogFootballPlayerPointsDatabase(footballPlayerPointsDatabaseList);
             else
@@ -100,7 +110,6 @@ namespace DefaultNamespace
                     clubNames.Add(split[0]);
             }
 
-            var fixtureInfo = EventsAndFixturesModule.Instance.GetFixtures(url, WebClientReader.CompSpan);        // Get today's football fixtures and events
             var fixtureMap = fixtureInfo.FixturesMap;
             
             // Test Case:
@@ -137,17 +146,14 @@ namespace DefaultNamespace
                     UpdateFootballPlayerPointsList(matchAssists, footballPlayerPointsList, FootballMatchEvent.Assist);
             }
             
-            var strList = new List<string>();
+            var updatedPointsList = new List<string>();
             for (int i = 0; i < footballPlayerPointsList.Count; i++)
             {
                 var line = string.Join(",", footballPlayerPointsList[i]);
-                strList.Add(line);
+                updatedPointsList.Add(line);
             }
-            DebugLogFootballPlayerPointsDatabase(strList);
 
-            var byteData = FirebaseDataStorage.Instance.ConvertStringArrayListToByteArray(strList);
-            FirebaseDataStorage.Instance.UploadFromBytes(byteData, DashBoardManager.FileNameB);
-            FirebaseDataStorage.Instance.UploadMetaData(DashBoardManager.FileNameB, date);
+            return updatedPointsList;
         }
 
         private void UpdateFootballPlayerPointsList(Dictionary<string, int> playerEvents, List<string[]> footballPlayerPointsMap, FootballMatchEvent eventType)

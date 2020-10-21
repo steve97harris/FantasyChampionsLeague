@@ -13,7 +13,7 @@ namespace DefaultNamespace
         public string price;
         public string position;
         public string teamSheetPosition;
-        public string gameweekPoints;
+        public string totalPlayerPoints;
         public string remoteConfigKey;
     }
 }

@@ -199,7 +199,7 @@ namespace DefaultNamespace
             playerDetails.price = athleteStats.Price;
             playerDetails.rating = athleteStats.Rating;
             playerDetails.position = athleteStats.Position;
-            playerDetails.gameweekPoints = athleteStats.TotalPoints;
+            playerDetails.totalPlayerPoints = athleteStats.TotalPoints;
             playerDetails.remoteConfigKey = athleteStats.RemoteConfigKey;
         }
         #endregion
