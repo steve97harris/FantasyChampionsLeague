@@ -50,5 +50,10 @@ namespace WebReader
 
             return nodes;
         }
+
+        public static string FootballCriticLiveScoresUrlByDate(string date)
+        {
+            return FootballCriticLiveScoresUrl + "?date=" + date;
+        }
     }
 }

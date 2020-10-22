@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using ErrorManagement;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -19,6 +20,12 @@ namespace DefaultNamespace
     {
         public static EventPointsRetriever Instance;
 
+        private enum FootballMatchEvent
+        {
+            Goal,
+            Assist
+        }
+        
         public void OnEnable()
         {
             if (Instance == null)
@@ -40,36 +47,33 @@ namespace DefaultNamespace
             
             StartCoroutine(RunEventPointsUpdate());
         }
-
-        private enum FootballMatchEvent
-        {
-            Goal,
-            Assist
-        }
-
+        
         private IEnumerator RunEventPointsUpdate()
         {
             yield return new WaitForSeconds(1f);
+
+            var date = RetrieveYesterdaysDate();
+            var url = WebClientReader.FootballCriticLiveScoresUrlByDate(date);
             
-            RunUpdate();
+            RunUpdate(date, url);
+            
+            // DisplayNewPointsData(url);
         }
 
-        private async void RunUpdate()
+        private async void RunUpdate(string date, string url)
         {
-            var newDate = RetrieveYesterdaysDate();
-            
             var fileMeta = await FirebaseDataStorage.Instance.DownloadMetaData(DashBoardManager.FileNameB);
 
             if (fileMeta.GetCustomMetadata("date") == null)
             {
-                UpdateFirebaseFootballPlayerPointsDatabase(WebClientReader.FootballCriticLiveScoresUrl + "?date=" + newDate, newDate);
+                UploadNewPointsData(url, date);
             }
             else
             {
                 var lastUpdate = fileMeta.GetCustomMetadata("date");
                 
-                if (lastUpdate != newDate)
-                    UpdateFirebaseFootballPlayerPointsDatabase(WebClientReader.FootballCriticLiveScoresUrl + "?date=" + newDate, newDate);
+                if (lastUpdate != date)
+                    UploadNewPointsData(url, date);
                 else
                 {
                     Debug.LogError("PlayerPointsDatabase is up to date, no changes to be made");
@@ -77,23 +81,34 @@ namespace DefaultNamespace
             }
         }
 
-        private async void UpdateFirebaseFootballPlayerPointsDatabase(string url, string date)
+        private async void DisplayNewPointsData(string url)
         {
-            var stream = await FirebaseDataStorage.Instance.DownloadFileStreamAsync(DashBoardManager.FileNameB);
-            var footballPlayerPointsDatabaseList = CsvReader.LoadCsvFileViaStream(stream);
+            var updatedPointsData = await RetrieveUpdatedPointsData(url);
+            DebugLogPointsData(updatedPointsData);
+        }
 
-            var fixtureInfo = EventsAndFixturesModule.Instance.GetFixtures(url, WebClientReader.CompSpan); 
-            var updatedFootballPlayerPointsDatabaseList = GetUpdatedPointsDatabaseList(footballPlayerPointsDatabaseList, fixtureInfo);
-
-            var byteData = FirebaseDataStorage.Instance.ConvertStringArrayListToByteArray(updatedFootballPlayerPointsDatabaseList);
+        private async void UploadNewPointsData(string url, string date)
+        {
+            var updatedPointsDataList = await RetrieveUpdatedPointsData(url);
+            
+            var byteData = FirebaseDataStorage.Instance.ConvertStringArrayListToByteArray(updatedPointsDataList);
+            
             FirebaseDataStorage.Instance.UploadFromBytes(byteData, DashBoardManager.FileNameB);
             FirebaseDataStorage.Instance.UploadMetaData(DashBoardManager.FileNameB, date);
         }
 
-        private List<string> GetUpdatedPointsDatabaseList(List<string> footballPlayerPointsDatabaseList, Fixtures fixtureInfo)
+        private async Task<List<string>> RetrieveUpdatedPointsData(string url)
+        {
+            var stream = await FirebaseDataStorage.Instance.DownloadFileStreamAsync(DashBoardManager.FileNameB);
+            var footballPlayerPointsDatabaseList = CsvReader.LoadCsvFileViaStream(stream);
+            var fixtureInfo = EventsAndFixturesModule.Instance.GetFixtures(url, WebClientReader.CompSpan); 
+            return GetUpdatedPointsDataList(footballPlayerPointsDatabaseList, fixtureInfo);;
+        }
+
+        private List<string> GetUpdatedPointsDataList(List<string> footballPlayerPointsDatabaseList, Fixtures fixtureInfo)
         {
             if (footballPlayerPointsDatabaseList.Count > 0)
-                DebugLogFootballPlayerPointsDatabase(footballPlayerPointsDatabaseList);
+                DebugLogPointsData(footballPlayerPointsDatabaseList);
             else
             {
                 Debug.LogError("FootballPlayerPointsDatabaseList returned count = 0");
@@ -140,10 +155,10 @@ namespace DefaultNamespace
                 var matchAssists = matchFixtureEvents.Assists;
 
                 if (matchGoalScorers != null)
-                    UpdateFootballPlayerPointsList(matchGoalScorers, footballPlayerPointsList, FootballMatchEvent.Goal);
+                    UpdatePointsDataList(matchGoalScorers, footballPlayerPointsList, FootballMatchEvent.Goal);
     
                 if (matchAssists != null)
-                    UpdateFootballPlayerPointsList(matchAssists, footballPlayerPointsList, FootballMatchEvent.Assist);
+                    UpdatePointsDataList(matchAssists, footballPlayerPointsList, FootballMatchEvent.Assist);
             }
             
             var updatedPointsList = new List<string>();
@@ -156,7 +171,7 @@ namespace DefaultNamespace
             return updatedPointsList;
         }
 
-        private void UpdateFootballPlayerPointsList(Dictionary<string, int> playerEvents, List<string[]> footballPlayerPointsMap, FootballMatchEvent eventType)
+        private void UpdatePointsDataList(Dictionary<string, int> playerEvents, List<string[]> footballPlayerPointsMap, FootballMatchEvent eventType)
         {
             foreach (var scorer in playerEvents)
             {
@@ -238,7 +253,7 @@ namespace DefaultNamespace
             return numberOfAssists * pointsPerAssist;
         }
 
-        private void DebugLogFootballPlayerPointsDatabase(List<string> footballPlayerPointsDatabaseList)
+        private void DebugLogPointsData(List<string> footballPlayerPointsDatabaseList)
         {
             var str = "";
             for (int i = 0; i < footballPlayerPointsDatabaseList.Count; i++)
