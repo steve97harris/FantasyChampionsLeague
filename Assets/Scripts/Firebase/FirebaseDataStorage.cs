@@ -7,7 +7,6 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ErrorManagement;
 using Firebase.Auth;
 using Firebase.Storage;
 using UnityEngine;

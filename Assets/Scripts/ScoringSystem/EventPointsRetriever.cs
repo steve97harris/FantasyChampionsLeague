@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ErrorManagement;
 using UnityEngine;
 using UnityEngine.Serialization;
 using WebReader;
@@ -19,6 +18,8 @@ namespace DefaultNamespace
     public class EventPointsRetriever : MonoBehaviour
     {
         public static EventPointsRetriever Instance;
+
+        public static string EventDate;
 
         private enum FootballMatchEvent
         {
@@ -36,28 +37,26 @@ namespace DefaultNamespace
             {
                 if (Instance != this)
                 {
-                    Destroy(this.gameObject);
+                    Destroy(gameObject);
                 }
             }
-            DontDestroyOnLoad(this.gameObject.transform.parent.gameObject);
+            DontDestroyOnLoad(gameObject.transform.parent.gameObject);
             
             var scene = SceneManager.GetActiveScene();
             if (scene.name != "ScoringSystem") 
                 return;
             
-            StartCoroutine(RunEventPointsUpdate());
+            EventDate = RetrieveYesterdaysDate();
+            StartCoroutine(RunEventPointsUpdate(EventDate));
         }
         
-        private IEnumerator RunEventPointsUpdate()
+        private IEnumerator RunEventPointsUpdate(string date)
         {
             yield return new WaitForSeconds(1f);
 
-            var date = RetrieveYesterdaysDate();
             var url = WebClientReader.FootballCriticLiveScoresUrlByDate(date);
             
             RunUpdate(date, url);
-            
-            // DisplayNewPointsData(url);
         }
 
         private async void RunUpdate(string date, string url)

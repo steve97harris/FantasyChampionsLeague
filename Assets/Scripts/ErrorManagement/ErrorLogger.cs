@@ -10,27 +10,41 @@ using DefaultNamespace;
 using TMPro;
 using UnityEngine;
 
-namespace ErrorManagement
+namespace DefaultNamespace
 {
     public class ErrorLogger : MonoBehaviour
     {
         public static ErrorLogger Instance;
 
-        private void Awake()
+        private void OnEnable()
         {
             if (Instance == null)
                 Instance = this;
-
-            StartCoroutine(SendLog());
+            else
+            {
+                if (Instance != this)
+                {
+                    Destroy(gameObject);
+                }
+            }
+            DontDestroyOnLoad(gameObject.transform.parent.gameObject);
+            
+            if (EventPointsRetriever.EventDate != null)
+                StartCoroutine(SendLog(EventPointsRetriever.EventDate));
+            else
+            {
+                Debug.LogError("Event date returned null");
+                StartCoroutine(SendLog("[unknown date]"));
+            }
         }
 
-        private IEnumerator SendLog()
+        private IEnumerator SendLog(string date)
         {
             yield return new WaitForSeconds(7f);
             
             var logFilePath = SaveErrorLog();
             if (logFilePath != null)
-                SendEmail("steve97harris@hotmail.co.uk", "T0ttenham!" ,"steve97harris@hotmail.co.uk", "FCL Log", "Error Log: " + $"{DateTime.Now:dd-MMM-yyyy}", logFilePath);
+                SendEmail("steve97harris@hotmail.co.uk", "T0ttenham!" ,"steve97harris@hotmail.co.uk", "FCL Log", "Error Log: " + date, logFilePath);
         }
 
         private string SaveErrorLog()
