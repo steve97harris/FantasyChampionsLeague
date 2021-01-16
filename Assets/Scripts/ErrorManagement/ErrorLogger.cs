@@ -44,7 +44,7 @@ namespace DefaultNamespace
             
             var logFilePath = SaveErrorLog();
             if (logFilePath != null)
-                SendEmail("steve97harris@hotmail.co.uk", "T0ttenham!" ,"steve97harris@hotmail.co.uk", "FCL Log", "Error Log: " + date, logFilePath);
+                SendEmail("steve97harris@hotmail.co.uk", "_password_here_" ,"steve97harris@hotmail.co.uk", "FCL Log", "Error Log: " + date, logFilePath);
         }
 
         private string SaveErrorLog()
